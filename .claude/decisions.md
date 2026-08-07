@@ -235,6 +235,16 @@ Decisions recorded above are historical; amendments are appended here rather tha
 
 - Note the deliberate asymmetry: commit bodies wrap at 72, Markdown prose does not wrap at all. Different media, different rules — do not let one convention "fix" the other.
 
+**2026-08-07 — "what Markleft is not", stated publicly.** Recorded in both READMEs and in `CLAUDE.md`'s non-goals. Charter material: this belongs in the charter's non-goals section.
+
+- The existing non-goal ruled out a *different product* — toolchains and document-preparation systems. This adds the narrower and likelier misreading: that Markleft is a **richer Markdown**. It is not, but neither is it an austerity project, and the docs must not claim otherwise — math, attributes, pipe tables, and the raw-HTML block are all additions.
+
+- **The rule:** every addition must remove an ambiguity or fill a genuine gap, *and* cost nothing in plain-text clarity. A construct that makes ordinary unmarked prose read worse is declined regardless of merit — prose-safety is invariant 1; richness is not an invariant at all.
+
+- **The budget:** the five-minute property. Most decisions remove, a few add, the total fits on one reference card. "Markleft could also do X" is not an argument; the argument must be that X is worth what it costs every reader who never uses it.
+
+- djot remains the right place to shop — most of our syntax is djot-vetted — and this is the test applied to djot features we have not taken (smart punctuation, definition lists, generic containers).
+
 **2026-08-07 — self-hosting as a stated goal.** Recorded in `CLAUDE.md`.
 
 - Every document the project ships should be written in Markleft — self-hosting in the compiler sense, applied to documents. Stronger than dogfooding, because it has a finish line and, from Phase 3, a test.

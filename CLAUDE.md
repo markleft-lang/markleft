@@ -22,6 +22,10 @@ Every contribution must preserve all four. A feature that violates one is reject
 
 **Non-goals (charter-level, from `.claude/landscape.md`):** Markleft is a language, not a toolchain and not a document-preparation system. No templating, no executable code cells, no scripting, no page/layout awareness, no output-format directives. Those make a different product (Quarto, Typst, Quarkdown) and every one of them front-loads complexity that kills the five-minute property. Feature requests in that direction are out of scope, not merely deferred.
 
+**Not a richer Markdown for its own sake — but not an austerity project either.** Markleft *does* add: math in the core, attributes, pipe tables, an explicit raw-HTML block, several adopted from djot. The rule is that every addition pays for itself. It must remove an ambiguity or fill a genuine gap, **and cost nothing in plain-text clarity** — a construct that makes ordinary unmarked prose read worse is declined regardless of merit, because prose-safety is invariant 1 and richness is not an invariant at all.
+
+**The five-minute property is the budget.** Most of the twelve decisions remove something; a few add; the total still fits on one reference card. So "Markleft could also do X" is never an argument by itself — the argument must be that X is worth what it costs every reader who never uses it. When weighing a djot feature we have not adopted (smart punctuation, definition lists, generic containers), that is the question to ask, and `.claude/landscape.md` records why djot is the right place to shop.
+
 ## Core language decisions
 
 Summary only — rationale and rejected alternatives live in `.claude/decisions.md` §4. Numbering is normative and matches that section: cite decisions by number ("challenge to decision 6"), here, in commits, and in `notes/` memos.
