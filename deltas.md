@@ -15,15 +15,18 @@ This document is Appendix A of `charter.md`, and it has two audiences at once. F
 | 3 | Underscore is not emphasis syntax | 2 | `_em_` becomes `*em*`; `snake_case` becomes safe |
 | 4 | Backslash escapes **any** character, with no exception list | 3 | Escapes that were literal backslashes now escape |
 | 5 | Setext headings removed | 4 | Convert underlined headings to ATX |
-| 6 | Indented code blocks removed | 5 | Convert four-space blocks to fences |
-| 7 | Strict list rules: one marker per list, content-column alignment, no lazy continuation | 6 | Re-indent continuations; split mixed-marker lists |
-| 8 | Raw HTML leaves the core: ```` ```=html ```` block and inline raw span only | 7 | Wrap raw HTML explicitly, or drop it |
-| 9 | Pipe tables are core and strictly grammatized | 8 | Malformed tables now fail instead of guessing |
-| 10 | Attributes `{.class #id k=v}` and a closed extension namespace | 9 | New capability; nothing to migrate |
-| 11 | Tabs are not structural | 10 | Validator warns and auto-fixes |
-| 12 | No smart punctuation in core | 11 | Typographic quotes must be written literally |
-| 13 | Trailing-space hard breaks removed; `\` before a line ending is the only hard break | 13 | Migrator converts and reports each one |
-| 14 | Unicode throughout, UTF-8 encoded; content is never normalized | 14 | None expected; see the open riders in decision 14 |
+| 6 | Heading closing sequences removed; a trailing run of `#` is heading text | 4 | Migrator strips the closing run and reports it |
+| 7 | Headings are never indented; the `#` sits in the first column | 4 | Outdent; nothing else changes |
+| 8 | Empty headings removed; a heading needs text | 4 | A lone `#` line becomes a paragraph — migrator reports each one |
+| 9 | Indented code blocks removed | 5 | Convert four-space blocks to fences |
+| 10 | Strict list rules: one marker per list, content-column alignment, no lazy continuation | 6 | Re-indent continuations; split mixed-marker lists |
+| 11 | Raw HTML leaves the core: ```` ```=html ```` block and inline raw span only | 7 | Wrap raw HTML explicitly, or drop it |
+| 12 | Pipe tables are core and strictly grammatized | 8 | Malformed tables now fail instead of guessing |
+| 13 | Attributes `{.class #id k=v}` and a closed extension namespace | 9 | New capability; nothing to migrate |
+| 14 | Tabs are not structural | 10 | Validator warns and auto-fixes |
+| 15 | No smart punctuation in core | 11 | Typographic quotes must be written literally |
+| 16 | Trailing-space hard breaks removed; `\` before a line ending is the only hard break | 13 | Migrator converts and reports each one |
+| 17 | Unicode throughout, UTF-8 encoded; content is never normalized | 14 | None expected; see the open riders in decision 14 |
 
 ## Per-delta detail
 
@@ -35,7 +38,7 @@ Each row above becomes a subsection here, and each subsection needs the same fou
 
 - **What breaks** — the realistic input that renders differently, not the contrived one. This is what a reader came for.
 
-- **What the migrator does** — automatic, automatic with a report, or manual. Delta 13 is the case to get right first: the old syntax is invisible, so a reader cannot audit that conversion by eye and has to trust the report.
+- **What the migrator does** — automatic, automatic with a report, or manual. Delta 16 is the case to get right first: the old syntax is invisible, so a reader cannot audit that conversion by eye and has to trust the report.
 
 ## Notes for drafting
 

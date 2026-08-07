@@ -36,7 +36,7 @@ Summary only — rationale and rejected alternatives live in `.claude/decisions.
 
 3. Backslash before ANY character escapes it. No exception list — explicitly including a line ending, which is the visible line break.
 
-4. ATX headings only (`#`..`######`). No setext.
+4. ATX headings only, one closed form: one to six `#` in the first column, a space, then non-empty text; any line that doesn't match is text. No setext, no closing `#` run, no indentation, no empty heading.
 
 5. Fenced code only. No indented code blocks.
 
