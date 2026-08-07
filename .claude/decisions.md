@@ -53,22 +53,31 @@ LLMs are now arguably the largest Markdown-producing population. A trivially lea
 
 8. **Pipe tables in core, strictly.** GFM-style with a real grammar; no heuristics.
 
-9. **Decorators — one vocabulary, two positions.** *(Reduced and renamed 2026-08-07; was "attributes + closed extension namespace", `{.class #id key=val}`.)* A **decorator list** is a space-separated sequence of tokens in exactly three shapes: a **bare word**, at most one, naming the content format; **`.class`**; and **`#id`**. Nothing else — no `key=val`, no `=format`, no colons, no sigil zoo. Class and id keep their sigils because they name things that are not formats, and they exist for CSS linkage. The list is written in two positions and means the same in both: **on a fence**, immediately after the opening backticks; **inline**, in braces immediately after the closing backtick run.
+9. **Decorators — one vocabulary, two positions, no reserved words.** *(Reduced and renamed 2026-08-07; reduced again the same day, when `math` and `text` left the specification.)* A **decorator list** is a space-separated sequence of tokens in exactly three shapes:
+
+    - a **bare word** — the format label. **At most one.** A single word, kebab-case permitted (`x-mermaid`, `objective-c`, `plain-text`).
+
+    - **`.class`** — CSS linkage. **Any number**, and the one multiplicity exception in the grammar, because an element genuinely carries several classes and every stylesheet language is built on that.
+
+    - **`#id`** — anchor. **At most one**; an identifier that repeats is not an identifier.
+
+    Nothing else — no `key=val`, no `=format`, no colons, no sigil zoo. Class and id keep their sigils because they name things that are not formats. Order within the list is free and the canonical formatter normalizes it (Phase 3). The list is written in two positions and means the same in both: **on a fence**, immediately after the opening backticks; **inline**, in braces immediately after the closing backtick run.
 
     ````
-    ```math              `x=y`{math}              math
-    ```rust              `let x = 1`{rust}        labelled verbatim
-    ```.note             `x`{.note}               class only
-    ```math #eq1         `x=y`{math #eq1}         format plus id
-    ```                  `x`                      plain verbatim
-    ```text              `x`{text}                plain verbatim, said aloud
+    ```math                `x=y`{math}                 labelled math
+    ```rust                `let x = 1`{rust}           labelled verbatim
+    ```.note .wide         `x`{.note .wide}            classes only
+    ```math #eq1           `x=y`{math #eq1}            label plus anchor
+    ```                    `x`                         unlabelled verbatim
     ````
 
-    **The default is verbatim, and `text` names it explicitly.** A bare fence and a bare span are plain-text verbatim; ` ```text ` and `` `x`{text} `` are idempotent spellings of the same thing. Permitted deliberately, because the point of a decorator is to lift a cryptic mark into conscious attention, and "this is plain text" is worth being able to say out loud. Two spellings of one meaning is not an ambiguity — invariant 3 forbids one spelling with two parses, not two spellings with one. *(Which form the canonical formatter normalizes to is a Phase 3 question.)*
+    **No word is reserved, ever — and that is the point.** The specification defines the grammar, `.class` as CSS linkage, and `#id` as an anchor. It does **not** define what any bare word means: a label is opaque, carried into the AST verbatim, and **no decorator word can affect the parse.** The grammar is therefore fixed independently of any word list — a stronger guarantee than the closed registry it replaces, because no future word can quietly become a directive when words have no parse-level power by construction, and there is no list to maintain, version, or argue about. It also removes the last place the language could have grown by accident.
 
-    **Unknown words fall back; they never fail.** A word the language does not define parses as plain-text verbatim, with the word retained in the AST as a label. The validator warns; the parser does not. That split is the point: the **language** defines `math` and `text`, while the **validator** carries a list of words it recognizes (`rust`, `python`, `sh`, …) which grows without a specification revision. So ` ```rust ` keeps working and stays byte-compatible with CommonMark under decision 12, a typo gets a diagnostic, and the normative document stays small. Retaining the label is required by decision 15 — a renderer may consume the mark, since syntax highlighting is presentation, but nothing may be lost. Vendors are advised to prefix `x-` to stay collision-proof against future reserved words; nothing enforces it, because it is a convention rather than syntax.
+    **Meanings live outside the standard.** `math` means TeX, `rust` means Rust, `text` means plain — by convention, recorded in a **non-normative** conventional-labels appendix and in the validator's recognized-word list, both revisable without touching the specification. An unrecognized word parses as plain verbatim and earns a lint warning, never a parse error. Retaining the label in the AST is required by decision 15: a renderer may consume the mark, since highlighting and typesetting are presentation, but nothing may be lost. Vendors are advised to prefix `x-` for collision-proofing; nothing enforces it, because it is a convention rather than syntax.
 
-    **This is the only extension point, and now there is exactly one.** The previous formulation had two — info strings for blocks, attributes for inlines. They are now the same vocabulary in two positions, so the registry is the single place the language can ever grow. *Note the other brace construct:* decision 2's `{*...*}` bracketed emphasis is not a decorator. The two never collide — a decorator follows a backtick run and never begins with `*` — but the grammar must say so rather than leave it to inspection.
+    **Consequence worth stating:** ` ```text ` and a bare fence are *not* the same node — one carries a label, one does not. They render identically, and the AST faithfully records which the author wrote, exactly as decision 15 requires. "Idempotent" here means renders-identically, not parses-identically.
+
+    *Open rider for the charter:* what character set a bare word, a class, and an id may use. Decision 14 forbids privileging an ASCII subset in constructs that take text, and a label is an identifier rather than text — the charter must say which rule governs. *Note the other brace construct:* decision 2's `{*...*}` bracketed emphasis is not a decorator. They cannot collide, since a decorator follows a backtick run and never opens with `*`, but the grammar must say so rather than leave it to inspection.
 
 10. **Tabs are not structural.** Spaces determine structure; tabs in structural position = validator warning with auto-fix.
 
@@ -377,3 +386,17 @@ Decisions recorded above are historical; amendments are appended here rather tha
 - **The constraint on this direction:** only marks may be consumed, and every unit of content survives. Dropping the content a mark identified breaks the rule as surely as inventing content does.
 
 - **Design test that falls out:** every format word the language defines must name something a conforming renderer visibly distinguishes. A format rendering indistinguishably from undecorated content destroys information and is refused. Classes and ids are exempt by kind — CSS linkage and anchors are metadata, the same category as a reference link's target, and metadata has no content to lose.
+
+**2026-08-07 — no word is ever reserved.** Decision 9 reduced again, same day. `math` and `text` leave the specification; `.class` and `#id` are the only tokens it assigns meaning to.
+
+- **The registry was the wrong shape.** `math` and `text` are format labels exactly like `rust` and `python`; privileging two of them put an arbitrary word list in the normative document and gave the language a way to grow by accident.
+
+- **What replaces it is stronger than what it replaces.** The specification defines the grammar and nothing about any word's meaning, so **no decorator word can affect the parse.** The grammar is fixed independently of any word list — no future word can quietly become a directive, because words have no parse-level power by construction, and there is no list to maintain, version, or argue about.
+
+- **Meanings move outside the standard**, to a non-normative conventional-labels appendix and the validator's recognized-word list, both revisable without a specification revision. Unknown words still parse as plain verbatim and warn on lint.
+
+- **Multiplicity, decided:** at most one bare word (kebab-case permitted), at most one `#id`, and **any number of `.class`** — the single multiplicity exception, because an element genuinely carries several classes and stylesheet languages are built on that. Order is free; the canonical formatter normalizes it.
+
+- **Consequence:** ` ```text ` and a bare fence are no longer the same node. They render identically, but one carries a label and the AST records which the author wrote, as decision 15 requires. "Idempotent" now means renders-identically.
+
+- **New open rider:** what character set a word, class, and id may use. Decision 14 forbids privileging ASCII in constructs that take text; a label is an identifier rather than text, and the charter must say which rule governs.
