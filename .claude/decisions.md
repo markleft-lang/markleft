@@ -1,0 +1,246 @@
+# Markleft — Project Decision Record
+
+*Origin conversation: August 2026. Status: pre-charter. This document records the decisions, rationale, and open items from the founding discussion.*
+
+---
+
+## 1. Origin story
+
+The project began with an investigation of the `$` sign in Markdown: no Markdown specification (Gruber 2004, CommonMark 0.31.2, the GFM spec) defines `$` as math syntax. Dollar-delimited math is entirely a renderer-level extension (GitHub added MathJax post-processing in 2022; Pandoc's `tex_math_dollars` has the most rigorous heuristics; KaTeX ships with single-dollar delimiters disabled by default).
+
+Mid-conversation, a paragraph *explaining* this problem was itself garbled by the chat interface's bolted-on math pass — dollars paired across the paragraph, whitespace collapsed by TeX math mode, and code spans offered no protection because the math layer ran outside the Markdown parser. This live failure is the project's founding exhibit: **same source, different realizations — a traceability failure, in metrological terms.**
+
+## 2. Mission
+
+Fix Markdown's ambiguity without losing what made it win. Occupy the empty quadrant: **small language, formal spec** (Markdown is small/informal; AsciiDoc is large/semi-formal; djot is small and better but still informal-ish). Nearest prior art is djot (MacFarlane, 2022) — we take its good ideas, add formalization, and make prose-safety and math a headline concern.
+
+### Why AsciiDoc lingered (lessons internalized)
+
+- It solved writing, not *source readability* — Markdown source looks like email.
+- Single-implementation problem for ~20 years; spec came very late.
+- Lost the platform war (GitHub chose Markdown; network effects compounded).
+- Complexity front-loaded; adoption curves are set by the first five minutes.
+
+### New adoption variable
+
+LLMs are now arguably the largest Markdown-producing population. A trivially learnable, formally validatable, math-collision-free language is a better output target for machines. This tailwind did not exist for any predecessor.
+
+## 3. The four invariants (constitution — features violating one are rejected)
+
+1. **Prose-safety.** Any natural-language paragraph renders verbatim unless it contains a delimiter in a structurally meaningful position; the set of such positions fits on one page. Testable via a prose corpus in CI.
+
+2. **Five-minute property.** Complete core fits on one reference card. A rule needing an "unless" clause is a wrong rule.
+
+3. **One-meaning property.** Every input has exactly one parse. The spec is executable (grammar + exhaustive tests), not interpretable prose.
+
+4. **Linear-time property.** Single pass, prefix-decidable blocks, no backtracking, no pathological inputs.
+
+## 4. The twelve binding decisions
+
+1. **Dollar is dead as syntax.** Bare `$` always literal. Math is core: `\(...\)` inline, ` ```math ` fenced for display.
+
+2. **Underscore is dead as syntax.** Emphasis is `*em*` / `**strong**` only. Bracketed form (djot-style `{*...*}`) for intra-word cases. Flanking rules collapse to two lines.
+
+3. **Uniform escaping.** Backslash before *any* character yields that character.
+
+4. **ATX headings only.** `#`..`######`. Setext headings removed.
+
+5. **Indented code blocks are dead.** Fenced only. (Also massively simplifies list parsing.)
+
+6. **Lists with arithmetic, not archaeology.** One marker per list; continuation aligns with content column; no lazy continuation; loose/tight by one explicit rule. *Most in need of corpus testing.*
+
+7. **Raw HTML leaves the core.** Explicit ` ```=html ` fenced block + inline raw span (djot design). Biggest breaking change; also the security story.
+
+8. **Pipe tables in core, strictly.** GFM-style with a real grammar; no heuristics.
+
+9. **Attributes + closed extension namespace.** Djot `{.class #id key=val}` attributes; fenced info strings are the only block extension point; namespaced registry (`math`, `=html` reserved; vendors use `x-*`).
+
+10. **Tabs are not structural.** Spaces determine structure; tabs in structural position = validator warning with auto-fix.
+
+11. **Deltas from djot:** no smart punctuation in core; keep Markdown muscle memory where Markdown wasn't broken (links, blockquotes, backtick verbatim); formalization is our value-add over djot's prose-plus-reference-code.
+
+12. **Compatibility principle:** match CommonMark byte-for-byte wherever it is unambiguous and harmless; diverge only to fix ambiguity or prose-harm; every delta documented in a "Deltas from Markdown" appendix doubling as the migration guide.
+
+## 5. Name: Markleft
+
+Cardinal-point extension of markup/markdown. Four readings, all load-bearing:
+
+1. **The compass:** orthogonal move — same size as Markdown, different rigor.
+
+2. **What's left:** the language is what *remains* after 15+ years of curation — a subtractive philosophy (most of the twelve decisions remove something).
+
+3. **We left:** departure from the informal era (chosen over Marklock's enforcement energy and Markright's self-verdict pretension; Markup² is bequeathed to our successors to do "right").
+
+4. **Left margin:** the natural state of plain text — prose-safety subliminal.
+
+**Copyleft lineage (structural, not just aesthetic):** copyleft used copyright's machinery to guarantee openness; Markleft uses formal-spec machinery to guarantee prose freedom. The formalism exists so plain text stays plain.
+
+**The self-installing meme:** a stranger asks "What's `left`?" — and the question is the elevator pitch. Enshrined.
+
+**The two axes of the naming family:** Markdown-adjacent names sort onto two morphological axes. *Suffix-keepers* vary the prefix and keep "-down" (Showdown, Kramdown — "Markdown" reversed — Quarkdown, whose name is a physics pun: quarks come in flavors, and Markdown dialects are literally called flavors). Keeping the suffix signals *membership*: "another flavor of Markdown." *Prefix-keepers* hold "mark-" and vary the direction (markup → markdown → Markleft). Keeping the prefix signals *succession*: the next move in the sequence, not another dialect of the ambiguous thing. Markleft is deliberately on the succession axis. (Charter Name section material.)
+
+**Name graveyard (considered, rejected — kept for the history):**
+
+- **Doubledown** (floated 2026-08-06) — quirky, memorable, and genuinely funny; rejected on the two-axis argument above. It is a *suffix-keeper*, so it signals membership ("another flavor of Markdown") when the entire positioning is succession — and it drops "mark-" as well, taking the membership signal without even the family recognition, which is the worst square of that grid. The semantics run backwards too: doubling down means committing harder to a position already held, where this language is subtractive. And a gambling metaphor on the masthead of a formal standard is a fight you would have to keep winning forever. *Survives as rhetoric rather than as a name:* CommonMark doubled down — it standardized the accident instead of fixing it. Charter prior-art material, where it works far better as the thing we contrast against than as our own banner.
+
+- **Marklock** — enforcement energy. The formalism exists so plain text stays plain; nothing is locked.
+
+- **Markright** — self-verdict pretension; a name should not award itself the correctness it has yet to demonstrate.
+
+- **Markup²** — bequeathed to our successors, to do "right".
+
+"One-meaning property" survives as the internal name of the core guarantee.
+
+## 6. Extensions (DECIDED — both forms)
+
+Exactly two extensions ship: a one-meaning language shouldn't have four names for its files.
+
+- **Long form (decided):** `.markleft` — canonical in documentation; the stable anchor and the collision-proof long-term claim, unambiguous in any namespace regardless of what the short form does.
+
+- **Short form (decided — `.lf`):** the `.md` two-letter family echo and the line-feed pun carried the call. Rejected alternative `.lft` had a marginally cleaner spoken form ("el-eff-tee file" gets a stop-consonant buffer before "file", where "el-eff file" can smear eff-into-file) and a clean namespace (only obsolete claimants: ChiWriter DOS fonts from 1986, an obscure CAD loft format) — it is the designated fallback if `.lf` ever proves untenable, not a live option.
+
+- **Graveyard (collisions & retirees):** `.lft` (runner-up, held in reserve), `.left` (bare English word, too collision-prone), `.mklf` (safety candidate, retired — its insurance role is covered by `.markleft`), `.ml` (OCaml), `.mll` (ocamllex — ironic: lexer files), `.mlf` (unfortunate acronym; also HTK), `.mlt` (MLT video framework), `.mlk` (spoken collisions), `.mkt` (market), `.mf` (Metafont — never disrespect Knuth).
+
+## 7. Copyright & licensing
+
+*Corrected 2026-08-06 — see §11. This section previously described an institutional home and steward. That was wrong and is removed, not annotated.*
+
+- **Copyright:** Crown copyright, **by operation of law and not by choice**. An author is a Canadian federal public servant, so Copyright Act s.12 applies whatever anyone would prefer. It is not sponsorship, endorsement, review, or stewardship. No institution governs this project or vouches for it, and no document may imply that one does.
+
+- **Metrology framing:** borrowed as an intellectual model, never as provenance — one definition, many independent realizations, kept honest by comparison. The conformance suite is a key comparison for parsers; the canonical formatter is a reference realization. The framing earns its place on the argument alone.
+
+- **Spec + conformance suite:** CC0 *intent*; instrument pending legal review (Crown copyright s.12 vs CC0-as-waiver interacts non-trivially; fallback formulation "CC0 where applicable; otherwise licensed without restriction"; OGL-Canada is the historical departmental route). Exact notice wording is for counsel; everything currently in the repos is a placeholder.
+
+- **Code:** MIT.
+
+- **Conformance mark:** "Markleft-conformant" reserved as a possible lightly-governed mark (Phase 4; reserve the possibility in the charter now) — held by the project's maintainers, not by any institution.
+
+- Inverse-Markdown posture: hold the language tightly, give the name and the spec away freely.
+
+## 8. Name availability accounting (done)
+
+- **npm `markleft`:** SQUATTED — abandoned 2013 "simplest markup language ever" (Fovea, v0.3.0, MIT). Same name, same category, dead. → Use scope **`@markleft/*`** (verify scope availability); bare name recoverable via slow npm dispute, non-blocking.
+
+- **GitHub:** bare `markleft` account TAKEN (moribund). → **`markleft-lang` org PARKED ✅** (rust-lang precedent). Bare name flagged for possible future trademark-process recovery; org renames redirect, so migration stays open.
+
+- **LaTeX:** `\markleft` is a KOMA-Script page-heading macro (counterpart of `\markright`). Low severity; charming irony; footnote material.
+
+- **Domain:** markleft.com parked/buyable at GoDaddy. markleft.org apparently undeveloped. `.ca` fits the Canadian origin.
+
+- **Trivia tier:** Botswana print shop, `markleft.ttf` font file, 11-follower Instagram. Irrelevant.
+
+- **Trademark registries:** no registered mark surfaced in web search; formal formal CIPO/USPTO/EUIPO search via counsel = OPEN ITEM. Note for examiner: the 2013 npm package is weak, non-commercial, non-continuous prior use.
+
+## 9. Roadmap
+
+- **Phase 0 — Charter & corpus.** Write the charter (invariants + twelve decisions with rationales and rejected alternatives). Seed the prose corpus in `tests/corpus/` — contributor-authored documents written to attack invariant 1. *Amended 2026-08-06 (§11): originally specified collected corpora of real READMEs and LLM output, with "% of real documents rendering identically" as the disciplining metric. That measurement is no longer a deliverable.*
+
+- **Phase 1 — Grammar & spec-as-tests.** PEG for inlines; explicit small-step block algorithm (honest about the non-CFG bits like fence-length matching); exhaustive conformance suite in CommonMark `spec.txt` style. *Amended 2026-08-06 (§11): originally "the suite IS the standard". The document is normative; the suite is the key comparison. See `notes/normative-hierarchy.md`.*
+
+- **Phase 2 — Reference parser & canonical AST.** Rust (speed, WASM playground, FFI). Specified JSON AST with source positions; the AST spec is a deliverable.
+
+- **Phase 3 — Killer tools.** Validator with real diagnostics ("unclosed emphasis opened at 12:4"); canonical formatter (gofmt-style, one serialization per AST); CommonMark→Markleft migrator with change report (the adoption bridge).
+
+- **Phase 4 — Ecosystem.** One-page cheat sheet; browser playground; editor highlighting; conformance badge; a system-prompt-sized language description so LLMs can emit valid Markleft (the network-effect wedge AsciiDoc never had).
+
+## 10. Open items checklist
+
+- [x] GitHub org — **markleft-lang parked**
+
+- [ ] npm scope `@markleft` — verify and claim
+
+- [ ] crates.io `markleft` — verify and claim
+
+- [ ] Domain — pick and acquire (markleft.org / markleft.ca candidates)
+
+- [ ] Trademark search via counsel (CIPO, USPTO, EUIPO)
+
+- [ ] CC0 instrument legal review (Crown copyright interaction)
+
+- [ ] Draft the Phase 0 charter (public-standard voice from day one — a standard has to read like one), including the explicit non-endorsement statement
+
+- [ ] Seed `tests/corpus/` with contributor-authored prose
+
+- [ ] Create the `tests` and `.github` repos under the org
+
+## 11. Amendments
+
+Decisions recorded above are historical; amendments are appended here rather than edited in place, so the record shows what changed and when.
+
+**2026-08-06 — repository layout and corpus.** Full memo: `notes/repo-layout.md`.
+
+- Three repos under `markleft-lang`, not one: `markleft` (spec + implementations
+
+  + tooling), `tests` (conformance suite + prose corpus, separately vendorable), `.github` (org profile). The org is the top-level home; nothing sits under a personal account.
+
+- The standard is held alone — no tests, no data, no tooling — leaving the promotion path to a standalone spec repo open. *(Superseded 2026-08-07: the promotion happened, and the `spec/` subdirectory it referred to no longer exists.)*
+
+- The collected corpus is dropped. `tests/corpus/` holds only contributor-authored prose; nothing is scraped, imported, quoted, or adapted, so the suite carries a single licence and no third-party redistribution question arises.
+
+- No governance repository. Governance *posture* is a charter section; governance *process* goes to `.github` when a first outside contributor appears; a dedicated repo splits out on the same trigger as `rfcs` — more than one decision-maker.
+
+- Each repo carries its own `CLAUDE.md` and sessions launch from inside a repo. The org folder is not a repository, so anything placed there is uncommittable and machine-local.
+
+- **Cost of that change, recorded deliberately:** §9's "% of real documents unchanged" metric was to be the empirical check on decisions 4, 5, and 6, the three flagged as carrying the most muscle-memory risk. An authored corpus cannot supply it — we would be writing the documents our own rules already handle. That evidence now arrives in Phase 3 via the migrator's change report, when acting on it is more expensive. If this proves uncomfortable, the recovery is a manifest-only corpus: URLs and content hashes committed, documents fetched locally and never redistributed.
+
+**2026-08-06 — normative hierarchy.** Full memo: `notes/normative-hierarchy.md`. Charter material.
+
+- The **specification document, grammar included, is normative.** The conformance suite is the **key comparison**: mandatory, exhaustive, and binding on any conformance claim, but subordinate to the document. Realizations — the reference parser included — are privileged over nothing.
+
+- Supersedes "the suite IS the standard" (§9, Phase 1), inherited from CommonMark along with the spec-as-tests methodology. Only the normative claim is amended; the methodology stands. CommonMark needed normative examples because it had no grammar; we are paying for formalization and should collect the benefit.
+
+- §7 already had the right term — the suite is "a key comparison for parsers" — without following it through. A key comparison is not a definition.
+
+- **Precedence rule.** When suite and document disagree the document governs and the test is presumed the bug, *unless* the test is evidence the document needs revising — a spec revision through this record, never a quiet edit. The rule settles where a change must land, not who was right. What it forbids is a behavior existing in the suite and nowhere in the document.
+
+- Consequence: conformance examples assert against the specified JSON AST, not against HTML. CommonMark's `spec.txt` asserts HTML and thereby binds the standard to a serialization unrelated to the language — the main reason test suites age badly, and the drift this amendment exists to avoid.
+
+**2026-08-06 — no institutional stewardship.** Corrected in place throughout, rather than annotated, because the original framing was a misstatement of fact and leaving it visible would keep propagating it.
+
+- Markleft has **no institutional steward, sponsor, endorser, or governing body**. It is an independent project maintained by its authors.
+
+- **Crown copyright applies by operation of law** — an author is a Canadian federal public servant, so Copyright Act s.12 attaches regardless of preference. A copyright notice is not sponsorship and must never be written so a reader could infer that it is.
+
+- The **metrology framing stays**, as a borrowed intellectual model that earns its place on the argument: one definition, many independent realizations, kept honest by comparison. It is not provenance and confers no authority.
+
+- Removed accordingly: "stewarded by" in the project description, the Stewardship section of the org profile, "NMI stewardship" as a claimed delta over djot, "disinterested institutional steward" in the positioning summary, institution-named copyright markers, "NRC provenance" as the justification for the charter's voice, and the institutional premise of the argument for using a GitHub org.
+
+- The org-profile README carries an explicit non-endorsement note, since that page is where a reader is likeliest to mistake a copyright line for a backer.
+
+**2026-08-07 — repository layout follows the normative hierarchy.** Revises the 2026-08-06 layout entry above. Full memo: `notes/repo-layout.md`.
+
+- One repository per layer: `markleft` is **the standard itself** (CC0), `tests` is the key comparison (CC0), `markleft-rs` will be the Rust realization (MIT, Phase 2), `.github` is the org profile. The namesake repository holds the definition, not the code.
+
+- Supersedes the working-monorepo shape, which predated the normative hierarchy. Once the document became normative, filing it as one directory inside a repository named after its own implementation stopped making sense — and it left `markleft` mixed-licence, the incoherence that prompted the question.
+
+- Nothing had to move: every implementation directory in the old layout was still hypothetical.
+
+- **No `spec/` subdirectory** (settled 2026-08-07, same day, after one round of getting it wrong). The standard sits at the repository root, so no URL or citation contains `markleft/spec/`. Keeping a `spec/` directory would have reintroduced the monorepo framing — the standard as one component among several — inside the very decision that removed it.
+
+- The licensing boundary a `spec/` directory would have drawn is drawn by exclusion instead: **everything in `markleft` is the standard except `CLAUDE.md` and `.claude/`**, stated in `README.md`. The exclusion list is short and stable, which makes it cheaper than a directory that appears in every path forever.
+
+- **`markleft-<lang>` is reserved for independent implementations** (`markleft-py`, `markleft-cpp`). A binding is not a realization: wrappers over the Rust core live in `markleft-rs/bindings/`. Running the suite against a wrapper compares a realization with itself — it measures nothing while looking like a passing key comparison, and an ecosystem of five bindings and one parser has one implementation.
+
+- The pairing burden between spec and suite is unchanged by this: it exists between `markleft` and `tests` wherever the spec lives. `markleft-rs` needs no pairing, because an implementation follows the standard rather than co-evolving with it.
+
+**2026-08-07 — Markdown and Git conventions.** Recorded in `CLAUDE.md`; applied across all three repos.
+
+- Markdown: no hard wrap (one line per paragraph), list-item spacing decided per list rather than per item, blank lines around every heading, list, fence, and table. All nine existing files were reflowed in one pass; a wrapped heading in `landscape.md` that had been half-heading and half-prose was fixed in the process.
+
+- The no-hard-wrap rule matters more here than in most projects: this record is edited by amendment, so a word-level diff *is* the audit trail. Reflowing a wrapped paragraph rewrites every line and buries the actual change.
+
+- Git: the cbea.ms seven rules in full (blank line after subject, subject ≤50 characters, capitalized, no trailing period, imperative mood, body wrapped at 72, body explains what and why). Atomic commits, sequenced so the history tells the story, staged and shown as a diff before committing.
+
+- Also: keep a "Claude" co-authorship credit but strip the `<noreply@anthropic.com>` address, so platforms cannot render it as a link to a dead mailbox — accepting that the trailer then reads as text rather than parsing as machine-readable co-authorship. No Claude-Session or `claude.ai` URLs in commit messages. No merge bubble around a single commit; `--amend` only against an unpushed tip; no bare `git stash`, whose stack is shared across worktrees.
+
+- Note the deliberate asymmetry: commit bodies wrap at 72, Markdown prose does not wrap at all. Different media, different rules — do not let one convention "fix" the other.
+
+**2026-08-07 — self-hosting as a stated goal.** Recorded in `CLAUDE.md`.
+
+- Every document the project ships should be written in Markleft — self-hosting in the compiler sense, applied to documents. Stronger than dogfooding, because it has a finish line and, from Phase 3, a test.
+
+- Staged: Markleft-valid content under `.md` now; validator-enforced in CI at Phase 3; `.markleft` sources with generated `.md` companions at Phase 4, but only for documents that need syntax CommonMark lacks.
+
+- **GitHub renders `.md` and will not render `.markleft`**, so `.md` files stay permanently. The only question is whether they are authored or generated, and generated files are a maintenance tax not worth paying for documents that could have stayed valid in both.
+
+- **New cheap metric:** the fraction of our own documents that *require* `.markleft` measures how far Markleft diverges from Markdown in practice, and tests decision 12 directly. It partially recovers what was lost with the collected corpus (§11, 2026-08-06) — and unlike scraped material, we can publish every byte of our own repos.
