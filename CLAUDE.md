@@ -20,7 +20,7 @@ Every contribution must preserve all four. A feature that violates one is reject
 
 4. **Linear-time property:** single pass, prefix-decidable blocks, no backtracking.
 
-**Non-goals (charter-level, from `.claude/landscape.md`):** Markleft is a language, not a toolchain and not a document-preparation system. No templating, no executable code cells, no scripting, no page/layout awareness, no output-format directives. Those make a different product (Quarto, Typst, Quarkdown) and every one of them front-loads complexity that kills the five-minute property. Feature requests in that direction are out of scope, not merely deferred.
+**Non-goals (charter-level, from `.claude/landscape.md`):** Markleft is a language, not a toolchain and not a document-preparation system. No templating, no executable code cells, no scripting, no page/layout awareness, no output-format directives. Those make a different product (Quarto, Typst, Quarkdown) and every one of them front-loads complexity that kills the five-minute property. Feature requests in that direction are out of scope, not merely deferred. Decision 15 turns this from a scoping statement into a syntax rule: **nothing renders that is not in the source**, so no TOC directive, no auto-numbering, no transclusion — you can always read the whole document in plain text, with no compiler or viewer.
 
 **Not a richer Markdown for its own sake — but not an austerity project either.** Markleft *does* add: math in the core, attributes, pipe tables, an explicit raw-HTML block, several adopted from djot. The rule is that every addition pays for itself. It must remove an ambiguity or fill a genuine gap, **and cost nothing in plain-text clarity** — a construct that makes ordinary unmarked prose read worse is declined regardless of merit, because prose-safety is invariant 1 and richness is not an invariant at all.
 
@@ -57,6 +57,8 @@ Summary only — rationale and rejected alternatives live in `.claude/decisions.
 13. Hard breaks are explicit: `\` before a line ending is the only one. Trailing-space breaks are removed, and trailing whitespace is never significant.
 
 14. Unicode is the character set, UTF-8 the encoding; every code point is text and content is never normalized. *Open riders for the charter: BOM, invalid UTF-8, anchor/label matching, and what "column" means for decision 6 outside ASCII.*
+
+15. No generated content — the source is the whole document. No TOC directive, auto-numbering, index, transclusion, or variable substitution. **Cardinal rule: you can always read the entire document in plain text, with no compiler, viewer, or extension.**
 
 ## File extensions
 

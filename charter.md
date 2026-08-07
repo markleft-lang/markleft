@@ -16,6 +16,8 @@ Two distinct claims, both load-bearing, from `CLAUDE.md`:
 
 - Not a toolchain and not a document-preparation system. No templating, executable code cells, scripting, page awareness, or output-format directives.
 
+- Nothing renders that is not in the source (decision 15). The cardinal rule this section exists to protect: a reader can always read the entire document in plain text, with no compiler, viewer, or extension. State it here as a promise to the reader, and let section 4 carry the rule.
+
 - Not a richer Markdown for its own sake — and not an austerity project either. Additions must remove an ambiguity or fill a genuine gap *and* cost nothing in plain-text clarity. The five-minute property is the budget.
 
 ## 3. The four invariants

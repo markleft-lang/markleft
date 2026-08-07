@@ -90,7 +90,7 @@ Nobody combines: small + formally specified + prose-safe + collision-free math +
 
 - **djot:** linear-time architecture, uniform escaping, attributes, bracketed emphasis, raw-content design; most of our syntax decisions are djot-vetted.
 
-- **MyST/rST:** the directive/role concept, disciplined into a closed namespace.
+- **MyST/rST:** the directive/role concept, disciplined into a closed namespace — the extension *point*, never the content-generating directive, which decision 15 forbids outright.
 
 - **Markdoc:** proof of demand for schema validation and docs-as-data.
 
