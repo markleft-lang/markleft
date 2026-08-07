@@ -8,7 +8,7 @@ A formally specified, ambiguity-free successor to Markdown: the same size and th
 
 - **Prose-safety.** Natural-language prose renders verbatim. Money, snake_case, `5 * 3 = 15`, and shell snippets are safe by construction, never by heuristic.
 
-- **Verbatim means verbatim.** A backslash before any character yields that character — line endings included, no exception list. And plain text has never meant ASCII.
+- **Verbatim means verbatim.** A backslash before any character yields that character — line endings included, no exception list. Any means any: the full Unicode range is text.
 
 - **Five minutes.** The complete core fits on one reference card. No rule has an "unless" clause.
 
