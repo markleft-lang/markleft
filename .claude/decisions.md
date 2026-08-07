@@ -93,7 +93,7 @@ It is also the general answer to "but Markleft cannot do X." The answer is not *
 
     **Legibility of the full form.** `` `x=y`{math .display #eq-euler} `` is the ceiling of the grammar rather than its normal use, and it sits at the edge of what stays comfortable in running prose — a decorator can grow longer than the content it decorates. The grammar permits it regardless, because forbidding the full form *inline only* would be an "unless" clause and the three shapes have to compose uniformly wherever they appear. House style carries that cost instead: classes and ids belong on fences, where a block has room for them, and an inline decorator normally carries the format word alone. What keeps even the ceiling inside invariant 1 is the postfix order — the content reads first, and the decoration is a suffix on a span the reader has already finished.
 
-    *Open rider for the charter:* what character set a bare word and an id may use. Decision 14 forbids privileging an ASCII subset in constructs that take text, and a label is an identifier rather than text — the charter must say which rule governs. *Note the other brace construct:* decision 2's `{*...*}` bracketed emphasis is not a decorator. They cannot collide, since a decorator follows a backtick run and never opens with `*`, but the grammar must say so rather than leave it to inspection.
+    **Character set — Unicode, restricted by exclusion only.** *(Decided 2026-08-07, closing the open rider.)* A decorator token is a run of Unicode characters excluding **whitespace** (it separates tokens), **control characters** (nothing invisible is ever syntax — decision 13's family), and **`{`, `}`, `(`, `)`** (they would close the brace group or a `[text](#id)` link target). Nothing else is excluded: letters in any script, digits, `:`, `-`, `.`, `_` are all writable, and the rule is stated by exclusion for the same reason decision 3 is — an exclusion list of four is auditable where an inclusion list is a standing argument. **The first character selects the shape:** `#` makes the token an id, anything else makes it the format word. Sigils are therefore significant only in first position, so `#` inside a token is an ordinary character and needs no further exclusion. **Feasible, not merely principled:** HTML5 permits any non-whitespace character in an `id`, browsers resolve Unicode fragments transparently, and with classes removed there is no CSS-selector escaping to satisfy. It also honours decision 14 without an identifier carve-out — no ASCII subset is privileged anywhere. *One deliberate consequence:* `{#fig:3}` is writable, so both the Pandoc and Quarto conventions are expressible, and there the colon does semantic work — "figure, namely 3" — rather than decorative work. *Note the other brace construct:* decision 2's `{*...*}` bracketed emphasis is not a decorator. They cannot collide, since a decorator follows a backtick run and never opens with `*`, but the grammar must say so rather than leave it to inspection.
 
 10. **Tabs are not structural.** Spaces determine structure; tabs in structural position = validator warning with auto-fix.
 
@@ -586,3 +586,15 @@ Decisions recorded above are historical; amendments are appended here rather tha
 - **Same guarantee, extended:** nothing the language does not define can ever change how a document parses. That property now covers both token shapes.
 
 - **Consequence for an open rider:** Pandoc spells these `#fig:3`, Quarto `#fig-3`. Whether a colon is writable in an id is therefore a concrete question for the character-set rider, not a theoretical one.
+
+**2026-08-07 — decorator character set decided.** Closes the open rider on decision 9 (§4), which decision 14 had also carried.
+
+- **Unicode, restricted by exclusion only.** A token excludes whitespace, control characters, and `{`, `}`, `(`, `)` — four exclusions, each with a structural reason. Everything else is writable: any script, digits, `:`, `-`, `.`, `_`.
+
+- **Stated by exclusion for decision 3's reason.** A list of four exclusions is auditable; an inclusion list is a standing argument about which characters deserve admission.
+
+- **The first character selects the shape** — `#` for an id, anything else for the format word — so sigils are significant only in first position and `#` inside a token is ordinary.
+
+- **Decision 14 is honoured without an identifier carve-out.** No ASCII subset is privileged, which is what that decision asked for; the worry that an identifier might need a different rule turned out to be unfounded once the exclusions were structural rather than typographic.
+
+- **`{#fig:3}` is writable**, so both Pandoc's and Quarto's figure conventions are expressible, and the colon does semantic work there rather than decorative.
