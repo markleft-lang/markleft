@@ -73,7 +73,7 @@ Cardinal-point extension of markup/markdown. Four readings, all load-bearing:
 
 2. **What's left:** the language is what *remains* after 15+ years of curation — a subtractive philosophy (most of the binding decisions remove something).
 
-3. **We left:** departure from the informal era (chosen over Marklock's enforcement energy and Markright's self-verdict pretension; Markup² is bequeathed to our successors to do "right").
+3. **We left:** departure from the informal era (chosen over Marklock's enforcement energy and Markright's self-verdict pretension — the fourth direction stays unclaimed, left to whoever comes next to do it "right").
 
 4. **Left margin:** the natural state of plain text — prose-safety subliminal.
 
@@ -89,9 +89,7 @@ Cardinal-point extension of markup/markdown. Four readings, all load-bearing:
 
 - **Marklock** — enforcement energy. The formalism exists so plain text stays plain; nothing is locked.
 
-- **Markright** — self-verdict pretension; a name should not award itself the correctness it has yet to demonstrate.
-
-- **Markup²** — bequeathed to our successors, to do "right".
+- **Markright** — self-verdict pretension; a name should not award itself the correctness it has yet to demonstrate. So the fourth direction is left open on purpose: the next iteration, not this one, gets to claim it did it "right".
 
 "One-meaning property" survives as the internal name of the core guarantee.
 
