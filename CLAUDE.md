@@ -30,7 +30,7 @@ Every contribution must preserve all four. A feature that violates one is reject
 
 Summary only — rationale and rejected alternatives live in `.claude/decisions.md` §4. Numbering is normative and matches that section: cite decisions by number ("challenge to decision 6"), here, in commits, and in `notes/` memos.
 
-1. Bare `$` is ALWAYS literal text. Math is core: `` `x=y`{math} `` inline, ```` ```math ```` block. Math content is verbatim — TeX backslashes survive.
+1. Bare `$` is ALWAYS literal text. Math is core: `` `x=y`{math} `` inline, ```` ```math ```` block. Math content is verbatim — TeX backslashes survive. "Core" = three guarantees: `$` is never syntax, the construct exists at both sizes with verbatim content, the label reaches the AST intact. `math` is a conventional label, not a reserved word (decision 9).
 
 2. Emphasis: `*em*` / `**strong**` only. Underscore is not syntax. `{*...*}` for intra-word.
 
