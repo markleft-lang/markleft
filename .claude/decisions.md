@@ -278,3 +278,11 @@ Decisions recorded above are historical; amendments are appended here rather tha
 - **The six-level cap stays, with its reason now on the record:** HTML has `h1`–`h6`, the other targets agree, and CommonMark caps there too — so the cap costs no delta under decision 12, where raising it would buy nothing any renderer could express.
 
 - **`#` meaning "number" needs no special case.** The required space already makes `#5` text at the start of a line; only `# 5 is my favourite` needs decision 3's escape. Prose-safety here is structural rather than a carve-out, which is the shape every such rule should have.
+
+**2026-08-07 — UTF-8 confirmed; the durability risk relocated.** Memo: `notes/unicode-and-utf-8.md`. Decision 14 unchanged.
+
+- UTF-8 is the terminal answer rather than an interim one: the WHATWG Encoding Standard requires it exclusively for new formats, RFC 3629 froze its definition, deployment is ~99% of the web, and no successor exists or is proposed. Its age is the argument in its favour — a specification wants a target that has stopped moving.
+
+- **The version, not the encoding, is what can age.** UTF-8 is frozen; Unicode releases annually. So the risk attaches only to rules that consult a Unicode table, and "content is never normalized" already immunizes the bulk of the language.
+
+- Two open riders do consult tables and are therefore one-meaning questions across *time*: case-folding in anchor and label matching, and East Asian Width if "column" is defined by display width. The memo recommends defining both version-independently — code-point identity, code-point count — rather than pinning a Unicode version, so the spec does not inherit someone else's release schedule.
