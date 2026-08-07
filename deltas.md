@@ -11,7 +11,7 @@ This document is Appendix A of `charter.md`, and it has two audiences at once. F
 | # | Delta | Decision | Migration |
 |---|-------|----------|-----------|
 | 1 | `$` is never math syntax; bare `$` is always literal text | 1 | None needed — text that was at risk becomes safe |
-| 2 | Math is core: `\(...\)` inline, ```` ```math ```` fenced | 1 | Rewrite renderer-specific dollar math |
+| 2 | Math is core: `` `x=y`{math} `` inline, ```` ```math ```` fenced | 1 | Rewrite renderer-specific dollar math |
 | 3 | Underscore is not emphasis syntax | 2 | `_em_` becomes `*em*`; `snake_case` becomes safe |
 | 4 | Backslash escapes **any** character, with no exception list | 3 | Escapes that were literal backslashes now escape |
 | 5 | Setext headings removed | 4 | Convert underlined headings to ATX |
