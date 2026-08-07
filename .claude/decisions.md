@@ -187,7 +187,15 @@ Exactly two extensions ship: a one-meaning language shouldn't have four names fo
 
 - **Metrology framing:** borrowed as an intellectual model, never as provenance — one definition, many independent realizations, kept honest by comparison. The conformance suite is a key comparison for parsers; the canonical formatter is a reference realization. The framing earns its place on the argument alone.
 
-- **Spec + conformance suite:** CC0 *intent*; instrument pending legal review (Crown copyright s.12 vs CC0-as-waiver interacts non-trivially; fallback formulation "CC0 where applicable; otherwise licensed without restriction"; OGL-Canada is the historical departmental route). Exact notice wording is for counsel; everything currently in the repos is a placeholder.
+- **Spec + conformance suite: CC BY 4.0.** *(Settled 2026-08-07.)* The most open Creative Commons licence short of CC0 — attribution only, no share-alike, no non-commercial, no no-derivatives. **Why it is the right fallback:** the federal open-licensing instrument, **OGL-Canada 2.0**, grants substantively what CC BY grants — "copy, modify, publish, translate, adapt, distribute or otherwise use the Information in any medium, mode or format for any lawful purpose", commercial use included, conditioned only on attribution. Equivalent rights under the licence the Crown actually uses is a far stronger footing than the previous placeholder, "CC0 where applicable; otherwise licensed without restriction", which nobody could act on. *Precedent in the genre:* CommonMark's specification is CC BY-**SA** 4.0, so plain CC BY makes this strictly more open than the closest comparable standard — share-alike would force anyone quoting substantial parts into their own documentation to license that documentation alike, which is friction a specification meant to be reimplemented should not impose.
+
+- **CC0 remains the stated intent**, contingent on the copyright question below. The obstacle was never that the Crown cannot waive; it is **authority** — an individual public servant cannot dedicate Crown-copyright material to the public domain on the Crown's behalf. That is a permissions problem, and permissions problems have an address to write to.
+
+- **Where attribution actually bites:** the conformance suite is *designed* to be vendored wholesale into third-party implementations, so an attribution condition is more friction there than on the specification. If the copyright question resolves in favour of the author, CC0 for the suite is the first thing to secure.
+
+- **Basis of the copyright position, as the project states it:** an employee's copyright vests in the employer under the Copyright Act absent written agreement otherwise, so the author's copyright vests in the Crown. *(Recorded as the project's stated basis, not as advice.)* A contrary reading was raised and set aside: both s.12 and s.13(3) turn on the work being prepared under direction or control, or made in the course of employment, rather than on the author's employment status as such — which would matter for a personal project outside job duties. **The question for counsel is therefore the prior one — is this Crown copyright at all — because it is cheaper to answer than the waiver question and would moot it.**
+
+- **Corrected 2026-08-07:** an earlier statement in session that OGL-Canada 2.0 declares itself compatible with CC BY 4.0 **was wrong**. That clause belongs to the **UK** OGL v3.0; the Canadian licence is modelled on it but omits the sentence, as both the official text and the SPDX text confirm. The argument for CC BY rests on equivalence of granted rights, not on a compatibility declaration.
 
 - **Code:** MIT.
 
@@ -670,3 +678,19 @@ Decisions recorded above are historical; amendments are appended here rather tha
 - **It matches the argument the project already makes about the document.** `notes/normative-hierarchy.md` calls it the definition, the suite the key comparison, the parser a realization. The filename now agrees with the framing. It also names what the document is *not* — a realization — which is the distinction the whole repository layout exists to draw.
 
 - **The word "charter" is not retired, it is reserved.** The scaffold is roughly nine sections of specification and a three-section governance tail (licensing, governance, versioning). If that tail ever splits off, *that* document is legitimately the charter, and both names become correct instead of one name doing two jobs badly.
+
+**2026-08-07 — licence settled on CC BY 4.0.** §7 rewritten. Notice strings in `definition.md` and `deltas.md` updated; `README.md`, `CLAUDE.md`, and `.claude/plan.md` follow. Closes the licensing half of the legal errand.
+
+- **CC BY 4.0** — the most open Creative Commons licence short of CC0: attribution only, no share-alike, no non-commercial, no no-derivatives. It replaces the placeholder "CC0 where applicable; otherwise licensed without restriction", which was unactionable.
+
+- **The basis is equivalence of granted rights.** OGL-Canada 2.0, the federal open-licensing instrument, permits copying, modifying, publishing, translating, adapting, distributing, and commercial use, conditioned only on attribution — the same shape as CC BY.
+
+- **Correction on the record:** an earlier statement this session that OGL-Canada 2.0 *declares* compatibility with CC BY 4.0 was **wrong**. That sentence is the **UK** OGL v3.0's; the Canadian licence is modelled on it but omits the clause, confirmed against both the official text and SPDX. The recommendation is unchanged, but its footing is equivalence rather than declaration, and the difference matters in a licence notice.
+
+- **CommonMark's specification is CC BY-SA 4.0**, so plain CC BY makes Markleft strictly more open than the closest comparable standard. Share-alike was declined deliberately: it would force anyone quoting substantial parts into their own documentation to license that documentation alike, which is friction a specification meant to be reimplemented must not impose.
+
+- **CC0 remains the intent**, blocked on **authority rather than law** — an individual public servant cannot dedicate Crown-copyright material on the Crown's behalf. A permissions problem has an address to write to.
+
+- **The conformance suite is where attribution actually bites**, since it is designed to be vendored wholesale. If the copyright question resolves in the author's favour, CC0 for the suite is the first thing to secure.
+
+- **The project's stated basis**, recorded as such: an employee's copyright vests in the employer absent written agreement otherwise, so the author's vests in the Crown. The contrary reading — that both s.12 and s.13(3) turn on direction, control, or course of employment rather than employment status — was raised, considered, and set aside by the author. It survives in the errand as **the prior question for counsel: is this Crown copyright at all**, which is cheaper to answer than the waiver question and would moot it.

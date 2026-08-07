@@ -42,6 +42,8 @@ Phase 0. The definition is being drafted; no implementation has shipped.
 
 ## Licensing
 
-CC0 intent. The instrument is not yet settled, because Crown copyright interacts non-trivially with CC0 as a waiver, so this material currently carries "Crown copyright — to be released CC0 pending review".
+**CC BY 4.0** — attribution only, with no share-alike, no non-commercial, and no no-derivatives condition. Copy it, quote it, adapt it, implement it, sell what you build on it; just say where it came from. It is the most open Creative Commons licence short of a public-domain dedication, and it grants substantively what the federal open-licensing instrument ([Open Government Licence – Canada 2.0](https://open.canada.ca/en/open-government-licence-canada)) grants.
+
+A full CC0 public-domain dedication remains the intent. The obstacle is authority rather than law — an individual public servant cannot dedicate Crown-copyright material on the Crown's behalf — and that question is open. Exact notice wording is a matter for counsel; treat every notice string in these repositories as provisional.
 
 Crown copyright applies because an author is a Canadian federal public servant, by operation of law. Markleft is an independent project: no institution sponsors, endorses, reviews, or governs it.

@@ -74,7 +74,7 @@ Both forms are DECIDED (`.claude/decisions.md` §6). Canonical pair, exactly two
 
 **Crown copyright applies by operation of law, not by choice and not as sponsorship.** The author is a Canadian federal public servant, so Copyright Act s.12 vests copyright in the Crown whatever anyone would prefer. It carries no endorsement, no review authority, and no governance role over this project. Never phrase a notice so that a reader could infer a department backs, owns, supervises, or vouches for the language.
 
-- Spec & conformance suite: CC0 *intent*. The instrument is unresolved because Crown copyright interacts non-trivially with CC0-as-waiver (fallback formulation: "CC0 where applicable; otherwise licensed without restriction"). Until it resolves, mark files "Crown copyright — to be released CC0 pending review".
+- **Spec & conformance suite: CC BY 4.0** *(settled 2026-08-07)* — the most open CC licence short of CC0: attribution only, no share-alike, no non-commercial, no no-derivatives. Chosen because OGL-Canada 2.0, the federal open-licensing instrument, grants substantively the same rights. Mark files "Crown copyright — licensed CC BY 4.0. Notice wording provisional pending counsel." CC0 remains the stated *intent*, blocked on authority rather than law — a public servant cannot dedicate Crown material on the Crown's behalf. **Do not claim OGL-Canada declares CC BY compatibility; it does not** — that clause is the UK OGL's.
 
 - All code: MIT.
 
@@ -192,4 +192,4 @@ Master copy is `.claude/decisions.md` §10, mirrored in `.claude/plan.md` — up
 
 - [ ] Acquire domain (markleft.org / markleft.ca)
 
-- [ ] Legal: trademark search (CIPO/USPTO/EUIPO) + CC0 instrument wording under Crown copyright. Needs counsel; does not imply institutional oversight of the project itself.
+- [ ] Legal: trademark search (CIPO/USPTO/EUIPO). **Licence settled on CC BY 4.0**; what remains for counsel is (a) the prior question of whether this is Crown copyright at all — s.12 and s.13(3) turn on direction/control and course of employment, not employment status — and (b) exact notice wording. Does not imply institutional oversight of the project itself.

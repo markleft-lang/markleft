@@ -52,7 +52,8 @@ These need someone else — a registry, a registrar, a lawyer. Worth advancing w
 - [ ] Claim the `@markleft` package scope on npm
 - [ ] Claim `markleft` (or `markleft-core`) on crates.io
 - [ ] Register a domain — `markleft.org` or `markleft.ca`
-- [ ] Legal: trademark search, and settle how the CC0 dedication is worded given Crown copyright. Needs counsel, and does not imply anyone supervises the project
+- [ ] Legal: trademark search
+- [ ] Legal: ask counsel the *prior* question — is this Crown copyright at all? The Act turns on whether work was done under direction or control, not on who employs the author, so a personal project may not be caught. Cheaper to answer than the waiver question, and would settle it. **The licence itself is settled: CC BY 4.0.** What is left is this question, and the exact wording of the notice. Needs counsel, and does not imply anyone supervises the project
 
 ## Open questions
 

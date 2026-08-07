@@ -1,6 +1,6 @@
 # Deltas from Markdown
 
-*Crown copyright — to be released CC0 pending review.*
+*Crown copyright — licensed CC BY 4.0. Notice wording provisional pending counsel; see `README.md`.*
 
 **Status: scaffold.** The delta list below is complete as to *which* decisions diverge from CommonMark, because those decisions are settled. The per-delta detail — exact before and after, edge cases, migrator behaviour — is not written yet, and **no text in this file is normative until it is.**
 
