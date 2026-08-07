@@ -101,6 +101,7 @@ One repo per layer of the normative hierarchy — definition, comparison, realiz
 ```
 markleft/         # this repo — the standard itself, at its root
   README.md       # what this is; states the normative boundary
+  LICENSE         # CC BY 4.0 legal code, verbatim — GitHub reads this
   definition.md      # normative — scaffold so far, no normative text yet
   grammar/        # normative — not created yet (Phase 1)
   deltas.md       # normative — doubles as the migration guide; scaffold so far
@@ -118,7 +119,7 @@ markleft-rs/      # Phase 2 — the Rust realization, MIT
 
 **There is no `spec/` directory, deliberately.** The repository *is* the specification, so the specification sits at its root: cloning `markleft` gets you the standard, and no URL contains `markleft/spec/`. Nesting it would reintroduce the monorepo framing — the standard as one component among several — which is exactly what the layout decision removed.
 
-The licensing boundary that a `spec/` directory would have drawn is drawn by exclusion instead, which costs nothing: **everything here is the standard except `CLAUDE.md` and `.claude/`**, which are working scaffolding, neither normative nor part of what gets released. `README.md` states that so it can be settled without reading any file. A licensing line does not need a directory to hold it.
+The licensing boundary that a `spec/` directory would have drawn is drawn by exclusion instead, which costs nothing: **everything here is the standard except `CLAUDE.md` and `.claude/`**, which are working scaffolding, neither normative nor part of what gets released; `LICENSE` is Creative Commons' own text, reproduced verbatim. `README.md` states that so it can be settled without reading any file. A licensing line does not need a directory to hold it.
 
 **`markleft-<lang>` is reserved for independent implementations** — `markleft-py`, `markleft-cpp`, and so on, each a genuine realization written against the spec. A *binding* is not a realization: a thin wrapper over the Rust core via WASM or FFI belongs in `markleft-rs/bindings/`, because running the conformance suite against it compares one realization with itself, and a key comparison between a thing and itself measures nothing.
 

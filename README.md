@@ -30,7 +30,7 @@ Concretely, Markleft is not a document-preparation system (Typst, Quarkdown, Qua
 
 ## What is normative
 
-Everything in this repository is part of the standard, **except `CLAUDE.md` and `.claude/`**, which are working scaffolding — a decision record, a prior-art survey, and editing conventions. They are neither normative nor part of what gets released.
+Everything in this repository is part of the standard, **except `CLAUDE.md` and `.claude/`**, which are working scaffolding — a decision record, a prior-art survey, and editing conventions. They are neither normative nor part of what gets released. `LICENSE` is the Creative Commons licence text, reproduced verbatim.
 
 Within the standard, `notes/` holds non-normative memos: design challenges, and the reasoning behind decisions the normative text does not explain about itself.
 
