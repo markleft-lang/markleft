@@ -35,7 +35,7 @@ LLMs are now arguably the largest Markdown-producing population. A trivially lea
 
 4. **Linear-time property.** Single pass, prefix-decidable blocks, no backtracking, no pathological inputs.
 
-## 4. The twelve binding decisions
+## 4. The binding decisions
 
 1. **Dollar is dead as syntax.** Bare `$` always literal. Math is core: `\(...\)` inline, ` ```math ` fenced for display.
 
@@ -61,13 +61,15 @@ LLMs are now arguably the largest Markdown-producing population. A trivially lea
 
 12. **Compatibility principle:** match CommonMark byte-for-byte wherever it is unambiguous and harmless; diverge only to fix ambiguity or prose-harm; every delta documented in a "Deltas from Markdown" appendix doubling as the migration guide.
 
+13. **Hard breaks are explicit; trailing whitespace is never significant.** *(Decided 2026-08-07.)* A backslash before a line ending is the only hard line break. CommonMark's "two or more trailing spaces" break is **removed**. Invisible syntax cannot satisfy prose-safety or the one-meaning property: a reader cannot see it, a diff barely shows it, editors and pre-commit hooks strip it on save to avoid whitespace noise, and the still-common habit of typing two spaces after a period turns ordinary prose into structure whenever such a sentence happens to end a line. Nobody can reasonably rely on a mark they cannot see. Same family as decision 10 — whitespace does not carry meaning. Delta from CommonMark; goes in the migration appendix, where the migrator can convert a trailing-space break into a backslash and report it.
+
 ## 5. Name: Markleft
 
 Cardinal-point extension of markup/markdown. Four readings, all load-bearing:
 
 1. **The compass:** orthogonal move — same size as Markdown, different rigor.
 
-2. **What's left:** the language is what *remains* after 15+ years of curation — a subtractive philosophy (most of the twelve decisions remove something).
+2. **What's left:** the language is what *remains* after 15+ years of curation — a subtractive philosophy (most of the binding decisions remove something).
 
 3. **We left:** departure from the informal era (chosen over Marklock's enforcement energy and Markright's self-verdict pretension; Markup² is bequeathed to our successors to do "right").
 
@@ -133,7 +135,7 @@ Exactly two extensions ship: a one-meaning language shouldn't have four names fo
 
 ## 9. Roadmap
 
-- **Phase 0 — Charter & corpus.** Write the charter (invariants + twelve decisions with rationales and rejected alternatives). Seed the prose corpus in `tests/corpus/` — contributor-authored documents written to attack invariant 1. *Amended 2026-08-06 (§11): originally specified collected corpora of real READMEs and LLM output, with "% of real documents rendering identically" as the disciplining metric. That measurement is no longer a deliverable.*
+- **Phase 0 — Charter & corpus.** Write the charter (invariants + binding decisions with rationales and rejected alternatives). Seed the prose corpus in `tests/corpus/` — contributor-authored documents written to attack invariant 1. *Amended 2026-08-06 (§11): originally specified collected corpora of real READMEs and LLM output, with "% of real documents rendering identically" as the disciplining metric. That measurement is no longer a deliverable.*
 
 - **Phase 1 — Grammar & spec-as-tests.** PEG for inlines; explicit small-step block algorithm (honest about the non-CFG bits like fence-length matching); exhaustive conformance suite in CommonMark `spec.txt` style. *Amended 2026-08-06 (§11): originally "the suite IS the standard". The document is normative; the suite is the key comparison. See `notes/normative-hierarchy.md`.*
 
@@ -239,7 +241,7 @@ Decisions recorded above are historical; amendments are appended here rather tha
 
 - **Escaping extended explicitly to line endings.** Decision 3 already says a backslash before *any* character yields that character with no exception list, so line endings are arguably covered. Making it explicit is still worth it, because line endings are exactly where engines diverge today, and a guarantee that has to be *inferred* is not the kind this project makes.
 
-- **A backslash before a line ending is the line break.** Explicit and visible in the source. This raises a question the record has never settled: **CommonMark also allows two trailing spaces as a hard break, and that mechanism is invisible.** Invisible syntax that changes output is hard to square with prose-safety and impossible to square with the one-meaning property — a reader cannot see it, a diff barely shows it, and an editor may strip it. Presumed removal, but it is *not decided*: it needs its own numbered decision, and it is a delta from CommonMark that belongs in the "Deltas from Markdown" appendix.
+- **A backslash before a line ending is the line break.** Explicit and visible in the source. **Settled same day as decision 13: the trailing-space hard break is removed.** The deciding argument is prose-safety rather than aesthetics — two spaces after a period is a live typing habit forty years after typewriters, so a sentence that happens to end a line silently becomes structure. Ordinary prose turning into markup by keystroke habit is invariant 1 failing, not a style quibble. Everything else compounds it: editors and hooks strip end-of-line whitespace to keep diffs clean, so the syntax is not merely invisible but actively unstable. (The one language that made whitespace load-bearing on purpose, Whitespace, is a joke — deliberately.)
 
 - **Unicode is entirely new to this record.** "Plain text" has never meant ASCII, and the whole Unicode range carries the same verbatim guarantees, as content and in every construct that takes text. This was not in §3 or §4 in any form. It needs a numbered decision, and the charter needs to say what it implies — normalization, identifier and anchor handling, and what "the same guarantees" means for a grapheme cluster rather than a code point. Those are real questions the one-sentence guarantee does not answer.
 

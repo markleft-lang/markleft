@@ -24,7 +24,7 @@ Every contribution must preserve all four. A feature that violates one is reject
 
 **Not a richer Markdown for its own sake — but not an austerity project either.** Markleft *does* add: math in the core, attributes, pipe tables, an explicit raw-HTML block, several adopted from djot. The rule is that every addition pays for itself. It must remove an ambiguity or fill a genuine gap, **and cost nothing in plain-text clarity** — a construct that makes ordinary unmarked prose read worse is declined regardless of merit, because prose-safety is invariant 1 and richness is not an invariant at all.
 
-**The five-minute property is the budget.** Most of the twelve decisions remove something; a few add; the total still fits on one reference card. So "Markleft could also do X" is never an argument by itself — the argument must be that X is worth what it costs every reader who never uses it. When weighing a djot feature we have not adopted (smart punctuation, definition lists, generic containers), that is the question to ask, and `.claude/landscape.md` records why djot is the right place to shop.
+**The five-minute property is the budget.** Most of the binding decisions remove something; a few add; the total still fits on one reference card. So "Markleft could also do X" is never an argument by itself — the argument must be that X is worth what it costs every reader who never uses it. When weighing a djot feature we have not adopted (smart punctuation, definition lists, generic containers), that is the question to ask, and `.claude/landscape.md` records why djot is the right place to shop.
 
 ## Core language decisions
 
@@ -34,7 +34,7 @@ Summary only — rationale and rejected alternatives live in `.claude/decisions.
 
 2. Emphasis: `*em*` / `**strong**` only. Underscore is not syntax. `{*...*}` for intra-word.
 
-3. Backslash before ANY character escapes it. No exception list — explicitly including a line ending, which is the visible line break. *Two riders are promised publicly but not yet numbered decisions: whether trailing-space hard breaks are removed, and the full Unicode guarantee. See `.claude/decisions.md` §11, 2026-08-07.*
+3. Backslash before ANY character escapes it. No exception list — explicitly including a line ending, which is the visible line break.
 
 4. ATX headings only (`#`..`######`). No setext.
 
@@ -53,6 +53,8 @@ Summary only — rationale and rejected alternatives live in `.claude/decisions.
 11. Deltas from djot: no smart punctuation in core; keep Markdown muscle memory where Markdown wasn't broken (links, blockquotes, backtick verbatim).
 
 12. Match CommonMark byte-for-byte wherever it's unambiguous and harmless; every divergence goes in the "Deltas from Markdown" appendix, which doubles as the migration guide.
+
+13. Hard breaks are explicit: `\` before a line ending is the only one. Trailing-space breaks are removed, and trailing whitespace is never significant. *Unicode is still promised publicly without a numbered decision — see `.claude/decisions.md` §11, 2026-08-07.*
 
 ## File extensions
 
@@ -118,7 +120,7 @@ The licensing boundary that a `spec/` directory would have drawn is drawn by exc
 
 Immediate work, in order:
 
-1. **Draft `charter.md`** — public-standard voice, because a standard has to read like one: the four invariants; the twelve decisions each with rationale and rejected alternatives; Name section (four readings + copyleft lineage + the availability accounting); metrology framing (the conformance suite is a key comparison for parsers; the canonical formatter is a reference realization); licensing and copyright posture, including the explicit non-endorsement statement; governance sketch — which says the project is maintained by its authors and governed by no institution.
+1. **Draft `charter.md`** — public-standard voice, because a standard has to read like one: the four invariants; the binding decisions each with rationale and rejected alternatives; Name section (four readings + copyleft lineage + the availability accounting); metrology framing (the conformance suite is a key comparison for parsers; the canonical formatter is a reference realization); licensing and copyright posture, including the explicit non-endorsement statement; governance sketch — which says the project is maintained by its authors and governed by no institution.
 
 2. **Seed `tests/corpus/`** — original prose written to attack invariant 1: bare dollars and money amounts, snake_case identifiers, `5 * 3 = 15`, shell snippets, file globs, and lines that accidentally open with `#` or `-`. Contributor-authored only; see the corpus rule above.
 

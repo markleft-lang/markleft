@@ -103,7 +103,7 @@ The satellite files stay deliberately thin. `tests/CLAUDE.md` and `.github/CLAUD
 
 ## Deferred repositories and their triggers
 
-- **`rfcs`** — created when the project has more than one decision-maker. The migration is natural: the twelve binding decisions become RFC-0001 through RFC-0012, retroactively.
+- **`rfcs`** — created when the project has more than one decision-maker. The migration is natural: the binding decisions become RFC-0001 onward, retroactively.
 
 - **`tree-sitter-markleft`** — the tree-sitter ecosystem fixes both the repository name and the standalone-repository layout; this one cannot live in a subdirectory. Phase 4.
 
