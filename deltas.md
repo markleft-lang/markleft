@@ -22,7 +22,7 @@ This document is Appendix A of `charter.md`, and it has two audiences at once. F
 | 10 | Strict list rules: one marker per list, content-column alignment, no lazy continuation | 6 | Re-indent continuations; split mixed-marker lists |
 | 11 | Raw HTML is removed entirely; there is no passthrough of any kind | 7 | No automatic path — migrator strips and reports; see decision 7 |
 | 12 | Pipe tables are core and strictly grammatized | 8 | Malformed tables now fail instead of guessing |
-| 13 | Decorators `{word .class .class #id}` on fences and verbatim spans; labels are opaque | 9 | New capability; nothing to migrate |
+| 13 | Decorators `{word #id}` on fences and verbatim spans; labels are opaque; no classes | 9 | New capability; nothing to migrate |
 | 14 | Tabs are not structural | 10 | Validator warns and auto-fixes |
 | 15 | No smart punctuation in core | 11 | Typographic quotes must be written literally |
 | 16 | Trailing-space hard breaks removed; `\` before a line ending is the only hard break | 13 | Migrator converts and reports each one |
