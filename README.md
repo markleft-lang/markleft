@@ -42,7 +42,7 @@ Phase 0. The definition is being drafted; no implementation has shipped.
 
 ## Copyright
 
-© His Majesty the King in right of Canada, 2026. An author is a Canadian federal public servant, so the Copyright Act vests copyright in the Crown by operation of law.
+Crown copyright, Canada — 2026. An author is a Canadian federal public servant, so the Copyright Act vests copyright in the Crown by operation of law, not by any institution's involvement.
 
 **This is not sponsorship.** No department, agency, or institution owns, funds, backs, endorses, reviews, or governs Markleft. It is an independent project, maintained by its authors.
 

@@ -1,6 +1,6 @@
 # Markleft — The Definition
 
-*© His Majesty the King in right of Canada, 2026. Licensed CC BY 4.0.*
+*Crown copyright, Canada — 2026. Licensed CC BY 4.0.*
 
 **Why "Definition".** The word is the one place computing and metrology converge. Metrology *defines* the metre in a sentence and checks every realization against that definition; computing's most rigorous language document is *The Definition of Standard ML*. It also names precisely what this document is **not** — a realization. This file was called `charter.md` until 2026-08-07; in IETF and W3C practice a charter is a working group's governance document and never the technical specification, so the name was signalling the wrong thing. If the licensing, governance, and versioning sections ever split off, *that* document is legitimately the charter.
 

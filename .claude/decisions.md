@@ -712,3 +712,15 @@ Decisions recorded above are historical; amendments are appended here rather tha
 - **What remains is two short sections.** Copyright: the Crown holds it by operation of law, and that is not sponsorship. Licensing: CC BY 4.0, copy and adapt and sell, attribution the only condition.
 
 - **Notice strings no longer hedge.** "Notice wording provisional pending counsel" was accurate but belongs in working scaffolding — it is still recorded in `CLAUDE.md` and here. A notice that doubts itself invites a reader to doubt the grant.
+
+**2026-08-07 — the monarch's style dropped from notices.** `README.md`, `definition.md`, `deltas.md`, and the instruction in `CLAUDE.md`. Notices now read "Crown copyright, Canada — 2026."
+
+- **The leeway is real: Canada prescribes no notice form.** Copyright subsists without formality under Berne, so a © line is convention rather than requirement and nothing is invalidated by wording it differently. Departmental style guides prescribe forms for *government publications*; this is not one, and the project says so explicitly.
+
+- **Why not the honorific:** it is gratuitous in an independent project, and it carries a colonial charge that would be a needless barrier to contributors — a real cost for a project that wants third-party implementations.
+
+- **Why not "Government of Canada" either**, which was the form requested. It reads *more* like sponsorship rather than less: a government line beside a project looks like a government publication, which is the same inference that removed the agency name from the notice earlier today. The honorific at least reads as a legal artefact.
+
+- **"Crown copyright" is the resolution** — the exact term of art, naming no person and no institution, and the phrase a reuser or a lawyer would search for. It reads as a legal condition attached to the work rather than as a publisher's imprint.
+
+- Recorded in `CLAUDE.md` as a standing instruction, since both rejected forms are the ones a future session would reach for by default.
