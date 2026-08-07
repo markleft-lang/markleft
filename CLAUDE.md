@@ -58,7 +58,7 @@ Summary only — rationale and rejected alternatives live in `.claude/decisions.
 
 14. Unicode is the character set, UTF-8 the encoding; every code point is text and content is never normalized. *Open riders for the charter: BOM, invalid UTF-8, anchor/label matching, and what "column" means for decision 6 outside ASCII.*
 
-15. No generated content — the source is the whole document. No TOC directive, auto-numbering, index, transclusion, or variable substitution. **Cardinal rule: you can always read the entire document in plain text, with no compiler, viewer, or extension.** The source need not *look* like the rendered form (`**bold**` is not bold); it must be *semantically equivalent* to it, up to format. Test for any construct: is it changing the presentation of written content, or manufacturing content? Presentation instructions stay open; manufacturing is closed.
+15. No generated content — the source is the whole document. No TOC directive, auto-numbering, index, transclusion, or variable substitution. **Cardinal rule: you can always read the entire document in plain text, with no compiler, viewer, or extension.** The source need not *look* like the rendered form (`**bold**` is not bold); it must be *semantically equivalent* to it, up to format. Test for any construct: is it changing the presentation of written content, or manufacturing content? Presentation instructions stay open; manufacturing is closed. **Back half:** rendering is lossy on marks and lossless on content — a decorator disappears into the typography that re-expresses it, so every format word must name something a renderer visibly distinguishes.
 
 ## File extensions
 
