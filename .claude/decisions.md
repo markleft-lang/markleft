@@ -85,7 +85,7 @@ LLMs are now arguably the largest Markdown-producing population. A trivially lea
 
 10. **Tabs are not structural.** Spaces determine structure; tabs in structural position = validator warning with auto-fix.
 
-11. **Deltas from djot:** no smart punctuation in core; keep Markdown muscle memory where Markdown wasn't broken (links, blockquotes, backtick verbatim); formalization is our value-add over djot's prose-plus-reference-code.
+11. **Deltas from djot:** no smart punctuation in core; keep Markdown muscle memory where Markdown wasn't broken (links, blockquotes, backtick verbatim — challenged on keyboard-accessibility grounds 2026-08-07 and kept, `notes/backtick-verbatim-challenge.md`); formalization is our value-add over djot's prose-plus-reference-code.
 
 12. **Compatibility principle:** match CommonMark byte-for-byte wherever it is unambiguous and harmless; diverge only to fix ambiguity or prose-harm; every delta documented in a "Deltas from Markdown" appendix doubling as the migration guide.
 
@@ -438,3 +438,15 @@ Decisions recorded above are historical; amendments are appended here rather tha
 - **It was also the last reserved word hiding in prose.** Once no word is reserved, a paragraph blessing one particular word was incoherent, so removing it makes decision 9 self-consistent rather than merely shorter.
 
 - The generalized consequence survives: a labelled span and an unlabelled span are different nodes. They may render identically, but the AST records which the author wrote, as decision 15 requires.
+
+**2026-08-07 — backtick verbatim challenged and kept.** Memo: `notes/backtick-verbatim-challenge.md`. Decision 11 unchanged; a pointer added to it.
+
+- **The challenge is legitimate:** the backtick is a dead key on QWERTZ, AZERTY, and Nordic layouts, is visually near `'` and `´`, and is buried on mobile keyboards. Proposed alternative was `|x=y|{math}`.
+
+- **The pipe fails twice over before compatibility is even reached.** It is already the table delimiter (decision 8), and it breaks prose-safety — `|x| < 5`, `P(A|B)`, `a | b` — which is the `$` failure repeated deliberately instead of inherited.
+
+- **No substitute exists, and the reason is structural.** The backtick's inaccessibility and its prose-safety are *the same property*: it is hard to reach because nobody types it in prose, and nobody typing it in prose is what qualifies it as a delimiter. Any character reachable enough to fix the complaint is common enough to re-create the collision. This is the sentence worth keeping from the memo.
+
+- **Answered with tooling instead**, where decision 15 already sends this class of problem: editor snippets, a cheat-sheet line on non-US layouts, and — the sharpest of the three — a validator diagnostic that catches a decorator following a non-verbatim run and asks whether `'` or `´` was typed for a backtick. Lookalike detection at the point of failure, which is what the Typst error-message bar in `.claude/landscape.md` is for.
+
+- **Reopening requires a candidate, not an argument:** evidence that layout friction blocks adoption *plus* a character that survives the prose-safety test. Without a candidate the challenge has nowhere to go.
