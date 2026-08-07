@@ -25,6 +25,18 @@ Fix Markdown's ambiguity without losing what made it win. Occupy the empty quadr
 
 LLMs are now arguably the largest Markdown-producing population. A trivially learnable, formally validatable, math-collision-free language is a better output target for machines. This tailwind did not exist for any predecessor.
 
+### The format inherits no weight
+
+Every capability routed out of the language so far — tables of contents (§4, decision 15), file includes (decision 16), citations and bibliographies (decision 15) — landed the same way: **the tool writes into the source, and the format gains nothing.** Three instances is no longer coincidence; it is the strategic position, and it should be stated as one rather than rediscovered per feature.
+
+The contrast is the whole argument. Quarto, Typst, AsciiDoc, and Quarkdown accrete capability *in the language*, so every feature the ecosystem gains is a feature the next reader has to learn past — complexity front-loads, and adoption curves are set by the first five minutes. Markleft accretes capability in **tools**, so the first five minutes never get worse no matter how large the ecosystem grows.
+
+That is what makes the five-minute property **durable rather than merely initial**. Most small languages start small and then grow; this one has a structural reason not to, because decision 15 leaves nowhere for a feature to land except the tooling — the render may never say anything the source does not.
+
+It is also the general answer to "but Markleft cannot do X." The answer is not *no*; it is **not in the format** — and the burden moves to showing that X cannot be written into the source by a tool. Very little survives that test, which is why the refusals so far have been cheap rather than painful. Where something genuinely does not survive it, that is a real finding and belongs in the decision record.
+
+**The format is a protocol, not an application.** It also compounds with the adoption variable above: a target that never grows is a better emitter for machines than one that does, because the description a model needs stays the same size forever.
+
 ## 3. The four invariants (constitution — features violating one are rejected)
 
 1. **Prose-safety.** Any natural-language paragraph renders verbatim unless it contains a delimiter in a structurally meaningful position; the set of such positions fits on one page. Testable via a prose corpus in CI.
@@ -550,3 +562,15 @@ Decisions recorded above are historical; amendments are appended here rather tha
 - **Cost, stated: restyling.** APA to IEEE is a flag under citeproc and a full re-run with a large diff under this scheme. Immaterial for a single-venue document, a real loss for a paper shopped across journals. Diffable-and-readable always beats cheap-restyling sometimes, consistently with every other call here.
 
 - **Pattern now confirmed three times** — tables of contents, file includes, citations. **The tooling writes into the source, never into the render.** That is one policy, not three refusals, and the charter's non-goals should state it as one sentence.
+
+**2026-08-07 — the format inherits no weight.** Added to §2 as the strategic position behind three worked consequences. Not a binding decision; positioning, and charter material for the purpose and non-goals sections.
+
+- **Three capabilities routed identically** — tables of contents, file includes, citations and bibliographies. Each time the tool wrote into the source and the format gained nothing. That is a policy, not a coincidence.
+
+- **The contrast is the argument.** Quarto, Typst, AsciiDoc, and Quarkdown accrete capability in the language, so each feature the ecosystem gains is one the next reader must learn past. Markleft accretes it in tools, so the first five minutes never get worse however large the ecosystem grows.
+
+- **The five-minute property becomes durable rather than initial.** Most small languages start small and grow; this one has a structural reason not to, since decision 15 leaves nowhere for a feature to land except the tooling.
+
+- **It is the general answer to "Markleft cannot do X":** not *no*, but *not in the format* — with the burden moved to showing X cannot be written into the source by a tool. Little survives that test, which is why the refusals have been cheap. Something that genuinely does not survive it is a real finding and belongs in this record.
+
+- **Compounds with the LLM adoption variable** in §2: a target that never grows is a better emitter for machines than one that does, because the description a model needs stays the same size forever.
