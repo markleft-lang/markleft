@@ -46,7 +46,7 @@ Summary only — rationale and rejected alternatives live in `.claude/decisions.
 
 8. GFM-style pipe tables, strictly gramma­rized.
 
-9. Decorators — one vocabulary, two positions: ```` ```math ````, ```` ```.note .wide ````, ```` ```math #eq1 ```` on fences; `` `x`{math .note #eq1} `` inline. Three token shapes: bare word (format label, at most one, kebab-case ok), `.class` (any number — the one multiplicity exception), `#id` (at most one). No `key=val`, no `=format`. **No word is ever reserved:** labels are opaque, carried into the AST, and no decorator word can affect the parse. Meanings (`math`, `rust`, `text`) are convention, held in a non-normative appendix and the validator's list; unknown words parse as plain verbatim and warn on lint.
+9. Decorators — one vocabulary, two positions: ```` ```math ````, ```` ```.note .wide ````, ```` ```math #eq1 ```` on fences; `` `x`{math .note #eq1} `` inline. Three token shapes: bare word (format label, at most one, kebab-case ok), `.class` (any number — the one multiplicity exception), `#id` (at most one, matching HTML; duplicate ids across a document are a lint check, not a parse error). No `key=val`, no `=format`. **No word is ever reserved:** labels are opaque, carried into the AST, and no decorator word can affect the parse. Meanings (`math`, `rust`, `text`) are convention, held in a non-normative appendix and the validator's list; unknown words parse as plain verbatim and warn on lint.
 
 10. Tabs are not structural (validator warning + auto-fix).
 

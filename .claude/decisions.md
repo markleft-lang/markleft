@@ -55,11 +55,11 @@ LLMs are now arguably the largest Markdown-producing population. A trivially lea
 
 9. **Decorators — one vocabulary, two positions, no reserved words.** *(Reduced and renamed 2026-08-07; reduced again the same day, when `math` and `text` left the specification.)* A **decorator list** is a space-separated sequence of tokens in exactly three shapes:
 
-    - a **bare word** — the format label. **At most one.** A single word, kebab-case permitted (`x-mermaid`, `objective-c`, `plain-text`).
+    - a **bare word** — the format label. **At most one.** A single word, kebab-case permitted (`x-mermaid`, `objective-c`, `plain-text`). One is the ceiling because two format words would claim two content types for one box: there is no meaning to combine them into and no resolution order to appeal to, so a second word buys a race and an undecidable decoration rather than a capability.
 
-    - **`.class`** — CSS linkage. **Any number**, and the one multiplicity exception in the grammar, because an element genuinely carries several classes and every stylesheet language is built on that.
+    - **`.class`** — CSS linkage. **Any number**, and the one multiplicity exception in the grammar, because an element genuinely carries several classes and the cascade is built on exactly that. Restricting it would break the thing classes are for.
 
-    - **`#id`** — anchor. **At most one**; an identifier that repeats is not an identifier.
+    - **`#id`** — anchor. **At most one**, which matches HTML and CSS exactly: an element carries a single `id` attribute where `class` takes a space-separated set, and `#foo` selects one element where `.foo` selects a set. So the multiplicity here is HTML's own, and maps onto it without translation. *Uniqueness across the document is a validator check, not a parse error* — a duplicate id is well-formed syntax and a broken anchor, which puts it with the lint warnings rather than in the grammar, since a document-wide constraint cannot be expressed without leaving the local, single-pass discipline invariant 4 buys.
 
     Nothing else — no `key=val`, no `=format`, no colons, no sigil zoo. Class and id keep their sigils because they name things that are not formats. Order within the list is free and the canonical formatter normalizes it (Phase 3). The list is written in two positions and means the same in both: **on a fence**, immediately after the opening backticks; **inline**, in braces immediately after the closing backtick run.
 
@@ -76,6 +76,8 @@ LLMs are now arguably the largest Markdown-producing population. A trivially lea
     **Meanings live outside the standard.** `math` means TeX, `rust` means Rust, `text` means plain — by convention, recorded in a **non-normative** conventional-labels appendix and in the validator's recognized-word list, both revisable without touching the specification. An unrecognized word parses as plain verbatim and earns a lint warning, never a parse error. Retaining the label in the AST is required by decision 15: a renderer may consume the mark, since highlighting and typesetting are presentation, but nothing may be lost. Vendors are advised to prefix `x-` for collision-proofing; nothing enforces it, because it is a convention rather than syntax.
 
     **Consequence worth stating:** ` ```text ` and a bare fence are *not* the same node — one carries a label, one does not. They render identically, and the AST faithfully records which the author wrote, exactly as decision 15 requires. "Idempotent" here means renders-identically, not parses-identically.
+
+    **Legibility of the full form.** `` `x=y`{math .display #eq-euler} `` is the ceiling of the grammar rather than its normal use, and it sits at the edge of what stays comfortable in running prose — a decorator can grow longer than the content it decorates. The grammar permits it regardless, because forbidding the full form *inline only* would be an "unless" clause and the three shapes have to compose uniformly wherever they appear. House style carries that cost instead: classes and ids belong on fences, where a block has room for them, and an inline decorator normally carries the format word alone. What keeps even the ceiling inside invariant 1 is the postfix order — the content reads first, and the decoration is a suffix on a span the reader has already finished.
 
     *Open rider for the charter:* what character set a bare word, a class, and an id may use. Decision 14 forbids privileging an ASCII subset in constructs that take text, and a label is an identifier rather than text — the charter must say which rule governs. *Note the other brace construct:* decision 2's `{*...*}` bracketed emphasis is not a decorator. They cannot collide, since a decorator follows a backtick run and never opens with `*`, but the grammar must say so rather than leave it to inspection.
 
@@ -410,3 +412,15 @@ Decisions recorded above are historical; amendments are appended here rather tha
 - **The goal was unequivocalness, not a math engine.** *(Author's framing, recorded verbatim in intent.)* The language guarantees what the source unambiguously is; implementation of the rendering stays free. `` `…`{math} `` is the right answer because it draws that line in the syntax itself.
 
 - **The README claim was reworded** to match. "Math is core rather than a renderer's afterthought" was loose enough to imply the specification defines the rendering; it now names the three guarantees and says outright that a renderer still chooses the typesetting but can no longer change what the source says.
+
+**2026-08-07 — decorator multiplicity, with its reasons.** Added to decision 9 (§4). Confirms the rule rather than changing it; adds one new call on id uniqueness.
+
+- **At most one word, at most one `#id`, any number of `.class`** — confirmed as stated.
+
+- **Why one word:** two format words would claim two content types for one box. There is no meaning to combine them into and no resolution order to appeal to, so a second word buys a race and an undecidable decoration rather than a capability. *(Author's reasoning, recorded because it is stronger than "it is simpler".)*
+
+- **Why one id, and why any number of classes:** this is HTML's own multiplicity. An element carries a single `id` attribute where `class` takes a space-separated set, and `#foo` selects one element where `.foo` selects a set. The decorator therefore maps onto HTML and CSS without translation, and restricting classes would break the thing classes are for.
+
+- **New call — duplicate ids are a lint check, not a parse error.** HTML additionally requires ids to be unique document-wide, which the grammar cannot express without abandoning the local, single-pass discipline invariant 4 buys. A duplicate id is well-formed syntax and a broken anchor, so it joins unknown words in the validator rather than in the parser.
+
+- **Legibility of `` `x`{math .display #eq-euler} ``:** the ceiling of the grammar, not its normal use, and admittedly at the edge of comfortable running prose — a decorator can outgrow the content it decorates. Permitted anyway, because forbidding the full form inline only would be an "unless" clause. House style carries the cost: classes and ids belong on fences; an inline decorator normally carries the word alone. Postfix order is what keeps even the ceiling inside invariant 1 — the content reads first and the decoration is a suffix.
