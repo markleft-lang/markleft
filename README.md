@@ -4,9 +4,11 @@ A formally specified, ambiguity-free successor to Markdown: the same size and th
 
 **This repository is the standard.** Not a parser that happens to define the language by its behavior — the specification itself. Implementations live elsewhere, and none of them is privileged.
 
-## Four guarantees
+## Five guarantees
 
 - **Prose-safety.** Natural-language prose renders verbatim. Money, snake_case, `5 * 3 = 15`, and shell snippets are safe by construction, never by heuristic.
+
+- **Verbatim means verbatim.** A backslash before *any* character yields that character — no exception list, and no carve-outs that vary between engines. That includes a backslash before a line ending, which makes a line break explicit and visible in the source, where Markdown asked you to trust two invisible trailing spaces. And **plain text has never meant ASCII**: the whole Unicode range carries the same guarantees, as content and in every construct that takes text.
 
 - **Five minutes.** The complete core fits on one reference card. No rule has an "unless" clause.
 

@@ -34,7 +34,7 @@ Summary only — rationale and rejected alternatives live in `.claude/decisions.
 
 2. Emphasis: `*em*` / `**strong**` only. Underscore is not syntax. `{*...*}` for intra-word.
 
-3. Backslash before ANY character escapes it. No exception list.
+3. Backslash before ANY character escapes it. No exception list — explicitly including a line ending, which is the visible line break. *Two riders are promised publicly but not yet numbered decisions: whether trailing-space hard breaks are removed, and the full Unicode guarantee. See `.claude/decisions.md` §11, 2026-08-07.*
 
 4. ATX headings only (`#`..`######`). No setext.
 

@@ -235,6 +235,16 @@ Decisions recorded above are historical; amendments are appended here rather tha
 
 - Note the deliberate asymmetry: commit bodies wrap at 72, Markdown prose does not wrap at all. Different media, different rules — do not let one convention "fix" the other.
 
+**2026-08-07 — verbatim guarantee, stated publicly ahead of the record.** Added as the fifth guarantee in both READMEs. **Two of its clauses are new normative commitments and need to become numbered decisions in §4 before the charter is drafted.**
+
+- **Escaping extended explicitly to line endings.** Decision 3 already says a backslash before *any* character yields that character with no exception list, so line endings are arguably covered. Making it explicit is still worth it, because line endings are exactly where engines diverge today, and a guarantee that has to be *inferred* is not the kind this project makes.
+
+- **A backslash before a line ending is the line break.** Explicit and visible in the source. This raises a question the record has never settled: **CommonMark also allows two trailing spaces as a hard break, and that mechanism is invisible.** Invisible syntax that changes output is hard to square with prose-safety and impossible to square with the one-meaning property — a reader cannot see it, a diff barely shows it, and an editor may strip it. Presumed removal, but it is *not decided*: it needs its own numbered decision, and it is a delta from CommonMark that belongs in the "Deltas from Markdown" appendix.
+
+- **Unicode is entirely new to this record.** "Plain text" has never meant ASCII, and the whole Unicode range carries the same verbatim guarantees, as content and in every construct that takes text. This was not in §3 or §4 in any form. It needs a numbered decision, and the charter needs to say what it implies — normalization, identifier and anchor handling, and what "the same guarantees" means for a grapheme cluster rather than a code point. Those are real questions the one-sentence guarantee does not answer.
+
+- **Note on the count.** The four invariants in §3 remain four; they are constitutional. The READMEs list five *guarantees*, which are user-facing promises derived from the invariants and decisions. Do not "fix" the mismatch by adding a fifth invariant.
+
 **2026-08-07 — "what Markleft is not", stated publicly.** Recorded in both READMEs and in `CLAUDE.md`'s non-goals. Charter material: this belongs in the charter's non-goals section.
 
 - The existing non-goal ruled out a *different product* — toolchains and document-preparation systems. This adds the narrower and likelier misreading: that Markleft is a **richer Markdown**. It is not, but neither is it an austerity project, and the docs must not claim otherwise — math, attributes, pipe tables, and the raw-HTML block are all additions.
