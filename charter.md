@@ -20,11 +20,13 @@ Two distinct claims, both load-bearing, from `CLAUDE.md`:
 
 - Not a richer Markdown for its own sake — and not an austerity project either. Additions must remove an ambiguity or fill a genuine gap *and* cost nothing in plain-text clarity. The five-minute property is the budget.
 
-## 3. The four invariants
+## 3. The five invariants
 
-Prose-safety, the five-minute property, the one-meaning property, the linear-time property. Constitutional: a feature violating one is rejected regardless of merit. Source: `.claude/decisions.md` §3.
+Prose-safety, the five-minute property, the one-meaning property, the linear-time property, the cardinal rule. Constitutional: a feature violating one is rejected regardless of merit. Source: `.claude/decisions.md` §3.
 
-State plainly that there are four invariants and that the READMEs list five *guarantees* — user-facing promises derived from the invariants and decisions. The counts differ on purpose.
+State plainly that there are five invariants and that the READMEs list six *guarantees* — user-facing promises derived from the invariants and decisions. The counts differ on purpose, and this section is where the relationship is explained rather than left to inference.
+
+The cardinal rule needs its enabling framing stated here, not just its prohibition: it is the minimal set that lets capability live in tooling and be implemented cleanly. Features are relocated, not forbidden — see the non-goals in section 2 and `.claude/decisions.md` §2.
 
 ## 4. The binding decisions
 

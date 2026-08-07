@@ -10,7 +10,7 @@ The name: markup went up, markdown went down, Markleft moved sideways — and th
 
 ## Non-negotiable invariants
 
-Every contribution must preserve all four. A feature that violates one is rejected regardless of merit.
+Every contribution must preserve all five. A feature that violates one is rejected regardless of merit.
 
 1. **Prose-safety:** natural-language prose renders verbatim; money, snake_case, `5 * 3 = 15`, shell snippets are safe *by construction*, never by heuristic.
 
@@ -19,6 +19,8 @@ Every contribution must preserve all four. A feature that violates one is reject
 3. **One-meaning property:** every input has exactly one parse; the spec is executable (grammar + tests), not interpretable prose.
 
 4. **Linear-time property:** single pass, prefix-decidable blocks, no backtracking.
+
+5. **Cardinal rule:** you can always read the entire document in plain text, with no compiler, viewer, or extension; nothing renders that the source does not already say. **Enabling, not restrictive** — the minimal set that lets capability live in tooling and be built cleanly. Detail: decision 15.
 
 **Non-goals (charter-level, from `.claude/landscape.md`):** Markleft is a language, not a toolchain and not a document-preparation system. No templating, no executable code cells, no scripting, no page/layout awareness, no output-format directives. Those make a different product (Quarto, Typst, Quarkdown) and every one of them front-loads complexity that kills the five-minute property. Feature requests in that direction are out of scope, not merely deferred. Decision 15 turns this from a scoping statement into a syntax rule: **nothing renders that is not in the source**, so no TOC directive, no auto-numbering, no transclusion — you can always read the whole document in plain text, with no compiler or viewer.
 
