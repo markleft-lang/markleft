@@ -38,7 +38,7 @@ The specification document governs. The conformance suite in [markleft-lang/test
 
 ## Status
 
-Phase 0. The charter is being drafted; no implementation has shipped.
+Phase 0. The definition is being drafted; no implementation has shipped.
 
 ## Licensing
 

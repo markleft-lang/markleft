@@ -1,6 +1,8 @@
-# Markleft — Charter
+# Markleft — The Definition
 
 *Crown copyright — to be released CC0 pending review.*
+
+**Why "Definition".** The word is the one place computing and metrology converge. Metrology *defines* the metre in a sentence and checks every realization against that definition; computing's most rigorous language document is *The Definition of Standard ML*. It also names precisely what this document is **not** — a realization. This file was called `charter.md` until 2026-08-07; in IETF and W3C practice a charter is a working group's governance document and never the technical specification, so the name was signalling the wrong thing. If the licensing, governance, and versioning sections ever split off, *that* document is legitimately the charter.
 
 **Status: scaffold.** Section headings and scope notes only. **No text in this file is normative yet.** Each section names its source material so drafting never starts from a blank page; sources under `.claude/` are working scaffolding and are not themselves part of the standard.
 

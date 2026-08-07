@@ -1,6 +1,6 @@
 # Markleft — Prior Art Landscape
 
-*Survey of projects that have tried to "fix," extend, or replace Markdown. Researched August 2026. Companion to `.claude/decisions.md`; feeds the charter's prior-art section. Organizing lens: the size/formality quadrant map — Markleft targets **small language + formal spec + prose-safety**, a quadrant no project below occupies.*
+*Survey of projects that have tried to "fix," extend, or replace Markdown. Researched August 2026. Companion to `.claude/decisions.md`; feeds the definition's prior-art section. Organizing lens: the size/formality quadrant map — Markleft targets **small language + formal spec + prose-safety**, a quadrant no project below occupies.*
 
 ---
 
@@ -52,7 +52,7 @@ LaTeX's modern replacement: markdown-ish markup + real scripting language + incr
 
 ### Quarto/R Markdown, LaTeX itself, etc.
 
-See the strategies 3/5 overlap; all confirm: page-aware, programmable documents are a *different product* from a lightweight prose format. Markleft must never drift here (charter non-goal).
+See the strategies 3/5 overlap; all confirm: page-aware, programmable documents are a *different product* from a lightweight prose format. Markleft must never drift here (definition non-goal).
 
 ## Strategy 6 — The elder statesmen (pre-Markdown or parallel lineages)
 
@@ -84,7 +84,7 @@ Arguably the most capable plain-text format ever (outlining, literate programmin
 
 Nobody combines: small + formally specified + prose-safe + collision-free math + validation tooling — with no vendor's product roadmap attached. Every cell of that combination exists somewhere in the table; the conjunction exists nowhere. That conjunction is the project.
 
-## Standing on shoulders — explicit inheritances to acknowledge in the charter
+## Standing on shoulders — explicit inheritances to acknowledge in the definition
 
 - **CommonMark:** spec-as-tests methodology; byte-compatibility baseline.
 

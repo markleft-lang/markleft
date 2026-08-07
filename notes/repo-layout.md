@@ -6,7 +6,7 @@
 
 The GitHub organization `markleft-lang` is the top-level home for every project repository, and the layout mirrors the normative hierarchy in `notes/normative-hierarchy.md` — one repository per layer.
 
-- `markleft-lang/markleft` — **the standard itself**: charter, grammar, normative prose, deltas appendix. CC0-intent.
+- `markleft-lang/markleft` — **the standard itself**: definition, grammar, normative prose, deltas appendix. CC0-intent.
 
 - `markleft-lang/tests` — the conformance suite and prose corpus: the key comparison. Standalone and vendorable. CC0-intent.
 
@@ -14,7 +14,7 @@ The GitHub organization `markleft-lang` is the top-level home for every project 
 
 - `markleft-lang/.github` — organization profile and shared templates.
 
-The namesake repository holds the definition rather than the code. That is deliberate: it is the strongest available statement that the document is normative and the implementation is not, and it makes the point in the org listing before anyone reads a word of the charter. Cloning `markleft` gets you the language.
+The namesake repository holds the definition rather than the code. That is deliberate: it is the strongest available statement that the document is normative and the implementation is not, and it makes the point in the org listing before anyone reads a word of the definition. Cloning `markleft` gets you the language.
 
 Every other repository is deferred with an explicit trigger, listed below. Nothing is split out for tidiness; a split needs a reason that a directory cannot satisfy.
 
@@ -35,7 +35,7 @@ A repository under an individual account signals a personal project, and a stand
 ```
 markleft/
   README.md      # what this is; states the normative boundary
-  charter.md     # normative
+  definition.md     # normative
   grammar/       # normative
   deltas.md      # normative — doubles as the migration guide
   notes/         # non-normative memos, like this one
@@ -83,11 +83,11 @@ This directly serves invariant 1: `.claude/decisions.md` §3 specifies that pros
 
 What this corpus explicitly does **not** provide is the "percentage of real documents unchanged" figure. That metric required real documents, and it was to be the empirical check on decisions 4, 5, and 6 (ATX-only headings, fenced-only code, strict lists) — the three the decision record flags as carrying the most muscle-memory risk. Expect design challenges to those three to arrive during Phase 3, from the migrator's change report, rather than during Phase 0 when they would have been cheap to act on.
 
-## Governance: charter prose, not a repository
+## Governance: definition prose, not a repository
 
 There is no governance repository, and there should not be one yet. A governance repository needs a *process* to house, and the process today is that one maintainer decides and writes the decision down. What exists instead:
 
-- **Governance posture** — who maintains the language, licensing intent, the reserved conformance mark, and the explicit statement that no institution governs or endorses the project — is a section of `charter.md`. It is a position people will cite, so it belongs in the document meant to be cited.
+- **Governance posture** — who maintains the language, licensing intent, the reserved conformance mark, and the explicit statement that no institution governs or endorses the project — is a section of `definition.md`. It is a position people will cite, so it belongs in the document meant to be cited.
 
 - **Contributor-facing process** — a contributing guide, a code of conduct — goes in the `.github` repository when the first outside contributor appears. That repository exists already, so this costs nothing to adopt later.
 

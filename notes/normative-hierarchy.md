@@ -1,6 +1,6 @@
 # Memo: what is normative, and what the conformance suite is for
 
-*Non-normative. Status: decided 2026-08-06. Amends the "the suite IS the standard" formulation carried over from CommonMark in `.claude/decisions.md` §9 (Phase 1) and in `CLAUDE.md`. Charter material: this belongs in the charter's metrology framing, in condensed form.*
+*Non-normative. Status: decided 2026-08-06. Amends the "the suite IS the standard" formulation carried over from CommonMark in `.claude/decisions.md` §9 (Phase 1) and in `CLAUDE.md`. Definition material: this belongs in the definition's metrology framing, in condensed form.*
 
 ## The hierarchy
 

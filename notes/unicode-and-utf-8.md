@@ -1,6 +1,6 @@
 # Memo: is UTF-8 still the right encoding to specify?
 
-*Non-normative. Status: checked 2026-08-07 against current practice; decision 14 unchanged. Records the external evidence for "Unicode is the character set; UTF-8 is the encoding" so a later session does not re-open the question from scratch, and separates the part that is settled — the encoding — from the part that is not: which Unicode version the open riders depend on. Charter material for the decision 14 section.*
+*Non-normative. Status: checked 2026-08-07 against current practice; decision 14 unchanged. Records the external evidence for "Unicode is the character set; UTF-8 is the encoding" so a later session does not re-open the question from scratch, and separates the part that is settled — the encoding — from the part that is not: which Unicode version the open riders depend on. Definition material for the decision 14 section.*
 
 ## The question
 
@@ -38,7 +38,7 @@ Decision 14's **content is never normalized** clause already immunizes most of t
 
 - **What "column" means for decision 6.** Content-column alignment defined in terms of display width depends on East Asian Width, which is a versioned property with entries that have moved between releases.
 
-**Recommendation for the charter:** define both version-independently — code-point identity for label matching, code-point count for columns — rather than pinning a minimum Unicode version. A pinned version is a dependency that ages, and it puts the specification on someone else's release schedule; the argument is the one in `notes/normative-hierarchy.md`, that a definition written to be independent of its realizations outlives all of them. The cost is that a language with wide characters aligns by count rather than by apparent width, which is worth stating plainly in the charter rather than burying.
+**Recommendation for the definition:** define both version-independently — code-point identity for label matching, code-point count for columns — rather than pinning a minimum Unicode version. A pinned version is a dependency that ages, and it puts the specification on someone else's release schedule; the argument is the one in `notes/normative-hierarchy.md`, that a definition written to be independent of its realizations outlives all of them. The cost is that a language with wide characters aligns by count rather than by apparent width, which is worth stating plainly in the definition rather than burying.
 
 The other two riders — byte-order mark handling and what a conforming parser does with invalid UTF-8 — are unaffected by version drift. They are one-time choices about a frozen encoding, and this memo does not settle them.
 

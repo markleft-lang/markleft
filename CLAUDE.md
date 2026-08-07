@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this project is
 
-**Markleft** is a formally specified, ambiguity-free successor to Markdown: Markdown's size and prose-like source, with a formal grammar, an executable conformance suite, and exactly one parse for every input. **Independent project, maintained by its authors — no institutional steward, sponsor, or endorser.** Crown copyright attaches by operation of law, which is not sponsorship; see Licensing below, and never imply otherwise anywhere. GitHub org: `markleft-lang`. See `.claude/decisions.md` for the full decision record and rationale — read it before proposing design changes. See `.claude/landscape.md` for the prior-art survey (djot, CommonMark, MyST, Quarto, Markdoc, Typst, AsciiDoc, etc.) — consult it when writing the charter's prior-art section or evaluating features other languages have.
+**Markleft** is a formally specified, ambiguity-free successor to Markdown: Markdown's size and prose-like source, with a formal grammar, an executable conformance suite, and exactly one parse for every input. **Independent project, maintained by its authors — no institutional steward, sponsor, or endorser.** Crown copyright attaches by operation of law, which is not sponsorship; see Licensing below, and never imply otherwise anywhere. GitHub org: `markleft-lang`. See `.claude/decisions.md` for the full decision record and rationale — read it before proposing design changes. See `.claude/landscape.md` for the prior-art survey (djot, CommonMark, MyST, Quarto, Markdoc, Typst, AsciiDoc, etc.) — consult it when writing the definition's prior-art section or evaluating features other languages have.
 
 The name: markup went up, markdown went down, Markleft moved sideways — and the language is *what's left* after fifteen years of curation. When someone asks "what's left?", that question is the elevator pitch.
 
@@ -22,7 +22,7 @@ Every contribution must preserve all five. A feature that violates one is reject
 
 5. **Cardinal rule:** you can always read the entire document in plain text, with no compiler, viewer, or extension; nothing renders that the source does not already say. **Enabling, not restrictive** — the minimal set that lets capability live in tooling and be built cleanly. Detail: decision 15.
 
-**Non-goals (charter-level, from `.claude/landscape.md`):** Markleft is a language, not a toolchain and not a document-preparation system. No templating, no executable code cells, no scripting, no page/layout awareness, no output-format directives. Those make a different product (Quarto, Typst, Quarkdown) and every one of them front-loads complexity that kills the five-minute property. Feature requests in that direction are out of scope, not merely deferred. Decision 15 turns this from a scoping statement into a syntax rule: **nothing renders that is not in the source**, so no TOC directive, no auto-numbering, no transclusion — you can always read the whole document in plain text, with no compiler or viewer.
+**Non-goals (definition-level, from `.claude/landscape.md`):** Markleft is a language, not a toolchain and not a document-preparation system. No templating, no executable code cells, no scripting, no page/layout awareness, no output-format directives. Those make a different product (Quarto, Typst, Quarkdown) and every one of them front-loads complexity that kills the five-minute property. Feature requests in that direction are out of scope, not merely deferred. Decision 15 turns this from a scoping statement into a syntax rule: **nothing renders that is not in the source**, so no TOC directive, no auto-numbering, no transclusion — you can always read the whole document in plain text, with no compiler or viewer.
 
 **Not a richer Markdown for its own sake — but not an austerity project either.** Markleft *does* add: math in the core, decorators, pipe tables, several adopted from djot. The rule is that every addition pays for itself. It must remove an ambiguity or fill a genuine gap, **and cost nothing in plain-text clarity** — a construct that makes ordinary unmarked prose read worse is declined regardless of merit, because prose-safety is invariant 1 and richness is not an invariant at all.
 
@@ -58,7 +58,7 @@ Summary only — rationale and rejected alternatives live in `.claude/decisions.
 
 13. Hard breaks are explicit: `\` before a line ending is the only one. Trailing-space breaks are removed, and trailing whitespace is never significant.
 
-14. Unicode is the character set, UTF-8 the encoding; every code point is text and content is never normalized. *Open riders for the charter: BOM, invalid UTF-8, anchor/label matching, what "column" means for decision 6 outside ASCII, and what character set a decorator word, class, and id may use (decision 9).*
+14. Unicode is the character set, UTF-8 the encoding; every code point is text and content is never normalized. *Open riders for the definition: BOM, invalid UTF-8, anchor/label matching, what "column" means for decision 6 outside ASCII, and what character set a decorator word, class, and id may use (decision 9).*
 
 15. No generated content — the source is the whole document. No TOC directive, auto-numbering, index, transclusion, or variable substitution. **Cardinal rule: you can always read the entire document in plain text, with no compiler, viewer, or extension.** The source need not *look* like the rendered form (`**bold**` is not bold); it must be *semantically equivalent* to it, up to format. Test for any construct: is it changing the presentation of written content, or manufacturing content? Presentation instructions stay open; manufacturing is closed. **Back half:** rendering is lossy on marks and lossless on content — a decorator disappears into the typography that re-expresses it, so every format word must name something a renderer visibly distinguishes.
 
@@ -90,7 +90,7 @@ Three repositories under the `markleft-lang` GitHub org — never under a person
 
 One repo per layer of the normative hierarchy — definition, comparison, realizations. The namesake repo **is** the standard, which is the strongest available statement that the document is normative and not the code.
 
-- **`markleft-lang/markleft`** — the language itself: charter, grammar, normative prose, deltas appendix. The directory containing this file; all paths in this document are relative to it. CC0-intent.
+- **`markleft-lang/markleft`** — the language itself: definition, grammar, normative prose, deltas appendix. The directory containing this file; all paths in this document are relative to it. CC0-intent.
 
 - **`markleft-lang/tests`** — conformance suite + prose corpus, the key comparison. Separate so third-party implementations can vendor it without cloning a parser and a website. CC0-intent in its entirety, no MIT code inside.
 
@@ -101,7 +101,7 @@ One repo per layer of the normative hierarchy — definition, comparison, realiz
 ```
 markleft/         # this repo — the standard itself, at its root
   README.md       # what this is; states the normative boundary
-  charter.md      # normative — scaffold so far, no normative text yet
+  definition.md      # normative — scaffold so far, no normative text yet
   grammar/        # normative — not created yet (Phase 1)
   deltas.md       # normative — doubles as the migration guide; scaffold so far
   notes/          # non-normative memos (design challenges, layout decisions)
@@ -124,19 +124,19 @@ The licensing boundary that a `spec/` directory would have drawn is drawn by exc
 
 **`tests/corpus/` is original material only.** Nothing scraped, imported, quoted, or adapted — no collected READMEs, no third-party samples. Every file is contributor-authored, which keeps one licence across the whole suite. It exists to attack invariant 1 (`.claude/decisions.md` §3: prose-safety is "testable via a prose corpus in CI"), so write documents that try to break prose-safety, not ones that flatter it.
 
-**Current state:** all three repos exist locally with commits and GitHub remotes under the `markleft-lang` org — `markleft`, `tests`, and `.github`; `markleft-rs` is not among them and is not due until Phase 2. This repo holds `README.md`, `charter.md`, and `deltas.md` — the latter two are **scaffolds**, carrying section headings and scope notes with no normative text yet — plus four memos under `notes/` and the `.claude/` scaffolding. `tests` has its `examples/` and `corpus/` directories awaiting content. This is expected at Phase 0: the charter is prose, and no code ships before Phase 1. There is consequently no build, lint, or test command to document; add a Commands section here the moment `markleft-rs` lands, and make sure it covers running a *single* conformance example — that is the unit of debugging.
+**Current state:** all three repos exist locally with commits and GitHub remotes under the `markleft-lang` org — `markleft`, `tests`, and `.github`; `markleft-rs` is not among them and is not due until Phase 2. This repo holds `README.md`, `definition.md`, and `deltas.md` — the latter two are **scaffolds**, carrying section headings and scope notes with no normative text yet — plus four memos under `notes/` and the `.claude/` scaffolding. `tests` has its `examples/` and `corpus/` directories awaiting content. This is expected at Phase 0: the definition is prose, and no code ships before Phase 1. There is consequently no build, lint, or test command to document; add a Commands section here the moment `markleft-rs` lands, and make sure it covers running a *single* conformance example — that is the unit of debugging.
 
-## Current phase: Phase 0 — Charter & Corpus
+## Current phase: Phase 0 — Definition & Corpus
 
 Immediate work, in order:
 
-1. **Draft `charter.md`** — the file exists as a scaffold: eleven section headings, a scope note for each, and a pointer to its source material, with no normative text yet. The work is writing the prose into it, in public-standard voice, because a standard has to read like one: the four invariants; the binding decisions each with rationale and rejected alternatives; Name section (four readings + copyleft lineage + the availability accounting); metrology framing (the conformance suite is a key comparison for parsers; the canonical formatter is a reference realization); licensing and copyright posture, including the explicit non-endorsement statement; governance sketch — which says the project is maintained by its authors and governed by no institution.
+1. **Draft `definition.md`** — the file exists as a scaffold: eleven section headings, a scope note for each, and a pointer to its source material, with no normative text yet. The work is writing the prose into it, in public-standard voice, because a standard has to read like one: the five invariants; the binding decisions each with rationale and rejected alternatives; Name section (four readings + copyleft lineage + the availability accounting); metrology framing (the conformance suite is a key comparison for parsers; the canonical formatter is a reference realization); licensing and copyright posture, including the explicit non-endorsement statement; governance sketch — which says the project is maintained by its authors and governed by no institution.
 
 2. **Seed `tests/corpus/`** — original prose written to attack invariant 1: bare dollars and money amounts, snake_case identifiers, `5 * 3 = 15`, shell snippets, file globs, and lines that accidentally open with `#` or `-`. Contributor-authored only; see the corpus rule above.
 
 3. **Prototype the block parser sketch** — enough of the prefix-decidable block algorithm to run decisions 4, 5, 6 (headings, code blocks, lists) against the corpus; they carry the highest muscle-memory risk.
 
-Where Phase 0 sits in the ladder (full detail: `.claude/decisions.md` §9): Phase 1 grammar & spec-as-tests (PEG inlines + small-step block algorithm) → Phase 2 reference parser & specified JSON AST with source positions → Phase 3 killer tools (validator with real diagnostics, canonical formatter, migrator) → Phase 4 ecosystem (cheat sheet, playground, conformance badge, a system-prompt-sized language description for LLM emitters). Don't build ahead of the phase: the charter fixes the language before any parser encodes it.
+Where Phase 0 sits in the ladder (full detail: `.claude/decisions.md` §9): Phase 1 grammar & spec-as-tests (PEG inlines + small-step block algorithm) → Phase 2 reference parser & specified JSON AST with source positions → Phase 3 killer tools (validator with real diagnostics, canonical formatter, migrator) → Phase 4 ecosystem (cheat sheet, playground, conformance badge, a system-prompt-sized language description for LLM emitters). Don't build ahead of the phase: the definition fixes the language before any parser encodes it.
 
 ## Self-hosting goal
 

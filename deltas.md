@@ -4,7 +4,7 @@
 
 **Status: scaffold.** The delta list below is complete as to *which* decisions diverge from CommonMark, because those decisions are settled. The per-delta detail — exact before and after, edge cases, migrator behaviour — is not written yet, and **no text in this file is normative until it is.**
 
-This document is Appendix A of `charter.md`, and it has two audiences at once. For an implementer it is the normative list of every point where Markleft departs from CommonMark. For someone moving documents across, it is the migration guide. Decision 12 requires that every divergence appear here: matching CommonMark byte-for-byte wherever that is unambiguous and harmless is the rule, so each entry below has to justify its own existence.
+This document is Appendix A of `definition.md`, and it has two audiences at once. For an implementer it is the normative list of every point where Markleft departs from CommonMark. For someone moving documents across, it is the migration guide. Decision 12 requires that every divergence appear here: matching CommonMark byte-for-byte wherever that is unambiguous and harmless is the rule, so each entry below has to justify its own existence.
 
 ## The deltas
 
