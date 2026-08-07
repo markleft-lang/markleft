@@ -16,7 +16,7 @@ A formally specified, ambiguity-free successor to Markdown: the same size and th
 
 - **Linear time.** A single pass, prefix-decidable blocks, no backtracking, no pathological inputs.
 
-- **Read it anywhere.** You can always read the entire document in plain text, with no compiler, viewer, or extension. Nothing renders that the source does not already say — no directive whose content appears only after processing. Capability is not lost by this, it is relocated: tools write into the source, where the result stays plain text like everything else.
+- **Read it anywhere.** You can always read the entire document in plain text, with no compiler, viewer, or extension. Nothing renders that the source does not already say.
 
 ## What Markleft is not
 
