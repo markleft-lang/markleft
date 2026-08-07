@@ -40,7 +40,7 @@ Summary only — rationale and rejected alternatives live in `.claude/decisions.
 
 5. Fenced code only. No indented code blocks.
 
-6. Strict list rules: one marker per list, content-column alignment, no lazy continuation. *Highest muscle-memory risk, with 4 and 5.*
+6. Strict list rules: one marker per list, content-column alignment, no lazy continuation. *Highest muscle-memory risk, with 4 and 5.* *Open rider: whether ordered-list numbers render as written — CommonMark renumbers from the first marker, which manufactures content decision 15 forbids.*
 
 7. No raw passthrough at all — no raw block, no raw span, no `=format` decorator. A Markleft document is inert by construction. Raw HTML would be a decision 15 hole (`<iframe>` is transclusion).
 
@@ -50,13 +50,13 @@ Summary only — rationale and rejected alternatives live in `.claude/decisions.
 
 10. Tabs are not structural (validator warning + auto-fix).
 
-11. Deltas from djot: no smart punctuation in core; keep Markdown muscle memory where Markdown wasn't broken (links, blockquotes, backtick verbatim).
+11. Deltas from djot: no smart punctuation in core; keep Markdown muscle memory where Markdown wasn't broken (links, blockquotes, backtick verbatim — challenged on keyboard-accessibility grounds and kept, `notes/backtick-verbatim-challenge.md`).
 
 12. Match CommonMark byte-for-byte wherever it's unambiguous and harmless; every divergence goes in the "Deltas from Markdown" appendix, which doubles as the migration guide.
 
 13. Hard breaks are explicit: `\` before a line ending is the only one. Trailing-space breaks are removed, and trailing whitespace is never significant.
 
-14. Unicode is the character set, UTF-8 the encoding; every code point is text and content is never normalized. *Open riders for the charter: BOM, invalid UTF-8, anchor/label matching, and what "column" means for decision 6 outside ASCII.*
+14. Unicode is the character set, UTF-8 the encoding; every code point is text and content is never normalized. *Open riders for the charter: BOM, invalid UTF-8, anchor/label matching, what "column" means for decision 6 outside ASCII, and what character set a decorator word, class, and id may use (decision 9).*
 
 15. No generated content — the source is the whole document. No TOC directive, auto-numbering, index, transclusion, or variable substitution. **Cardinal rule: you can always read the entire document in plain text, with no compiler, viewer, or extension.** The source need not *look* like the rendered form (`**bold**` is not bold); it must be *semantically equivalent* to it, up to format. Test for any construct: is it changing the presentation of written content, or manufacturing content? Presentation instructions stay open; manufacturing is closed. **Back half:** rendering is lossy on marks and lossless on content — a decorator disappears into the typography that re-expresses it, so every format word must name something a renderer visibly distinguishes.
 
@@ -95,9 +95,9 @@ One repo per layer of the normative hierarchy — definition, comparison, realiz
 ```
 markleft/         # this repo — the standard itself, at its root
   README.md       # what this is; states the normative boundary
-  charter.md      # normative
-  grammar/        # normative
-  deltas.md       # normative — doubles as the migration guide
+  charter.md      # normative — scaffold so far, no normative text yet
+  grammar/        # normative — not created yet (Phase 1)
+  deltas.md       # normative — doubles as the migration guide; scaffold so far
   notes/          # non-normative memos (design challenges, layout decisions)
   CLAUDE.md       # scaffolding — not part of the released standard
   .claude/        # scaffolding — decision record, prior-art survey, conventions
@@ -118,13 +118,13 @@ The licensing boundary that a `spec/` directory would have drawn is drawn by exc
 
 **`tests/corpus/` is original material only.** Nothing scraped, imported, quoted, or adapted — no collected READMEs, no third-party samples. Every file is contributor-authored, which keeps one licence across the whole suite. It exists to attack invariant 1 (`.claude/decisions.md` §3: prose-safety is "testable via a prose corpus in CI"), so write documents that try to break prose-safety, not ones that flatter it.
 
-**Current state:** three repos exist locally (`git init`, no commits yet, no GitHub remotes); `markleft-rs` is not among them and is not due until Phase 2. This repo holds only this file, `.claude/`, and two memos under `notes/` — `charter.md` is the next thing to write. This is expected at Phase 0: the charter is prose, and no code ships before Phase 1. There is consequently no build, lint, or test command to document; add a Commands section here the moment `markleft-rs` lands, and make sure it covers running a *single* conformance example — that is the unit of debugging.
+**Current state:** all three repos exist locally with commits and GitHub remotes under the `markleft-lang` org — `markleft`, `tests`, and `.github`; `markleft-rs` is not among them and is not due until Phase 2. This repo holds `README.md`, `charter.md`, and `deltas.md` — the latter two are **scaffolds**, carrying section headings and scope notes with no normative text yet — plus four memos under `notes/` and the `.claude/` scaffolding. `tests` has its `examples/` and `corpus/` directories awaiting content. This is expected at Phase 0: the charter is prose, and no code ships before Phase 1. There is consequently no build, lint, or test command to document; add a Commands section here the moment `markleft-rs` lands, and make sure it covers running a *single* conformance example — that is the unit of debugging.
 
 ## Current phase: Phase 0 — Charter & Corpus
 
 Immediate work, in order:
 
-1. **Draft `charter.md`** — public-standard voice, because a standard has to read like one: the four invariants; the binding decisions each with rationale and rejected alternatives; Name section (four readings + copyleft lineage + the availability accounting); metrology framing (the conformance suite is a key comparison for parsers; the canonical formatter is a reference realization); licensing and copyright posture, including the explicit non-endorsement statement; governance sketch — which says the project is maintained by its authors and governed by no institution.
+1. **Draft `charter.md`** — the file exists as a scaffold: eleven section headings, a scope note for each, and a pointer to its source material, with no normative text yet. The work is writing the prose into it, in public-standard voice, because a standard has to read like one: the four invariants; the binding decisions each with rationale and rejected alternatives; Name section (four readings + copyleft lineage + the availability accounting); metrology framing (the conformance suite is a key comparison for parsers; the canonical formatter is a reference realization); licensing and copyright posture, including the explicit non-endorsement statement; governance sketch — which says the project is maintained by its authors and governed by no institution.
 
 2. **Seed `tests/corpus/`** — original prose written to attack invariant 1: bare dollars and money amounts, snake_case identifiers, `5 * 3 = 15`, shell snippets, file globs, and lines that accidentally open with `#` or `-`. Contributor-authored only; see the corpus rule above.
 
@@ -168,13 +168,13 @@ Two project-specific riders sit on top of them:
 
 - A spec change and its examples land as **paired pull requests** across repos — opened together, merged together, neither alone. `tests` records the spec revision it targets; the spec is never tagged ahead of the suite that exercises it. See `notes/repo-layout.md`.
 
-- Dogfood: write all project prose so it's valid under our own rules (e.g., escape dollars, no underscore emphasis, fenced code only) — our own repo is the first thing that has to survive them. (This file uses standard Markdown for Claude Code's benefit; spec documents should dogfood.)
+- Dogfood: write all project prose so it's valid under our own rules (no underscore emphasis, fenced code only, no raw HTML) — our own repo is the first thing that has to survive them. Note the one asymmetry: **escape dollars in `.md` files even though Markleft never needs it** — bare `$` is always literal here, but GitHub's math pass will pair them on render, which is the founding exhibit happening to us. (This file uses standard Markdown for Claude Code's benefit; spec documents should dogfood.)
 
 - Prefer boring, explicit rules over clever heuristics — cleverness is how Markdown got here.
 
 - Humor budget: the "What's left?" pun and the extension graveyard are canon; everything else in normative text stays sober.
 
-- Attribute inheritances explicitly in spec prose — CommonMark (spec-as-tests methodology, byte-compatibility baseline), djot (linear-time architecture, uniform escaping, attributes, bracketed emphasis, raw-content design), MyST/rST (directives/roles), Markdoc (schema validation), Typst (error-message bar), AsciiDoc/Eclipse (TCK concept). Full list: `.claude/landscape.md`. Most of our syntax is djot-vetted; saying so is both accurate and disarming.
+- Attribute inheritances explicitly in spec prose — CommonMark (spec-as-tests methodology, byte-compatibility baseline), djot (linear-time architecture, uniform escaping, attributes — reduced here to decorators, bracketed emphasis; **not** its raw-content design, which decision 7 removes), MyST/rST (the directive concept disciplined into a closed extension point, never the content-generating directive), Markdoc (schema validation), Typst (error-message bar), AsciiDoc/Eclipse (TCK concept). Full list: `.claude/landscape.md`. Most of our syntax is djot-vetted; saying so is both accurate and disarming.
 
 ## Open checklist (verify/act early in session when relevant)
 
