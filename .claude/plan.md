@@ -52,6 +52,9 @@ These need someone else — a registry, a registrar, a lawyer. Worth advancing w
 - [ ] Claim the `@markleft` package scope on npm
 - [ ] Claim `markleft` (or `markleft-core`) on crates.io
 - [ ] Register a domain — `markleft.org` or `markleft.ca`
+- [ ] Set the GitHub About box and topics on `markleft` (needs the web UI or `gh`). Proposed description: *"A formally specified successor to Markdown — prose-safe by construction, exactly one parse for every input. This repository is the standard."* Proposed topics: `markdown`, `markup-language`, `commonmark`, `specification`, `formal-grammar`, `markleft`. Six on purpose — more dilutes to the same effect as none
+- [ ] Give `tests` and `.github` their own About boxes, consistent with the above and distinct from each other. `tests` is the key comparison, not a copy of the standard
+- [ ] Add `LICENSE` (CC BY 4.0) to `tests`, which matters more than here since that repo is designed to be vendored wholesale
 - [ ] Legal: trademark search
 - [ ] Legal: ask counsel the *prior* question — is this Crown copyright at all? The Act turns on whether work was done under direction or control, not on who employs the author, so a personal project may not be caught. Cheaper to answer than the waiver question, and would settle it. **The licence itself is settled: CC BY 4.0.** What is left is this question, and the exact wording of the notice. Needs counsel, and does not imply anyone supervises the project
 
