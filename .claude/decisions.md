@@ -147,6 +147,8 @@ Cardinal-point extension of markup/markdown. Four readings, all load-bearing:
 
 4. **Left margin:** the natural state of plain text — prose-safety subliminal.
 
+**A grace note, not a fifth reading.** Decision 17's anchors let an author *leave a mark* in a document — a third sense of the verb the name already plays on, after "what remains" (reading 2) and "we departed" (reading 3). Markleft may be the only Markdown successor whose name describes what its anchors do. It is a pleasing resonance and Name-section material if it earns room there, but **the four readings stay four**: each of those describes the whole language, where this describes one feature. Promoting it would dilute "all load-bearing" into "all quite nice".
+
 **Copyleft lineage (structural, not just aesthetic):** copyleft used copyright's machinery to guarantee openness; Markleft uses formal-spec machinery to guarantee prose freedom. The formalism exists so plain text stays plain.
 
 **The self-installing meme:** a stranger asks "What's `left`?" — and the question is the elevator pitch. Enshrined.
@@ -610,3 +612,11 @@ Decisions recorded above are historical; amendments are appended here rather tha
 - Decision 12 agrees independently: this is CommonMark's behaviour and what every Markdown author already expects, so keeping it costs no delta.
 
 - **Phase 3 formatter question:** all-`1.` normalization has the stronger case, since inserting an item then changes one line rather than rewriting every line below it — the diff-churn argument that governs hard-wrapping. Sequential numerals read better in raw source. Left open.
+
+**2026-08-07 — the "leave a mark" resonance.** Added to §5 as a grace note. Not a fifth reading; the four stand.
+
+- Decision 17's anchors let an author *leave a mark* in a document — a third sense of the verb the name plays on, after "what remains" and "we departed". Markleft may be the only Markdown successor whose name describes what its anchors do.
+
+- **Deliberately not promoted.** The four readings each describe the whole language; this describes one feature. "Four readings, all load-bearing" is a claim worth keeping true, and a fifth entry would soften it to "all quite nice".
+
+- Charter Name-section material if it earns room there, subject to the humour budget in `CLAUDE.md`.
