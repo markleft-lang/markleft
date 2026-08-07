@@ -8,13 +8,13 @@ A formally specified, ambiguity-free successor to Markdown: the same size and th
 
 - **Prose-safety.** Natural-language prose renders verbatim. Money, snake_case, `5 * 3 = 15`, and shell snippets are safe by construction, never by heuristic.
 
-- **Verbatim means verbatim.** A backslash before *any* character yields that character — no exception list, and no carve-outs that vary between engines. That includes a backslash before a line ending: it is the *only* hard line break, and trailing whitespace never means anything. Markdown's two-trailing-spaces break is gone — you cannot see it, editors strip it, and the ordinary habit of typing two spaces after a period turned prose into structure whenever such a sentence ended a line. And **plain text has never meant ASCII**: the whole Unicode range carries the same guarantees, as content and in every construct that takes text.
+- **Verbatim means verbatim.** A backslash before any character yields that character — line endings included, no exception list. And plain text has never meant ASCII.
 
 - **Five minutes.** The complete core fits on one reference card. No rule has an "unless" clause.
 
 - **One meaning.** Every input has exactly one parse, and the specification is executable — a grammar and a conformance suite, not interpretable prose.
 
-- **Linear time.** A single pass, prefix-decidable blocks, no backtracking.
+- **Linear time.** A single pass, prefix-decidable blocks, no backtracking, no pathological inputs.
 
 ## What Markleft is not
 
