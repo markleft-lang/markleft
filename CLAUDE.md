@@ -54,7 +54,9 @@ Summary only — rationale and rejected alternatives live in `.claude/decisions.
 
 12. Match CommonMark byte-for-byte wherever it's unambiguous and harmless; every divergence goes in the "Deltas from Markdown" appendix, which doubles as the migration guide.
 
-13. Hard breaks are explicit: `\` before a line ending is the only one. Trailing-space breaks are removed, and trailing whitespace is never significant. *Unicode is still promised publicly without a numbered decision — see `.claude/decisions.md` §11, 2026-08-07.*
+13. Hard breaks are explicit: `\` before a line ending is the only one. Trailing-space breaks are removed, and trailing whitespace is never significant.
+
+14. Unicode is the character set, UTF-8 the encoding; every code point is text and content is never normalized. *Open riders for the charter: BOM, invalid UTF-8, anchor/label matching, and what "column" means for decision 6 outside ASCII.*
 
 ## File extensions
 
