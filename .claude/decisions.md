@@ -49,7 +49,7 @@ LLMs are now arguably the largest Markdown-producing population. A trivially lea
 
 6. **Lists with arithmetic, not archaeology.** One marker per list; continuation aligns with content column; no lazy continuation; loose/tight by one explicit rule. *Most in need of corpus testing.*
 
-7. **Raw HTML leaves the core.** Explicit ` ```=html ` fenced block + inline raw span (djot design). Biggest breaking change; also the security story.
+7. **No raw passthrough. At all.** *(Reversed 2026-08-07 — previously an explicit ` ```=html ` block plus an inline raw span, djot's design.)* Markleft has no way to emit content in a target format. There is no raw block, no raw span, and no `=format` decorator; the `=` sigil leaves the language with them. **The reason is decision 15:** `<iframe>`, `<img src>`, `<script>`, and `<object>` render content that is not in the source, which is transclusion under another name and exactly what the cardinal rule forbids. Nor can the hole be patched by rule — `<br>` adds nothing and `<iframe>` adds everything, and separating them requires knowing HTML semantics, an unbounded blocklist and an "unless" clause at once, which invariant 2 refuses. **What removal buys, beyond closing the hole:** a Markleft document is **inert by construction** — it cannot execute or embed anything, ever, a claim no Markdown flavour can make and one that lands directly on the LLM-emitter argument in §2, since a safe output target is worth more when "safe" needs no qualifier; no target-format lock-in, where `=html` had put HTML *inside* a language claiming independence from any serialization, the same fault `notes/normative-hierarchy.md` finds in CommonMark binding its suite to HTML; and a simpler decorator grammar, decision 9's `=name` token disappearing entirely. **The cost, stated honestly:** an escape hatch is what lets a small language *refuse* feature requests — "Markleft cannot do X" is answerable with "drop to a raw block" only while one exists. Without it, every gap presses directly on the core, which is the force that killed the five-minute property everywhere else. `<details>`/`<summary>` is the concrete casualty on GitHub, and djot's answer to it is generic containers, which `.claude/landscape.md` records us declining. That pressure is judged better handled by saying no than by keeping a hole in the cardinal rule. **Rejected alternative:** keeping the raw block as a loudly-marked exception, where decision 15 holds *except* inside a fence that warns the reader the plain text is not the whole story. Honest, but still an "unless" clause on the cardinal rule, and the rule is worth more intact. *Open: what the migrator does with the HTML in existing documents — it cannot convert it, so it strips and reports or refuses the document. Deferred deliberately; principle first.*
 
 8. **Pipe tables in core, strictly.** GFM-style with a real grammar; no heuristics.
 
@@ -322,3 +322,17 @@ Decisions recorded above are historical; amendments are appended here rather tha
 - **So inline math is not a delimiter problem, it is a tagged-verbatim problem** — and both halves were already on the record: backtick verbatim (decision 11) and the decorator grammar (decision 9). The inline form needed no new syntax, only the statement that the registry is reachable inline.
 
 - Rejected: carving `\(` and `\)` out of decision 3. It costs the "no exception list" invariant *and* does not fix the content problem, so it buys nothing on its own.
+
+**2026-08-07 — raw passthrough removed entirely.** Decision 7 reversed (§4). Delta 11 rewritten; `.claude/landscape.md`, `README.md`, and `CLAUDE.md` updated.
+
+- **Decision 15 is the reason.** `<iframe>`, `<img src>`, `<script>`, and `<object>` render content that is not in the source. That is transclusion, which the cardinal rule forbids by name, so any document with a raw block falsified "you can read the whole document in plain text" by exactly the mechanism decision 15 exists to exclude.
+
+- **The hole could not be patched by rule.** `<br>` adds nothing, `<iframe>` adds everything, and telling them apart needs HTML semantics — an unbounded blocklist and an "unless" clause at once. Invariant 2 refuses it, so the choice was binary.
+
+- **Bought:** a document **inert by construction** (no execution, no embedding, ever — a claim no Markdown flavour can make, and worth more in the LLM-emitter argument because "safe" needs no qualifier); no target-format lock-in, `=html` having put HTML inside a language that claims independence from any serialization; and a simpler decorator grammar, since the `=name` token shape leaves with it.
+
+- **Paid, and stated in the decision rather than hidden:** an escape hatch is what lets a small language refuse feature requests. Without one, every gap presses on the core — the force that killed the five-minute property everywhere else. `<details>`/`<summary>` is the concrete casualty; djot answers it with generic containers, which we decline.
+
+- Rejected: keeping the raw block as a loudly-marked exception. Honest, but still an "unless" clause on the cardinal rule.
+
+- **Deferred deliberately:** what the migrator does with HTML in existing documents. Principle first; the migration story is a later problem and does not change the design.

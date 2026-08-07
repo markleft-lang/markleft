@@ -20,7 +20,7 @@ This document is Appendix A of `charter.md`, and it has two audiences at once. F
 | 8 | Empty headings removed; a heading needs text | 4 | A lone `#` line becomes a paragraph — migrator reports each one |
 | 9 | Indented code blocks removed | 5 | Convert four-space blocks to fences |
 | 10 | Strict list rules: one marker per list, content-column alignment, no lazy continuation | 6 | Re-indent continuations; split mixed-marker lists |
-| 11 | Raw HTML leaves the core: ```` ```=html ```` block and inline raw span only | 7 | Wrap raw HTML explicitly, or drop it |
+| 11 | Raw HTML is removed entirely; there is no passthrough of any kind | 7 | No automatic path — migrator strips and reports; see decision 7 |
 | 12 | Pipe tables are core and strictly grammatized | 8 | Malformed tables now fail instead of guessing |
 | 13 | Attributes `{.class #id k=v}` and a closed extension namespace | 9 | New capability; nothing to migrate |
 | 14 | Tabs are not structural | 10 | Validator warns and auto-fixes |

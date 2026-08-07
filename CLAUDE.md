@@ -22,7 +22,7 @@ Every contribution must preserve all four. A feature that violates one is reject
 
 **Non-goals (charter-level, from `.claude/landscape.md`):** Markleft is a language, not a toolchain and not a document-preparation system. No templating, no executable code cells, no scripting, no page/layout awareness, no output-format directives. Those make a different product (Quarto, Typst, Quarkdown) and every one of them front-loads complexity that kills the five-minute property. Feature requests in that direction are out of scope, not merely deferred. Decision 15 turns this from a scoping statement into a syntax rule: **nothing renders that is not in the source**, so no TOC directive, no auto-numbering, no transclusion — you can always read the whole document in plain text, with no compiler or viewer.
 
-**Not a richer Markdown for its own sake — but not an austerity project either.** Markleft *does* add: math in the core, attributes, pipe tables, an explicit raw-HTML block, several adopted from djot. The rule is that every addition pays for itself. It must remove an ambiguity or fill a genuine gap, **and cost nothing in plain-text clarity** — a construct that makes ordinary unmarked prose read worse is declined regardless of merit, because prose-safety is invariant 1 and richness is not an invariant at all.
+**Not a richer Markdown for its own sake — but not an austerity project either.** Markleft *does* add: math in the core, attributes, pipe tables, several adopted from djot. The rule is that every addition pays for itself. It must remove an ambiguity or fill a genuine gap, **and cost nothing in plain-text clarity** — a construct that makes ordinary unmarked prose read worse is declined regardless of merit, because prose-safety is invariant 1 and richness is not an invariant at all.
 
 **The five-minute property is the budget.** Most of the binding decisions remove something; a few add; the total still fits on one reference card. So "Markleft could also do X" is never an argument by itself — the argument must be that X is worth what it costs every reader who never uses it. When weighing a djot feature we have not adopted (smart punctuation, definition lists, generic containers), that is the question to ask, and `.claude/landscape.md` records why djot is the right place to shop.
 
@@ -42,7 +42,7 @@ Summary only — rationale and rejected alternatives live in `.claude/decisions.
 
 6. Strict list rules: one marker per list, content-column alignment, no lazy continuation. *Highest muscle-memory risk, with 4 and 5.*
 
-7. No raw HTML in core: ```` ```=html ```` fenced block + inline raw span only.
+7. No raw passthrough at all — no raw block, no raw span, no `=format` decorator. A Markleft document is inert by construction. Raw HTML would be a decision 15 hole (`<iframe>` is transclusion).
 
 8. GFM-style pipe tables, strictly gramma­rized.
 
@@ -140,7 +140,7 @@ Every document this project ships should be written in Markleft. This is the com
 
 2. **Phase 3 — enforced in CI.** The validator checks every `.md` in every repo: it parses as Markleft, and its CommonMark rendering matches byte for byte. Failures are fixed, or exempted with a stated reason. This is where the claim stops being aspirational and becomes testable.
 
-3. **Phase 4 — `.markleft` sources where they earn it.** Documents using Markleft-only features (math, attributes, raw blocks) cannot be valid CommonMark. Those become `.markleft`, with the canonical formatter generating `.md` companions marked do-not-edit; the site renders `.markleft` natively via WASM.
+3. **Phase 4 — `.markleft` sources where they earn it.** Documents using Markleft-only features (math, attributes) cannot be valid CommonMark. Those become `.markleft`, with the canonical formatter generating `.md` companions marked do-not-edit; the site renders `.markleft` natively via WASM.
 
 **GitHub renders `.md` and will not render `.markleft`.** That constraint does not go away, and pretending otherwise would cost us the platform that decided Markdown's adoption in the first place. So `.md` files stay. The only real question is whether they are authored or generated — and stage 3 is worth doing only for documents that genuinely need syntax CommonMark lacks. Generated files are a maintenance tax; do not pay it for documents that could simply have stayed valid in both.
 

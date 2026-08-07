@@ -88,7 +88,7 @@ Nobody combines: small + formally specified + prose-safe + collision-free math +
 
 - **CommonMark:** spec-as-tests methodology; byte-compatibility baseline.
 
-- **djot:** linear-time architecture, uniform escaping, attributes, bracketed emphasis, raw-content design; most of our syntax decisions are djot-vetted.
+- **djot:** linear-time architecture, uniform escaping, attributes (as decorators), bracketed emphasis; most of our syntax decisions are djot-vetted. **Not** its raw-content design — decision 7 removes passthrough entirely, because raw HTML is transclusion and decision 15 forbids it.
 
 - **MyST/rST:** the directive/role concept, disciplined into a closed namespace — the extension *point*, never the content-generating directive, which decision 15 forbids outright.
 
