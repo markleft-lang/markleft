@@ -105,6 +105,8 @@ LLMs are now arguably the largest Markdown-producing population. A trivially lea
 
     **Rejected — `[alt](src){image}`,** the strongest alternative, which fails on cost rather than on principle. The principle favours it: `![]()` is the only *inline* construct whose type marker precedes its content, and prefix markers were rejected everywhere else inline. But decision 12 forbids diverging from an unambiguous, harmless CommonMark construct for legibility alone; it opens a third decorator position, growing the rule rather than shrinking it; and it would make nearly every real document invalid CommonMark, since almost every README carries badges or screenshots. That last cost also destroys the self-hosting measurement, which exists precisely to count the documents that genuinely need `.markleft`.
 
+    **The line, tested — file includes stay forbidden.** Could `![…](chapter-2.md)` include a text file in place, with `[…]` linking to it? **No**, and the rule decides it without needing an amendment, which is the test of an invariant rather than a carve-out. An include inserts text the source does not contain, so a plain-text reader has *not* read the document: it fails exactly where an image passes, and it fails the same way `<iframe>` does — arbitrary imported text rather than a bounded illustration. The prohibition is over-determined besides, since include mechanisms are what document-preparation systems have (AsciiDoc `include::`, MyST, Quarto, mdBook), and the charter-level non-goal already excludes that product category. **The legitimate want behind it** — keeping a code sample in sync with the file it came from — is real, and gets the same answer tables of contents got: a preprocessor or the editor writes the snippet *into* the source, where it becomes plain text like everything else. An include directive hides drift; an inlined snippet shows it in the diff.
+
     *Left open deliberately:* whether decorators gain a third position, so that `## Heading {#custom-id}` becomes expressible. `#id` exists for anchors and cannot currently reach a heading, which is a real gap — but it should be settled on heading anchors' own merits rather than as a side effect of image syntax.
 
 ## 5. Name: Markleft
@@ -474,3 +476,13 @@ Decisions recorded above are historical; amendments are appended here rather tha
 - **Rejected:** `` `path`{image} `` — a decorator must work in both positions and ` ```image ` is meaningless; a decorator labels content that is present, not a reference to content that is absent; and there is nowhere to put alt text. **Also rejected:** `[alt](src){image}`, which principle actually favours — `![]()` is the only inline construct with a prefix type marker — but which decision 12 forbids for legibility alone, which opens a third decorator position, and which would make nearly every README invalid CommonMark and void the self-hosting measurement.
 
 - **Left open:** whether decorators gain a third position for `## Heading {#custom-id}`. `#id` exists for anchors and cannot reach a heading; a real gap, to be settled on its own merits.
+
+**2026-08-07 — file includes confirmed forbidden.** Worked consequence added to decision 16 (§4). No new rule; the existing one decided the case.
+
+- **`![…](chapter-2.md)` as an in-place include fails**, because it inserts text the source does not contain. It fails exactly where an image passes, and in the same way `<iframe>` does — arbitrary imported text rather than a bounded illustration.
+
+- **This is the rule's first live test, and it passed.** The textual line was written for images and then decided an unrelated case with no amendment. That is what separates an invariant from a carve-out, and it is worth recording as evidence that the line is drawn in the right place.
+
+- **Over-determined anyway:** include mechanisms are what document-preparation systems have (AsciiDoc `include::`, MyST, Quarto, mdBook), and the charter-level non-goal already excludes that product category.
+
+- **The legitimate want gets the tables-of-contents answer:** keeping a code sample in sync with its source file is real, and belongs to a preprocessor or the editor, which writes the snippet *into* the source where it becomes plain text like everything else. An include directive hides drift; an inlined snippet shows it in the diff — which is the better outcome on its own merits, not merely the permitted one.
