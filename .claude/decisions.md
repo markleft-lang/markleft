@@ -129,6 +129,8 @@ It is also the general answer to "but Markleft cannot do X." The answer is not *
 
     **Rejected — a bare reference sigil,** in every spelling considered (`#id`, `@id`, `@#id`). Two independent failures. It would have to **generate its own text**: rendering `@#five-minute` means emitting either the useless literal `five-minute` or the target's title or section number, which is text pulled from elsewhere and inserted where nobody wrote it — decision 15, arriving through a smaller door than a table of contents but through the same door. And bare `#id` is **prose-unsafe**: `#general`, `#nowplaying`, and `#hashtag` are ordinary technical prose, and it would make `#word` text at the start of a line (decision 4) but syntax in the middle of one. `@` collides with handles for the same reason; `@#` escapes the collision only by being obscure enough that nobody would type it, which is also why nobody would reach for it. *(No digit-guard rule is needed as a result: with references written as links, `#1` in prose is never syntax and never needs escaping.)*
 
+    **Prefix conventions belong to tooling, never to the grammar.** An id is an opaque string, exactly as a decorator word is: `fig-3` means no more to the language than `banana` does. So a tool may adopt `fig-`, `sec-`, `tab-` and build figure numbering, table references, and section cross-references on top of them — writing the results into the source, per §2 — while an author who prefers `{#the-bridge-photo}` and numbers figures by hand is never conscripted into any scheme. Competing conventions coexist without the format arbitrating between them, and the non-normative conventional-labels appendix is where a prevailing one gets *recorded* rather than *imposed*. This is the same guarantee that made no word reserved, extended to ids for the same reason: nothing the language does not define can ever change how a document parses. *One live consequence for the character-set rider:* Pandoc spells these `#fig:3` and Quarto `#fig-3`, so whether a colon is writable in an id is now a concrete question rather than a theoretical one.
+
     **The validator stays a single-document tool.** Duplicate ids and dangling same-document fragments are lint. A target carrying a path or a host is a **URL**, and Markleft does not validate URLs — an `https://` link can 404 and is not checked either, so a cross-document fragment gets the same treatment. This keeps the tooling from needing to know about a document set, which would have been its first multi-file commitment.
 
     **Cost, stated:** `{#` becomes structural in prose, so Svelte and Handlebars snippets (`{#if}`, `{#each}`) need `\{` outside a fence. Decision 3's uniform escape covers it and no new rule is required, but it is a real papercut for one audience.
@@ -574,3 +576,13 @@ Decisions recorded above are historical; amendments are appended here rather tha
 - **It is the general answer to "Markleft cannot do X":** not *no*, but *not in the format* — with the burden moved to showing X cannot be written into the source by a tool. Little survives that test, which is why the refusals have been cheap. Something that genuinely does not survive it is a real finding and belongs in this record.
 
 - **Compounds with the LLM adoption variable** in §2: a target that never grows is a better emitter for machines than one that does, because the description a model needs stays the same size forever.
+
+**2026-08-07 — anchor prefix conventions belong to tooling.** Added to decision 17 (§4). Extends "no word is ever reserved" from decorator words to ids.
+
+- **An id is opaque**, exactly as a decorator word is. `fig-3` means no more to the grammar than `banana`, so `fig-`, `sec-`, and `tab-` conventions can carry figure numbering and cross-references entirely in tooling, writing into the source per §2.
+
+- **Nobody is conscripted.** An author who writes `{#the-bridge-photo}` and numbers figures by hand is untouched, and competing conventions coexist without the format arbitrating. The conventional-labels appendix *records* a prevailing convention rather than imposing one.
+
+- **Same guarantee, extended:** nothing the language does not define can ever change how a document parses. That property now covers both token shapes.
+
+- **Consequence for an open rider:** Pandoc spells these `#fig:3`, Quarto `#fig-3`. Whether a colon is writable in an id is therefore a concrete question for the character-set rider, not a theoretical one.
