@@ -60,6 +60,8 @@ Summary only — rationale and rejected alternatives live in `.claude/decisions.
 
 15. No generated content — the source is the whole document. No TOC directive, auto-numbering, index, transclusion, or variable substitution. **Cardinal rule: you can always read the entire document in plain text, with no compiler, viewer, or extension.** The source need not *look* like the rendered form (`**bold**` is not bold); it must be *semantically equivalent* to it, up to format. Test for any construct: is it changing the presentation of written content, or manufacturing content? Presentation instructions stay open; manufacturing is closed. **Back half:** rendering is lossy on marks and lossless on content — a decorator disappears into the typography that re-expresses it, so every format word must name something a renderer visibly distinguishes.
 
+16. Images are core, `![alt](src)` unchanged from CommonMark — no delta. Legal because **an image adds no text**: decision 15 governs the document's text, so "no transclusion" there means no *textual* transclusion. Alt is optional; empty alt is a lint warning, never an error. **The memorable rule: `[…]` links to the target, `![…]` shows it instead — the `!` is a presentation switch, not a different construct.**
+
 ## File extensions
 
 Both forms are DECIDED (`.claude/decisions.md` §6). Canonical pair, exactly two: `.markleft` (long form — documentation-canonical, the collision-proof long-term anchor) and `.lf` (short form — the `.md` two-letter echo and the line-feed wink). Never use: `.lft` (runner-up, reserve fallback only — not a live option), `.left`, `.mklf` (retired), `.ml`, `.mll` (OCaml/ocamllex), `.mlf`, `.mlt`, `.mlk`, `.mkt`, `.mf`.
