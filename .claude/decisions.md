@@ -694,3 +694,11 @@ Decisions recorded above are historical; amendments are appended here rather tha
 - **The conformance suite is where attribution actually bites**, since it is designed to be vendored wholesale. If the copyright question resolves in the author's favour, CC0 for the suite is the first thing to secure.
 
 - **The project's stated basis**, recorded as such: an employee's copyright vests in the employer absent written agreement otherwise, so the author's vests in the Crown. The contrary reading — that both s.12 and s.13(3) turn on direction, control, or course of employment rather than employment status — was raised, considered, and set aside by the author. It survives in the errand as **the prior question for counsel: is this Crown copyright at all**, which is cheaper to answer than the waiver question and would moot it.
+
+**2026-08-07 — `README.md` gains a Copyright section.** Placed above Licensing: who holds it, then what you may do with it.
+
+- **Bare Crown form, no institution named.** "His Majesty the King in right of Canada, by operation of law", followed immediately by the statement that this is employment law rather than sponsorship, and that no institution owns, funds, backs, endorses, reviews, supervises, or vouches for the project.
+
+- **Naming the author's agency was requested and declined**, on two grounds. It is the "institution-named copyright markers" that §11 removed on 2026-08-06, and a reader who sees an agency beside a copyright symbol concludes the agency backs the project — an inference no disclaimer underneath reliably dislodges. It is also inaccurate: Crown copyright vests in the Crown, and a department enters only through the longer "as represented by the Minister of…" form, which names a Minister rather than an agency and reads *more* like sponsorship, not less.
+
+- The section says explicitly that no institution is named *and why*, so a future editor does not read the omission as an oversight and helpfully fix it.
