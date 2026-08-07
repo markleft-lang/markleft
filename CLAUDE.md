@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this project is
 
-**Markleft** is a formally specified, ambiguity-free successor to Markdown: Markdown's size and prose-like source, with a formal grammar, an executable conformance suite, and exactly one parse for every input. **Independent project, maintained by its authors — no institutional steward, sponsor, or endorser.** Crown copyright attaches by operation of law, which is not sponsorship; see Licensing below, and never imply otherwise anywhere. GitHub org: `markleft-lang`. See `.claude/decisions.md` for the full decision record and rationale — read it before proposing design changes. See `.claude/landscape.md` for the prior-art survey (djot, CommonMark, MyST, Quarto, Markdoc, Typst, AsciiDoc, etc.) — consult it when writing the definition's prior-art section or evaluating features other languages have.
+**Markleft** is a formally specified, ambiguity-free successor to Markdown: Markdown's size and prose-like source, with a formal grammar, an executable conformance suite, and exactly one parse for every input. **Independent project, maintained by its authors — no institutional steward, sponsor, or endorser.** Crown copyright attaches by operation of law, which is not sponsorship; see Licensing below, and never imply otherwise anywhere. GitHub org: `markleft-lang`. See `.claude/decisions.md` for the full decision record and rationale — read it before proposing design changes. See `.claude/plan.md` for the running plan — current work, parked ideas, errands, and open questions in plain language; add to it as things come up. See `.claude/landscape.md` for the prior-art survey (djot, CommonMark, MyST, Quarto, Markdoc, Typst, AsciiDoc, etc.) — consult it when writing the definition's prior-art section or evaluating features other languages have.
 
 The name: markup went up, markdown went down, Markleft moved sideways — and the language is *what's left* after fifteen years of curation. When someone asks "what's left?", that question is the elevator pitch.
 
@@ -184,7 +184,7 @@ Two project-specific riders sit on top of them:
 
 ## Open checklist (verify/act early in session when relevant)
 
-Master copy is `.claude/decisions.md` §10 — update both when an item closes, or they drift. Items below are the ones with an external dependency (registry, registrar, counsel) that a session may be able to advance opportunistically.
+Master copy is `.claude/decisions.md` §10, mirrored in `.claude/plan.md` — update all three when an item closes, or they drift. Items below are the ones with an external dependency (registry, registrar, counsel) that a session may be able to advance opportunistically.
 
 - [ ] Claim npm scope `@markleft`
 

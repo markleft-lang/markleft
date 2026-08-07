@@ -1,0 +1,76 @@
+# Plan
+
+Where the project is, what comes next, and everything parked along the way. Plain language on purpose — nothing here needs a spec background to read.
+
+**What this file is not.** It is not the decision record, which is `.claude/decisions.md` and holds *why* things were decided. It is not normative, not part of the released standard, and nothing here binds anything. When an idea here turns into a decision, it moves to the decision record and comes off this list. Keep it scruffy and current rather than tidy and stale.
+
+## Right now — Phase 0
+
+Two things stand between us and a stable language. Everything else is downstream.
+
+- **Write the definition.** `definition.md` has eleven section headings, a scope note under each, and a pointer to the material it should draw on. Nothing in it is normative yet. The job is turning the decision record into prose that reads like a standard. There is plenty to draw on: seventeen decisions with rationale and rejected alternatives, five memos under `notes/`, and a deltas table.
+
+- **Write the prose corpus** (in the `tests` repo, `corpus/`). Original prose written specifically to *break* prose-safety — money amounts, `snake_case`, `5 * 3 = 15`, shell snippets, file globs, lines that accidentally start with `#` or `-`. Deliberately deferred until the definition settles, so the corpus is written against a stable target. Everything in it must be written by contributors; nothing scraped or borrowed.
+
+The corpus matters more than it looks: it is the only thing that produces *evidence* rather than reasoning. Three decisions carry real risk of annoying people who already know Markdown — headings, code blocks, and lists — and nothing has tested them against actual prose.
+
+## What comes after
+
+The ladder, in order. Nothing gets built ahead of its rung; the definition fixes the language before any parser encodes it.
+
+1. **Grammar and tests** — the formal grammar, plus a suite of worked examples that any implementation must pass.
+2. **Reference parser** — the first realization, in Rust, producing a documented syntax tree.
+3. **The tools that make it worth adopting** — a validator with genuinely good error messages, a canonical formatter, and a migrator from Markdown. This is where most of the value to users lives.
+4. **Ecosystem** — cheat sheet, web playground, conformance badge, and a short language description sized for an AI model's system prompt.
+
+## Ideas parked
+
+None of these are commitments. They are things worth remembering when the relevant rung arrives.
+
+**Tooling that writes into the source.** The pattern behind three separate decisions: capability lives in tools, and tools write plain text into the document rather than doing anything at render time.
+
+- A bibliography tool that reads a `.bib` file and writes citations and a reference list into the document, hanging them on anchors.
+- Figure, table, and section numbering built on anchor naming conventions, using names rather than numbers so inserting one figure does not rewrite everything after it.
+- A table-of-contents generator that inserts a real list of links into the source.
+- A snippet-sync tool that pulls code out of a source file and writes it in, so drift shows up in the diff instead of hiding.
+
+**Editor support.** Not part of the language; the natural home for friction relief.
+
+- Typing help for the backtick, which is a dead key on several non-US keyboard layouts.
+- A prompt for image alt text while the author still has the picture in mind.
+- Inline preview of anchors and cross-references.
+
+**Optional extras.**
+
+- Base64 image embedding as a "shrink-wrap" step for a self-contained file. Never a requirement — inlining binary wrecks diffs and makes a light format heavy.
+- A companion appendix listing conventional names — what `math` means, what `rust` means, which anchor prefixes tools have settled on. Explicitly non-binding, so it can be updated without touching the standard.
+
+## Errands with outside dependencies
+
+These need someone else — a registry, a registrar, a lawyer. Worth advancing whenever the opportunity appears. The master copy is `.claude/decisions.md` §10; update both or they drift.
+
+- [ ] Claim the `@markleft` package scope on npm
+- [ ] Claim `markleft` (or `markleft-core`) on crates.io
+- [ ] Register a domain — `markleft.org` or `markleft.ca`
+- [ ] Legal: trademark search, and settle how the CC0 dedication is worded given Crown copyright. Needs counsel, and does not imply anyone supervises the project
+
+## Open questions
+
+Nothing blocking. These are answerable, just not answered.
+
+- **Should the governance sections split out?** Licensing, governance, and versioning are genuinely charter material sitting in a document that is otherwise a specification. If they split, that document gets the name `charter.md` back, correctly used this time.
+- **What should the formatter normalize?** Several small choices are deferred to when the formatter exists: the order of tokens inside a decorator, whether ordered lists are written all-`1.` or numbered in sequence, and whether a redundant label is removed.
+- **Which Unicode version, if any, to pin.** The encoding is frozen but Unicode is not, so any rule consulting a Unicode table can drift. Current recommendation is to define those rules so they never consult one.
+
+## Worth writing down eventually
+
+Things the record has *derived* rather than assumed. They explain the shape of several decisions at once, and a reader who has them can predict the rest.
+
+- **Do not encode a position in something other things point at.** Positions shift; references do not want to. This is the reason behind three unrelated calls: not hard-wrapping prose, not hand-numbering ordered lists, and naming anchors rather than numbering them.
+- **Rarity in ordinary use is what makes a mark safe to give a job.** The backtick survives as a delimiter because nobody types it in prose, and a colon works as a namespace separator for the same reason. It is also why the dollar sign had to lose its job.
+- **The tooling writes into the source, never into the render.** One policy, arrived at separately for tables of contents, file includes, and citations.
+- **The parser is total and local; the validator carries every judgement.** Unknown names, duplicate anchors, missing alt text, structural tabs, redundant labels — six of these now. The parser never fails on them; the validator warns.
+
+## How to use this file
+
+Add to it freely and in whatever words come. Prune when something ships or is decided. If an entry starts needing a paragraph of justification, that is the signal it belongs in the decision record instead — write it there and leave a one-line pointer here.
