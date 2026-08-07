@@ -1,6 +1,6 @@
 # Deltas from Markdown
 
-*Crown copyright — licensed CC BY 4.0. Notice wording provisional pending counsel; see `README.md`.*
+*© His Majesty the King in right of Canada, 2026. Licensed CC BY 4.0.*
 
 **Status: scaffold.** The delta list below is complete as to *which* decisions diverge from CommonMark, because those decisions are settled. The per-delta detail — exact before and after, edge cases, migrator behaviour — is not written yet, and **no text in this file is normative until it is.**
 

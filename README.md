@@ -42,14 +42,10 @@ Phase 0. The definition is being drafted; no implementation has shipped.
 
 ## Copyright
 
-Copyright in this material vests in His Majesty the King in right of Canada, by operation of law. An author is a Canadian federal public servant, and the Copyright Act attaches Crown copyright without anyone electing it.
+© His Majesty the King in right of Canada, 2026. An author is a Canadian federal public servant, so the Copyright Act vests copyright in the Crown by operation of law.
 
-**That is a fact about employment law, not a statement of sponsorship.** No department, agency, or institution owns, funds, backs, endorses, reviews, supervises, or vouches for Markleft. It is an independent project, maintained by its authors and governed by no institution. Nothing in these repositories should be read — or written — to imply otherwise, and no institution is named in any notice here for that reason.
+**This is not sponsorship.** No department, agency, or institution owns, funds, backs, endorses, reviews, or governs Markleft. It is an independent project, maintained by its authors.
 
 ## Licensing
 
-**CC BY 4.0** — attribution only, with no share-alike, no non-commercial, and no no-derivatives condition. Copy it, quote it, adapt it, implement it, sell what you build on it; just say where it came from. It is the most open Creative Commons licence short of a public-domain dedication, and it grants substantively what the federal open-licensing instrument ([Open Government Licence – Canada 2.0](https://open.canada.ca/en/open-government-licence-canada)) grants.
-
-A full CC0 public-domain dedication remains the intent. The obstacle is authority rather than law — an individual public servant cannot dedicate Crown-copyright material on the Crown's behalf — and that question is open. Exact notice wording is a matter for counsel; treat every notice string in these repositories as provisional.
-
-Crown copyright applies because an author is a Canadian federal public servant, by operation of law. Markleft is an independent project: no institution sponsors, endorses, reviews, or governs it.
+**[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).** Copy it, quote it, adapt it, implement it, and sell what you build on it. Attribution is the only condition.

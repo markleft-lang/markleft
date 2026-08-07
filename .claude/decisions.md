@@ -702,3 +702,13 @@ Decisions recorded above are historical; amendments are appended here rather tha
 - **Naming the author's agency was requested and declined**, on two grounds. It is the "institution-named copyright markers" that §11 removed on 2026-08-06, and a reader who sees an agency beside a copyright symbol concludes the agency backs the project — an inference no disclaimer underneath reliably dislodges. It is also inaccurate: Crown copyright vests in the Crown, and a department enters only through the longer "as represented by the Minister of…" form, which names a Minister rather than an agency and reads *more* like sponsorship, not less.
 
 - The section says explicitly that no institution is named *and why*, so a future editor does not read the omission as an oversight and helpfully fix it.
+
+**2026-08-07 — public files state the position, not the reasoning.** `README.md`'s Copyright and Licensing sections cut to the facts; notice strings in `definition.md` and `deltas.md` simplified; `CLAUDE.md` updated to instruct the same.
+
+- **The editorial rule, now explicit:** a reader wants to know what they may do, immediately and without qualification. Hedging in a public notice reads as uncertainty about the rights themselves, which is worse than the uncertainty it honestly reflects.
+
+- **Removed from `README.md`:** the CC0-intent paragraph, the authority-versus-law explanation, the OGL-Canada equivalence argument, the "treat every notice as provisional" caveat, and the meta-note about why no institution is named. Every one of those is reasoning, and all of it is preserved in §7 above.
+
+- **What remains is two short sections.** Copyright: the Crown holds it by operation of law, and that is not sponsorship. Licensing: CC BY 4.0, copy and adapt and sell, attribution the only condition.
+
+- **Notice strings no longer hedge.** "Notice wording provisional pending counsel" was accurate but belongs in working scaffolding — it is still recorded in `CLAUDE.md` and here. A notice that doubts itself invites a reader to doubt the grant.
