@@ -19,11 +19,14 @@ How commits are written and history is shaped in this repository.
 These are **hard limits, not targets.** Rules 2 and 6 are the only two that can be checked mechanically, and they are the two most often missed, because a 51-character subject looks exactly like a 49-character one. Measure before committing rather than judging by eye:
 
 ```
-git log --format='%s' <range> | awk 'length($0)>50'
-git log --format='%b' <range> | awk 'length($0)>72'
+git log --format='%s' <range> | python3 -c "import sys
+[print(len(l), l) for l in sys.stdin.read().splitlines() if len(l) > 50]"
+
+git log --format='%b' <range> | python3 -c "import sys
+[print(len(l), l) for l in sys.stdin.read().splitlines() if len(l) > 72]"
 ```
 
-Both must print nothing. Run them over the range about to be pushed. "Close enough" is how a limit erodes, and the correction afterwards costs a history rewrite — and a force push, if the commits already left the machine. Rule 1 deserves the same suspicion: a heredoc that drops the blank line after the subject silently produces a commit whose entire body is folded into its title.
+Both must print nothing. **Do not use `awk 'length($0)>50'` for this** — most `awk` implementations count *bytes*, so a line containing an em-dash, a curly quote, or any non-ASCII character reads as longer than it is and reports a violation that is not there. A check that cries wolf gets ignored, which is worse than no check. The limits are in characters, so count characters. Run them over the range about to be pushed. "Close enough" is how a limit erodes, and the correction afterwards costs a history rewrite — and a force push, if the commits already left the machine. Rule 1 deserves the same suspicion: a heredoc that drops the blank line after the subject silently produces a commit whose entire body is folded into its title.
 
 Rule 6 is not in tension with the no-hard-wrap Markdown convention — a commit message is not Markdown and is not rendered. Wrap commit bodies at 72; leave `.md` prose unwrapped. Issue and task titles use the same imperative mood as subject lines.
 
