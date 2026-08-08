@@ -40,7 +40,7 @@ Summary only — rationale and rejected alternatives live in `.claude/decisions.
 
 4. ATX headings only, one closed form: one to six `#` in the first column, a space, then non-empty text; any line that doesn't match is text. No setext, no closing `#` run, no indentation, no empty heading.
 
-5. Fenced code only. No indented code blocks.
+5. Fenced code only. No indented code blocks. **Backtick runs are maximal, and a fence closes on a run of exactly the opening length** — the same counting rule as a verbatim span, where CommonMark uses two. **The run length is the only escape inside verbatim**, decision 3's backslash being switched off there, which is what "one or more" and "three or more" are for; the minimum of three is a separate rule answering prose-safety. Cost: an over-long closing run does not close, and the validator says so.
 
 6. Strict list rules: `-` is the only bullet marker and `1.` the only ordered marker; content-column alignment; no lazy continuation. Adjacent items are one list, and a list ends only at a non-list block — blank lines never split one, they only make it loose. **"One marker per list" is deleted rather than reworded**: `*`, `+`, and `1)` existed only so a marker switch could separate two touching lists, so the rule left with them. `+` is now free everywhere. Ordered lists renumber from the first marker's value. **Alphabetic and Roman markers are rejected** — `A. Smith`, `J. R. R. Tolkien` put a severity-3 collision at line start, and a numbering style written into the source is what decision 9 removed classes for. *Highest muscle-memory risk, with 4 and 5.*
 
@@ -131,7 +131,7 @@ The licensing boundary that a `spec/` directory would have drawn is drawn by exc
 
 Immediate work, in order:
 
-1. **Review and settle `definition.md`** — the full draft is written (twelve sections, four appendices, public-standard voice). What remains is the author's review, and closing Appendix D: items 1–4 are answered there for the first time and need confirming (invalid UTF-8, leading BOM, code-point identity for matching, code-point count for "column"); items 5–10 are unanswered (tilde fences, thematic-break spelling, lazy continuation in block quotes, the loose/tight rule, verbatim-span whitespace stripping, media type). Anything confirmed goes into `.claude/decisions.md` as an amendment, not silently into the prose.
+1. **Review and settle `definition.md`** — the full draft is written (twelve sections, four appendices, public-standard voice). What remains is the author's review, and closing Appendix D: items 1–4 are answered there for the first time and need confirming (invalid UTF-8, leading BOM, code-point identity for matching, code-point count for "column"); items 5–11 are unanswered (tilde fences, thematic-break spelling, lazy continuation in block quotes, the loose/tight rule, verbatim-span whitespace stripping, media type, and what a line with a malformed decorator list becomes). Anything confirmed goes into `.claude/decisions.md` as an amendment, not silently into the prose.
 
 2. **Seed `tests/corpus/`** — original prose written to attack invariant 1: bare dollars and money amounts, snake_case identifiers, `5 * 3 = 15`, shell snippets, file globs, and lines that accidentally open with `#` or `-`. Contributor-authored only; see the corpus rule above.
 

@@ -144,14 +144,15 @@ Block structure is decided from each line's own prefix together with the contain
 
 **The parser is total.** Every document that decodes as UTF-8 has exactly one parse, and there are no parse errors. A fence that is never closed closes at the end of its container. Emphasis that is never closed is an asterisk. A table row that does not match the table form is a paragraph. Nothing an author can type causes a parser to refuse the document.
 
-Judgements that need more than the text in front of the parser therefore belong to the **validator**, and they are warnings, never failures. There are six of them today:
+Judgements that need more than the text in front of the parser therefore belong to the **validator**, and they are warnings, never failures. There are seven of them today:
 
 - a decorator word the validator does not recognize;
 - an anchor identifier used more than once in a document;
 - a link to a fragment in the same document that no anchor defines;
 - an image with no alternative text;
 - a tab in a structural position;
-- a decorator that only restates what the bare construct already means.
+- a decorator that only restates what the bare construct already means;
+- a verbatim block closed only by the end of its container, naming any unmatched backtick run it passed on the way.
 
 This split is deliberate and stable: the parser is local and total, the validator carries every judgement, and the two never trade places.
 
@@ -192,9 +193,17 @@ Note what this rule does for prose without any special case: `#hashtag` and `#5`
 
 #### 4.3.3 Verbatim block
 
-A verbatim block opens with a run of three or more backticks at the start of a line, after any container prefix, optionally followed by a decorator list (section 4.5). It closes with a run of at least as many backticks alone on a line. An unclosed block closes at the end of its container.
+A **backtick run** is a maximal sequence of backticks: the characters immediately before and after it are not backticks. Every rule in this document that counts backticks counts a run in this sense, at both sizes.
+
+A verbatim block opens with a run of three or more backticks at the start of a line, after any container prefix, optionally followed by a decorator list (section 4.5). It closes with a run of **the same length**, alone on a line. An unclosed block closes at the end of its container.
 
 Everything between the fences is **verbatim**: no escape is processed, no inline construct is recognized, and no decorator is read. The content reaches the tree exactly as written.
+
+**Why a run rather than a fixed delimiter.** Because no escape is processed inside, decision 3's universal backslash — the answer to every other "how do I write the delimiter literally" question in this language — is switched off in the one construct whose delimiter an author most often needs to write. The run length is therefore the entire escape mechanism, and it is the only one there is. One rule states it at both sizes: **choose a length that does not occur as a run in the content.** At this size the content is lines, so only a run alone on a line can close the block.
+
+**The minimum of three is a separate rule with a separate reason**, and it is not about content at all. A block's type is decidable from its own first line (section 4.2), so if one backtick could open a fence, a paragraph beginning `` `x = y` is the formula `` would open a verbatim block instead of being prose. Three is the smallest run that does not begin an ordinary sentence, and it is CommonMark's number.
+
+**Closing on an exact match is a delta from CommonMark** (Appendix A), which also closes on a longer run. Exact matching gives the language one counting rule instead of two, and it lets a document show a longer run inside a shorter fence — which a specification about fences needs. The cost is a real failure mode and is stated rather than hidden: a block opened with three backticks and closed with four is not closed, and runs to the end of its container. That is well-formed input with one parse, so it is the validator that reports it.
 
 ````
 ```
@@ -344,12 +353,15 @@ For emphasis inside a word, use the bracketed form `{*text*}`, adopted from djot
 
 #### 4.4.5 Verbatim spans
 
-A verbatim span opens with a run of one or more backticks and closes with a run of the same length. Its content is verbatim: no escape is processed and no construct is recognized inside it.
+A verbatim span opens with a run of one or more backticks and closes with a run of the same length. Runs are maximal, in the sense given in section 4.3.3. Its content is verbatim: no escape is processed and no construct is recognized inside it.
+
+The counting rule is the same sentence as at block size, and for the same reason: no escape reaches inside, so **choose a length that does not occur as a run in the content**. That is what "one or more" is for. Inline the choice may go down as well as up, a single-backtick span being free to hold a doubled run.
 
 A decorator list (section 4.5) may follow the closing run immediately, in braces.
 
 ````
 `x = y`             an unlabelled verbatim span
+``a `b` c``         a doubled run, so the content may hold a single one
 `x = y`{math}       a verbatim span labelled math
 `x`{#snippet-3}     a verbatim span carrying an anchor
 ````
@@ -432,7 +444,11 @@ There is consequently **no `text` label**. It is not forbidden — forbidding a 
 
 A labelled span and an unlabelled span are **different nodes**. They may render identically; the tree records which the author wrote.
 
-**Token character set.** A decorator token is a run of Unicode characters excluding whitespace (which separates tokens), control characters (nothing invisible is ever syntax), and `{`, `}`, `(`, `)` (which would close a brace group or a link destination). Nothing else is excluded: letters in any script, digits, `:`, `-`, `.`, and `_` are all writable. The list is stated by exclusion, and it has four entries, because a list of four exclusions can be audited where an inclusion list is a standing argument.
+**Token character set.** A decorator token is a run of Unicode characters excluding whitespace (which separates tokens), control characters (nothing invisible is ever syntax), `{`, `}`, `(`, `)` (which would close a brace group or a link destination), and the backtick (which would put an unpaired run inside a construct delimited by counting runs). Nothing else is excluded: letters in any script, digits, `:`, `-`, `.`, and `_` are all writable. The list is stated by exclusion, and it has five entries, because a list of five exclusions can be audited where an inclusion list is a standing argument.
+
+The backtick exclusion earns its place twice. On a fence the decorator list runs to the end of the line, so without it ```` ```rust``` ```` would be an opening fence whose label is `` rust``` `` — a line that reads as a closed empty fence and is not one. Inline, a backtick inside a decorator would be a candidate opener for the next span in the paragraph, making the pairing of later runs depend on text inside braces. Nothing is lost: no format word and no identifier wants a backtick, and CommonMark excludes it from a backtick fence's info string for the same reason.
+
+What such a line is *instead* is a question this exclusion raises and does not answer — whether a malformed decorator list makes the whole line paragraph text, under the uniform fallback of section 4.2, or leaves a well-formed fence carrying a validator error. It is the general case and it applies equally to two bare words in one list. See Appendix D.11.
 
 **The first character selects the shape:** `#` makes the token an anchor, anything else makes it the format word. Sigils are significant only in first position, so `#` inside a token is an ordinary character.
 
@@ -873,7 +889,7 @@ That second piece of guidance is a specific case of a principle that decides thr
 
 *Non-normative. Every point this document settles for the first time, and every point it leaves open, so that no gap has to be discovered by a reader.*
 
-Items 1 to 4 are answered in section 4 for the first time; each closes a rider that the decision record left open, and each needs the answer confirmed before it is treated as settled. Items 5 to 10 are not answered at all.
+Items 1 to 4 are answered in section 4 for the first time; each closes a rider that the decision record left open, and each needs the answer confirmed before it is treated as settled. Items 5 to 11 are not answered at all.
 
 1. **Invalid UTF-8.** Section 4.1 states that a byte sequence which is not well-formed UTF-8 is not a Markleft document. The alternatives were replacement with U+FFFD and passing bytes through; both silently alter content, which decision 3 and invariant 1 argue against.
 
@@ -894,5 +910,7 @@ Items 1 to 4 are answered in section 4 for the first time; each closes a rider t
 9. **Verbatim-span whitespace.** CommonMark strips one leading and one trailing space from a verbatim span when both are present. That is a rule with an exception clause, and whether it is inherited is undecided.
 
 10. **Media type.** No media type is registered for either file extension.
+
+11. **A malformed decorator list.** Section 4.5 states the form of a decorator list without saying what a line that fails it becomes. Two answers are available and both are defensible: the uniform fallback of section 4.2 makes the whole line paragraph text, which is what CommonMark does with ```` ```rust``` ```` and keeps the grammar honest; or the fence opens anyway and the malformed list is a validator error, which keeps a document's block structure from collapsing over a typo in a label. The cases are a token containing a backtick, two bare words, and two anchors. Raised by the backtick exclusion decided 2026-08-08; it applies to all three.
 
 Formatter behaviour — the order of tokens inside a decorator, whether ordered-list numerals are normalized to all-`1.` or written in sequence, and whether a redundant label is removed — is deliberately not in this list. Those are questions about a tool, not about the language, and they are settled when the formatter is built.

@@ -66,7 +66,7 @@ Mostly not blocking. These are answerable, just not answered.
 
 - **The sixth is closed.** Pipe tables needed a line of lookahead, which was the one thing blocking Phase 1. The table rewrite of 2026-08-08 removed it by changing the construct rather than the invariant — worth remembering as a pattern: when a finding points at an invariant, try moving the construct first.
 
-- **Ten more the first full draft of `definition.md` turned up**, listed in its Appendix D. Four the draft answers for the first time and needs confirmed; six it does not answer.
+- **Eleven more the first full draft of `definition.md` turned up**, listed in its Appendix D. Four the draft answers for the first time and needs confirmed; seven it does not answer. The eleventh arrived on 2026-08-08 with the backtick exclusion: what a line whose decorator list is malformed becomes.
 
 - **Should the governance sections split out?** Licensing, governance, and versioning are genuinely charter material sitting in a document that is otherwise a specification. If they split, that document gets the name `charter.md` back, correctly used this time.
 - **What should the formatter normalize?** Several small choices are deferred to when the formatter exists: the order of tokens inside a decorator, whether ordered lists are written all-`1.` or numbered in sequence, and whether a redundant label is removed.
@@ -83,7 +83,7 @@ Things the record has *derived* rather than assumed. They explain the shape of s
 - **Do not encode a value that a tool will later compute better.** A hand-written number overrides every future improvement to the code that would have derived it, and it goes stale silently besides. This is why there are no column width hints, and it is the general form of the argument against hand-maintained list numerals.
 - **Rarity in ordinary use is what makes a mark safe to give a job.** The backtick survives as a delimiter because nobody types it in prose, and a colon works as a namespace separator for the same reason. It is also why the dollar sign had to lose its job.
 - **The tooling writes into the source, never into the render.** One policy, arrived at separately for tables of contents, file includes, and citations.
-- **The parser is total and local; the validator carries every judgement.** Unknown names, duplicate anchors, missing alt text, structural tabs, redundant labels — six of these now. The parser never fails on them; the validator warns.
+- **The parser is total and local; the validator carries every judgement.** Unknown names, duplicate anchors, missing alt text, structural tabs, redundant labels, a fence closed only by the end of its container — seven of these now. The parser never fails on them; the validator warns.
 
 ## How to use this file
 

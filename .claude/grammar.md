@@ -164,13 +164,17 @@ Applied per line, in the order given. Container rules (R7, R8, R9) consume a pre
 
 ### R11 — Verbatim fence
 
-- **Form:** open with a run of three or more backticks at the start of the line's remaining content, optionally followed by a decorator list (R20). Close with a run of at least as many backticks, alone on a line.
+- **Form:** open with a run of three or more backticks at the start of the line's remaining content, optionally followed by a decorator list (R20). Close with a run of **exactly that length**, alone on a line. A **run** is maximal — the characters on either side of it are not backticks — and that is what every backtick count in this list means.
 - **Range:** content is verbatim — no escape, no inline rule, no nested decorator. An unclosed fence closes at the end of its container.
 - **Order:** 5. Wins over everything except the container prefixes.
 - **Decidable from:** this line and the open containers.
 - **Reserves:** a run of three or more backticks in first position.
 - **Collision:** essentially none — three consecutive backticks do not occur in prose. **Severity 0.**
 - **Escape:** `` \` `` on the first backtick.
+
+**The run length is the only escape inside verbatim**, because R17 does not apply there. So the count is not decoration: it is what lets content hold the delimiter, at both sizes, under one rule — *choose a length that does not occur as a run in the content*. The minimum of three is unrelated to that and answers a different question: a one-backtick opener would make any paragraph starting with a verbatim span into a fence, which is prose-safety, not escaping.
+
+*Changed 2026-08-08:* closing tightened from "at least as many" to exactly as many, making the counting rule the same here and in R19. New cost, and it belongs to the validator: a fence closed with too long a run is not closed and swallows the rest of its container.
 
 *Undecided:* whether `~~~` is also a fence. See Finding 4.
 
@@ -265,7 +269,7 @@ See Finding 3 for the mitigation this argues for.
 
 ### R19 — Verbatim span
 
-- **Form:** a run of one or more backticks, content, then a run of the same length.
+- **Form:** a run of one or more backticks, content, then a run of the same length. Runs are maximal, as in R11, and the length may go down as well as up — a one-backtick span may hold a doubled run.
 - **Range:** content is verbatim; no rule below applies inside it.
 - **Order:** 3. Wins over every construct below, which is what makes it the universal safe harbour.
 - **Decidable from:** the run length and the search for its match within the block.
@@ -278,7 +282,7 @@ See Finding 3 for the mitigation this argues for.
 ### R20 — Decorator list
 
 - **Form:** a space-separated token list, in exactly two shapes and at most one of each: a bare word (the format label) and `#identifier` (an anchor). Written after a fence's opening backticks, or in braces immediately after a verbatim span's closing run.
-- **Range:** tokens exclude whitespace, control characters, and `{`, `}`, `(`, `)`. Nothing else is excluded. The first character selects the shape.
+- **Range:** tokens exclude whitespace, control characters, `{`, `}`, `(`, `)`, and the backtick. Nothing else is excluded. The first character selects the shape.
 - **Order:** 4, and **only** in those two positions.
 - **Decidable from:** the preceding backtick run.
 - **Reserves:** `{` immediately after a closing backtick run.
@@ -286,6 +290,10 @@ See Finding 3 for the mitigation this argues for.
 - **Escape:** not needed; put a space before the brace.
 
 No word is ever reserved, so no decorator token can affect the parse. That is what keeps this rule's collision surface at zero permanently rather than at zero for now.
+
+*Changed 2026-08-08:* the backtick joins the exclusion list. On a fence the list runs to the end of the line, so a backtick in a token would make ```` ```rust``` ```` an opener whose label ends in a run — a line that reads as a closed empty fence and is not one. Inline it would put an unpaired run into R19's scan, so the pairing of later spans in a paragraph would depend on text inside braces.
+
+*Undecided:* what a line whose decorator list is malformed becomes — paragraph text under the uniform fallback, or a fence carrying a validator error. Three cases reach it: a token holding a backtick, two bare words, two anchors. Raised by the change above and recorded as Appendix D.11 of `definition.md`.
 
 **The braces delimit the list; they are not part of any token.** A fence needs no delimiter, because the rest of the line is the list, so the fence form carries none — ```` ```rust #id ````, never ```` ```rust {#id} ````. Bracing the fence form would nest inside the inline one, `` `x`{rust {#id}} ``. The same `#identifier` therefore appears bare in both list positions and braced only as a standalone anchor (R23), where the braces are that construct's own delimiter. *(Recorded because the asymmetry reads as an inconsistency until the delimiter argument is stated, and it has already caught one reader.)*
 
