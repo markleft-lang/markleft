@@ -2,6 +2,56 @@
 
 *Working scaffolding, not part of the standard and not normative. Started 2026-08-07. Accumulates as decisions land.*
 
+## The reserved-position table
+
+Every ASCII punctuation character, and what it costs plain text. This is the one-page statement invariant 1 promises, and it is first in the file because it is the part you consult while typing — what is safe to write, at a glance, without reading a rule.
+
+Each entry cites the rule that claims it (`R11`, `R29`, …); those rules are the rest of this file, in the order a parser applies them.
+
+| Character | At the start of a line | Inside a line | Worst severity |
+|---|---|---|---|
+| `` ` `` | fence, run of 3+ (R11) | verbatim span, any run (R19) | 1 |
+| `#` | heading, run of 1–6 then a space (R12) | free, except after `{` (R23) | 2 |
+| `-` | bullet marker, then a space (R8); thematic break (R13) | free | 3 |
+| `*` | thematic break (R13) | emphasis when flanking non-whitespace (R21) | 2 |
+| digits | ordered marker, then `.` and a space (R9) | free | 2 |
+| `+` | **free** | **free** | **0** |
+| `>` | block quote (R7) | free | 1 |
+| `\|` | opens a table (R14) | cell separator inside a table only | 2 |
+| `\` | escape (R17) | escape (R17); hard break at end of line (R18) | 3 |
+| `[` `]` | link reference definition (R15) | link (R24, R25) | 2 |
+| `(` `)` | free | link destination, only after `]` (R24) | 1 |
+| `!` | free | image, only immediately before `[` (R27) | 1 |
+| `{` `}` | free | brace group, only before `#` or `*`, or after a backtick run (R20, R22, R23) | 2 |
+| `<` `>` | `>` is a block quote (R7) | autolink, only around a scheme (R26) | 1 |
+| `_` | thematic break, `___` only (R13) | subscript, only immediately before `{` (R29) | 1 |
+| `^` | free | superscript, only immediately before `{` (R29) | 1 |
+| `$` | **free** | **free** | **0** |
+| `~` | **free** | **free** | **0** |
+| `%` `@` `:` `;` `?` `/` `=` `&` `"` `'` `,` `.` | **free** | **free** | **0** |
+
+**Fourteen** ASCII punctuation characters have no meaning anywhere in the language: the twelve in the last row, plus `$` and `~`. Three characters in this table were deliberately bought back — `$` by decision 1, `+` by the list revision below, and `_` by decision 2, which is why it sits at severity 1 rather than higher. That is the concrete form of invariant 1, and it is the number to watch: **any future decision that moves a character out of the free column is spending the language's main asset, and any decision that moves one into it is the language's main dividend.**
+
+*(The figure previously read fourteen while the rows totalled fifteen. Restated above so the arithmetic is visible and cannot drift again.)*
+
+*Changed 2026-08-08:* `+` left the reserved column entirely when it stopped being a bullet marker, and `*` dropped from severity 3 to 2 by losing the same job. No character moved the other way.
+
+*Changed 2026-08-08, second revision — the first entry that spends rather than earns.* `^` left the free column, and `_` gained a meaning inside a line, both to decision 18. This is the price side of the sentence above, so it is recorded next to the construct that paid it: two characters moved out, each into one position only — immediately before `{` — and each landing at severity 1. What was bought is a construct with no braceless form, which is why nothing that was safe to write yesterday changed meaning: `2^32`, `[^0-9]`, `ISO_8601`, `file_2.txt`, and `snake_case` are all still text, with no escape.
+
+### How to read the severity column
+
+| # | Name | Meaning |
+|---|------|---------|
+| 0 | none | the character has no meaning in this position, guaranteed |
+| 1 | negligible | requires a spelling essentially nobody produces by accident |
+| 2 | occasional | shows up in technical prose from time to time |
+| 3 | frequent | shows up in ordinary prose regularly |
+| 4 | hazard | silently changes meaning in common writing, with no visible cue |
+
+**The goal is zero 4s and as few 3s as the language can manage.** A proposed feature that introduces a 3 has to pay for it; a 4 does not survive invariant 1 on its own.
+
+---
+
 ## What this file is for
 
 A serial list of every rule that gives a character operational meaning, written in the order a parser would apply it, each with an estimate of how often that meaning collides with ordinary writing.
@@ -27,20 +77,8 @@ Each rule carries the same seven fields:
 - **Order** — where it is tried relative to other rules in its layer.
 - **Decidable from** — what the parser must see to apply it. Anything other than "this line and the open containers" is an invariant 4 problem.
 - **Reserves** — exactly what this rule takes away from plain text, and in what position.
-- **Collision** — realistic writing that trips it, and the severity below.
+- **Collision** — realistic writing that trips it, and its severity on the scale at the top of this file.
 - **Escape** — what an author writes to get the literal text instead.
-
-### Severity scale
-
-| # | Name | Meaning |
-|---|------|---------|
-| 0 | none | the character has no meaning in this position, guaranteed |
-| 1 | negligible | requires a spelling essentially nobody produces by accident |
-| 2 | occasional | shows up in technical prose from time to time |
-| 3 | frequent | shows up in ordinary prose regularly |
-| 4 | hazard | silently changes meaning in common writing, with no visible cue |
-
-**The goal is zero 4s and as few 3s as the language can manage.** A proposed feature that introduces a 3 has to pay for it; a 4 does not survive invariant 1 on its own.
 
 ---
 
@@ -397,40 +435,6 @@ The rule self-sorts as a result. A variable set upright looks wrong to the perso
 
 ---
 
-## The reserved-position table
-
-Every ASCII punctuation character, and what it costs plain text. This is the one-page statement invariant 1 promises.
-
-| Character | At the start of a line | Inside a line | Worst severity |
-|---|---|---|---|
-| `` ` `` | fence, run of 3+ (R11) | verbatim span, any run (R19) | 1 |
-| `#` | heading, run of 1–6 then a space (R12) | free, except after `{` (R23) | 2 |
-| `-` | bullet marker, then a space (R8); thematic break (R13) | free | 3 |
-| `*` | thematic break (R13) | emphasis when flanking non-whitespace (R21) | 2 |
-| digits | ordered marker, then `.` and a space (R9) | free | 2 |
-| `+` | **free** | **free** | **0** |
-| `>` | block quote (R7) | free | 1 |
-| `\|` | opens a table (R14) | cell separator inside a table only | 2 |
-| `\` | escape (R17) | escape (R17); hard break at end of line (R18) | 3 |
-| `[` `]` | link reference definition (R15) | link (R24, R25) | 2 |
-| `(` `)` | free | link destination, only after `]` (R24) | 1 |
-| `!` | free | image, only immediately before `[` (R27) | 1 |
-| `{` `}` | free | brace group, only before `#` or `*`, or after a backtick run (R20, R22, R23) | 2 |
-| `<` `>` | `>` is a block quote (R7) | autolink, only around a scheme (R26) | 1 |
-| `_` | thematic break, `___` only (R13) | subscript, only immediately before `{` (R29) | 1 |
-| `^` | free | superscript, only immediately before `{` (R29) | 1 |
-| `$` | **free** | **free** | **0** |
-| `~` | **free** | **free** | **0** |
-| `%` `@` `:` `;` `?` `/` `=` `&` `"` `'` `,` `.` | **free** | **free** | **0** |
-
-**Fourteen** ASCII punctuation characters have no meaning anywhere in the language: the twelve in the last row, plus `$` and `~`. Three characters in this table were deliberately bought back — `$` by decision 1, `+` by the list revision below, and `_` by decision 2, which is why it sits at severity 1 rather than higher. That is the concrete form of invariant 1, and it is the number to watch: **any future decision that moves a character out of the free column is spending the language's main asset, and any decision that moves one into it is the language's main dividend.**
-
-*(The figure previously read fourteen while the rows totalled fifteen. Restated above so the arithmetic is visible and cannot drift again.)*
-
-*Changed 2026-08-08:* `+` left the reserved column entirely when it stopped being a bullet marker, and `*` dropped from severity 3 to 2 by losing the same job. No character moved the other way.
-
-*Changed 2026-08-08, second revision — the first entry that spends rather than earns.* `^` left the free column, and `_` gained a meaning inside a line, both to decision 18. This is the price side of the sentence above, so it is recorded next to the construct that paid it: two characters moved out, each into one position only — immediately before `{` — and each landing at severity 1. What was bought is a construct with no braceless form, which is why nothing that was safe to write yesterday changed meaning: `2^32`, `[^0-9]`, `ISO_8601`, `file_2.txt`, and `snake_case` are all still text, with no escape.
-
 ---
 
 ## Findings from the first pass
@@ -493,6 +497,6 @@ Dropping the shortcut form — keeping `[text][label]` and `[text][]`, which are
 
 ## Maintenance
 
-Add a rule when a decision creates one, in the same session that records the decision. Update the reserved-position table in the same edit — it is the summary that gets read, and a stale summary is worse than none.
+Add a rule when a decision creates one, in the same session that records the decision. **Update the reserved-position table in the same edit.** It is the first thing in the file because it is the only part consulted while writing rather than while designing, so it is the part most read and the part where staleness does real damage — a wrong row tells someone a character is safe to type when it is not.
 
 When a finding here is settled, replace it with a one-line pointer to the amendment in `.claude/decisions.md`. Findings accumulate; resolutions live in the record.
