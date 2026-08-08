@@ -1,6 +1,6 @@
 # Memo: repository layout for the markleft-lang organization
 
-*Non-normative. Status: decided 2026-08-06, revised 2026-08-07 once the normative hierarchy was settled. Records the organization and repository structure chosen at Phase 0, and the reasoning behind each split, so that later sessions do not relitigate it from scratch.*
+*Non-normative. Status: decided 2026-08-06, revised 2026-08-07 once the normative hierarchy was settled. Records the organization and repository structure chosen at Phase 0, and the reasoning behind each split, so that later sessions find the analysis instead of rebuilding it.*
 
 ## Decision
 
@@ -24,7 +24,7 @@ Every other repository is deferred with an explicit trigger, listed below. Nothi
 
 A repository under an individual account signals a personal project, and a standard needs to look like something others can rely on and eventually help maintain. Three further reasons make the choice one-way rather than merely preferable:
 
-1. **Succession.** The language must outlive the people who wrote it. An organization can add and remove maintainers without any transfer of ownership; a personal account cannot.
+1. **Succession.** The language should be able to outlive the people who wrote it. An organization can add and remove maintainers without any transfer of ownership; a personal account cannot.
 
 2. **Migration cost.** Transferring a repository between accounts later rewrites every clone URL, every citation, and every vendored submodule reference. Organization renames, by contrast, leave redirects in place — which is also what keeps the bare `markleft` name recoverable if the trademark process ever frees it (see `.claude/decisions.md` §8).
 
@@ -47,11 +47,11 @@ markleft/
 
 The boundary is therefore drawn by exclusion: **everything in this repository is the standard except `CLAUDE.md` and `.claude/`**, which are working scaffolding — neither normative nor part of what gets released. `README.md` says so, so a reader or a lawyer can settle it without opening anything else. The exclusion list is short and stable, which is what makes this cheaper than a directory.
 
-The standard contains the standard and nothing else: no tests, no measurement data, no tooling, no implementation notes. The sole exception is `notes/`, which holds non-normative memos like this one, kept adjacent because they record why the normative text says what it says. A reader must be able to read the standard without reading the project.
+The standard contains the standard and nothing else: no tests, no measurement data, no tooling, no implementation notes. The sole exception is `notes/`, which holds non-normative memos like this one, kept adjacent because they record why the normative text says what it says. A reader can read the standard without reading the project.
 
 ## Repository: tests
 
-The conformance suite is its own repository rather than a directory, because its audience is not this project. Third-party implementations in other languages must be able to vendor it — as a submodule, a subtree, or a release tarball — without cloning a Rust parser, a website, and a migrator they will never build. That is the whole point of a suite meant to serve as the key comparison: it has to be cheap for a stranger to run against their own parser.
+The conformance suite is its own repository rather than a directory, because its audience is not this project. Third-party implementations in other languages need to be able to vendor it — as a submodule, a subtree, or a release tarball — without cloning a Rust parser, a website, and a migrator they will never build. That is the whole point of a suite meant to serve as the key comparison: it has to be cheap for a stranger to run against their own parser.
 
 It is also the cleanest possible licensing surface. The repository is CC0-intent in its entirety, with no MIT code anywhere inside it, so a vendoring implementer never has to reason about which directory carries which terms.
 
@@ -61,7 +61,7 @@ tests/
   corpus/        # prose documents authored for this project (see below)
 ```
 
-**Consequence for the working convention.** CLAUDE.md requires that a grammar or spec change land together with its executable examples in the same commit. Across two repositories that is no longer literally possible. The rule becomes:
+**Consequence for the working convention.** Under CLAUDE.md a grammar or spec change lands together with its executable examples in the same commit. Across two repositories that is no longer literally possible. The rule becomes:
 
 - A spec change and its examples land as a **paired pull request**, opened together and merged together; neither merges alone.
 
@@ -119,7 +119,7 @@ Repositories do not repeat the organization name: `markleft-lang/markleft`, neve
 
 **`markleft-<lang>` is reserved for independent implementations**, one per language, each written against the specification. The pattern is doing real work: it says in the org listing that realizations are plural and interchangeable, which is the whole claim of the normative hierarchy.
 
-**A binding is not a realization, and must not take the name.** A thin wrapper over the Rust core — via WASM, FFI, or a subprocess — belongs in `markleft-rs/bindings/`, because it is a way of reaching that realization rather than an independent one. The distinction is not pedantry: running the conformance suite against a wrapper compares a realization with itself, which measures nothing while looking exactly like a passing key comparison. An ecosystem of five bindings and one parser has *one* implementation, and a standard that cannot tell the difference has lost the guarantee the suite exists to provide.
+**A binding is not a realization, and does not take the name.** A thin wrapper over the Rust core — via WASM, FFI, or a subprocess — belongs in `markleft-rs/bindings/`, because it is a way of reaching that realization rather than an independent one. The distinction is not pedantry: running the conformance suite against a wrapper compares a realization with itself, which measures nothing while looking exactly like a passing key comparison. An ecosystem of five bindings and one parser has *one* implementation, and a standard that cannot tell the difference has lost the guarantee the suite exists to provide.
 
 `markleft-lang/tests` reads unambiguously in the organization listing. It reads less well once vendored, where a checkout named `tests` inside someone else's project says nothing about whose tests they are; `conformance` would survive that context better. The rename is free today and expensive after the first implementation vendors the URL, so it is worth settling before the repository is created rather than after.
 

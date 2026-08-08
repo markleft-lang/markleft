@@ -14,9 +14,9 @@ The document is named *definition* rather than *specification* or *standard* for
 
 **Informative sections** explain, justify, and position: sections 1, 2, 5, 6, 7, 8, 11, and Appendices C and D. Section 10 states a legal position rather than a technical requirement. Where an informative section appears to state a rule, section 4 governs.
 
-**Requirement words.** *Must* states a requirement on a conforming implementation. *Must not* states a prohibition. *May* states a permission — an implementation is free to do the thing, and free not to. Nothing in this document uses *should*: a rule that only recommends is a rule the language cannot rely on.
+**Requirement words.** *Must* states a requirement on a conforming implementation. *Must not* states the same requirement negatively. *May* marks a free choice — an implementation is free to do the thing, and free not to. Nothing in this document uses *should*: a rule that only recommends is a rule the language cannot rely on.
 
-**Terms.** A **document** is the complete text an author writes. A **parser** turns a document into a tree. A **renderer** turns that tree into something a person looks at — a web page, a printed page, a screen reader's speech. A **realization** is any of these: an independent implementation of this definition. A **validator** reports problems a parser is not allowed to fail on. A **formatter** rewrites a document into one canonical form. A **migrator** converts Markdown into Markleft. The **conformance suite** is the executable set of examples every realization is checked against.
+**Terms.** A **document** is the complete text an author writes. A **parser** turns a document into a tree. A **renderer** turns that tree into something a person looks at — a web page, a printed page, a screen reader's speech. A **realization** is any of these: an independent implementation of this definition. A **validator** reports problems a parser never fails on. A **formatter** rewrites a document into one canonical form. A **migrator** converts Markdown into Markleft. The **conformance suite** is the executable set of examples every realization is checked against.
 
 Examples in this document are shown in fenced blocks. Where an example shows what a construct means, the meaning is stated in words beside it; this document never asserts a particular HTML output, because the language is not defined in terms of HTML.
 
@@ -38,7 +38,7 @@ That is the whole problem in one incident: **the same source, two different docu
 
 ### 1.3 What this document does
 
-It defines the language. Specifically, it states the five invariants that every part of the language must satisfy (section 3), the language itself (section 4), the reasoning behind each binding decision including the alternatives that were rejected (section 5), what conformance means and how it is checked (section 9), and the project's licensing and governance position (sections 10 and 11).
+It defines the language. Specifically, it states the five invariants that every part of the language must satisfy (section 3), the language itself (section 4), the reasoning behind each binding decision including the alternatives it set aside (section 5), what conformance means and how it is checked (section 9), and the project's licensing and governance position (sections 10 and 11).
 
 ### 1.4 What is in scope, and what is not
 
@@ -46,7 +46,7 @@ Markleft defines what a document **is**. It does not define what a renderer **do
 
 ## 2. Non-goals
 
-Three things Markleft is not. Each rules out a different misreading, and each is enforced by a rule rather than by intention.
+Three things Markleft is not. Each rules out a different misreading, and each is held by a rule rather than by intention.
 
 ### 2.1 Not a toolchain, and not a document-preparation system
 
@@ -54,7 +54,7 @@ There is no templating, no executable code, no scripting, no page or layout awar
 
 ### 2.2 Not a richer Markdown for its own sake — and not an austerity project either
 
-Markleft adds things. Mathematics is part of the core, decorators are new, pipe tables are in the language rather than in a platform's post-processing, and several constructs are adopted from djot. What every addition has to clear is a single bar: **it must remove an ambiguity or fill a genuine gap, and it must cost nothing in plain-text clarity.** A construct that makes ordinary unmarked prose read worse is declined regardless of merit, because prose-safety is invariant 1 and richness is not an invariant at all.
+Markleft adds things. Mathematics is part of the core, decorators are new, pipe tables are in the language rather than in a platform's post-processing, and several constructs are adopted from djot. What every addition has to clear is a single bar: **it removes an ambiguity or fills a genuine gap, and it costs nothing in plain-text clarity.** A construct that makes ordinary unmarked prose read worse does not clear it, however much it offers elsewhere, because prose-safety is invariant 1 and richness is not an invariant at all.
 
 The budget for all of this is the five-minute property. Most of the binding decisions in section 5 remove something; a few add; the total still fits on one reference card. So "Markleft could also do X" is never an argument by itself. The argument has to be that X is worth what it costs every reader who never uses it.
 
@@ -68,7 +68,7 @@ That last clause is the strategic point. Because capability accumulates in tools
 
 ## 3. The invariants
 
-Five invariants. They are constitutional: a proposed feature that violates one is rejected regardless of merit, and no rule elsewhere in this document may contradict them.
+Five invariants. They are constitutional in the ordinary sense: a proposal that breaks one cannot land as it stands, and changing that means amending the invariant itself — in the open, with the argument written down. No rule elsewhere in this document contradicts them.
 
 ### 3.1 Invariant 1 — Prose-safety
 
@@ -86,7 +86,7 @@ This is the invariant that most often does the rejecting, because almost every a
 
 Every input has exactly one parse. Not one parse per implementation, not one parse per platform: one parse.
 
-This requires the definition to be executable rather than interpretable. Prose can be read two ways; a grammar and a suite of worked examples cannot. Two authors may write the same document two ways — that is style. One document parsing two ways is a defect.
+This is why the definition is executable rather than interpretable. Prose can be read two ways; a grammar and a suite of worked examples cannot. Two authors may write the same document two ways — that is style. One document parsing two ways is a defect.
 
 ### 3.4 Invariant 4 — The linear-time property
 
@@ -179,11 +179,11 @@ That is the entire rule, and every case falls out of it rather than being legisl
 ## Title ##                a level-2 heading whose text is "Title ##"
 ````
 
-Number signs are the only heading marker. There are no underlined (setext) headings: besides being a second spelling of one thing, an underlined heading is a heading only because of the *next* line, which invariant 4 forbids.
+Number signs are the only heading marker. There are no underlined (setext) headings: besides being a second spelling of one thing, an underlined heading is a heading only because of the *next* line, which invariant 4 rules out.
 
-There is no closing sequence. In `## Title ##` the text is `Title ##`. CommonMark's rule for when a trailing run closes a heading and when it does not is the clearest available example of the "unless" clause invariant 2 forbids.
+There is no closing sequence. In `## Title ##` the text is `Title ##`. CommonMark's rule for when a trailing run closes a heading and when it does not is the clearest available example of the "unless" clause invariant 2 leaves no room for.
 
-There is no leading indentation: the run sits in the first column, after any container prefix such as a block-quote marker or list-item indentation. CommonMark allowed up to three spaces in order to keep headings clear of indented code blocks, and decision 5 removed indented code blocks, so the allowance now buys nothing and costs a boundary case.
+There is no leading indentation: the run sits in the first column, after any container prefix such as a block-quote marker or list-item indentation. CommonMark admitted up to three spaces in order to keep headings clear of indented code blocks, and decision 5 removed indented code blocks, so the allowance now buys nothing and costs a boundary case.
 
 There is no empty heading. A line holding only a number sign is a paragraph whose text is a number sign.
 
@@ -249,7 +249,7 @@ Lists are the most rule-heavy part of any Markdown-like language, and the place 
 
 **Ordered lists renumber.** A list begins at its first marker's value and its items render sequentially from there, whatever numerals are written. `1.` `1.` `1.` renders as 1, 2, 3.
 
-This is worth defending explicitly, because it looks at first like generated content and invariant 5 forbids that. It is not. A rendered ordinal is not text taken from somewhere else; it is a presentation of the item's **position**, and position is fully stated by the source. A reader looking at three items in plain text already knows there are three, in order — they can count. Nothing is relocated, as a table of contents relocates heading text, and nothing is imported, as an image imports a file. What makes the behaviour necessary rather than merely permissible is that hand-maintained numerals are wrong in practice: they break silently on every edit, and the failure is invisible until someone reads the rendered output.
+This is worth defending explicitly, because it looks at first like generated content, which invariant 5 leaves out. It is not. A rendered ordinal is not text taken from somewhere else; it is a presentation of the item's **position**, and position is fully stated by the source. A reader looking at three items in plain text already knows there are three, in order — they can count. Nothing is relocated, as a table of contents relocates heading text, and nothing is imported, as an image imports a file. What makes the behaviour necessary rather than merely available is that hand-maintained numerals are wrong in practice: they break silently on every edit, and the failure is invisible until someone reads the rendered output.
 
 #### 4.3.6 Table
 
@@ -279,7 +279,7 @@ A leading colon aligns the column left, a trailing colon right, both centre it. 
 
 **The rule row's position says whether there is a header.** First line: no header. Second row: the row above it was the header. Absent: neither, and alignment is whatever the renderer does by default.
 
-**A rule row is recognized only as a table's first or second row.** Anywhere else, a row of dashes is content. That restriction and the three-hyphen minimum exist for the same reason: a cell holding a single dash is a common way to write "not applicable", and without them it would be read as structure and its content would disappear. A cell whose content is genuinely three or more dashes, in one of those two positions, is written `\---`.
+**A rule row is recognized only as a table's first or second row.** Anywhere else, a row of dashes is content. That narrowing and the three-hyphen minimum exist for the same reason: a cell holding a single dash is a common way to write "not applicable", and without them it would be read as structure and its content would disappear. A cell whose content is genuinely three or more dashes, in one of those two positions, is written `\---`.
 
 ````
 |-----------|----------|
@@ -308,7 +308,7 @@ The form is exact. A block that does not match it is not a table and, under the 
 
 Two properties are worth naming, because they are why the construct is shaped this way.
 
-**A table is decidable from its own first line**, like every other block. Markdown's table needs to see the next line before it knows whether the current one is a header or a paragraph, which is the property section 4.3.2 removed setext headings for. Opening on the pipe removes it here too, rather than granting tables an exception.
+**A table is decidable from its own first line**, like every other block. Markdown's table needs to see the next line before it knows whether the current one is a header or a paragraph, which is the property section 4.3.2 removed setext headings for. Opening on the pipe removes it here too, rather than carving tables an exception.
 
 **A block cell is a container**, in the same sense as a list item or a block quote: inside it, lines belong to the cell. Note the one difference, stated rather than left to discovery — a list item marks every line it owns by indentation, where a block cell marks only its first and relies on the terminator. Both are coherent, and the reason a cell does not use indentation is that the `|` already does the work indentation does in a list.
 
@@ -374,7 +374,7 @@ Links are unchanged from CommonMark: `[text](destination)`, optionally with a ti
 
 Cross-references need no new syntax, and that is the point. `[text](#anchor)`, `[text](other.md#anchor)`, and `[text](https://example.org/page#anchor)` are one construct — a link whose destination is a URL carrying a fragment. Internal and external references behave consistently because URL semantics already unified them.
 
-Images are also unchanged from CommonMark: `![alt](src)`. Alternative text is optional and empty alternative text is legal; missing alternative text is a validator warning, never an error.
+Images are also unchanged from CommonMark: `![alt](src)`. Alternative text is optional and empty alternative text is well-formed; missing alternative text is a validator warning, never an error.
 
 The relationship between the two is worth stating, because it makes the exclamation mark memorable rather than arbitrary: **`[…]` links to the target; `![…]` shows it instead.** The mark is a presentation switch, not a different construct.
 
@@ -438,9 +438,9 @@ There is nothing else. No key-value pairs, no classes, no format sigils, no colo
 
 **No word is ever reserved.** This document defines the grammar of a decorator list and the meaning of the `#` sigil. It does not define what any bare word means. A label is opaque, is carried into the tree exactly as written, and **cannot affect the parse**. The grammar is therefore fixed independently of any word list — no future word can quietly become a directive, because words have no parse-level power by construction, and there is no registry to maintain, version, or argue about.
 
-Meanings live outside this document. That `math` means TeX and `rust` means Rust is convention, recorded in the non-normative Appendix C and in a validator's list of recognized words, both revisable without touching the language. An unrecognized word parses as plain verbatim content and earns a validator warning, never a parse error. Vendors are advised to prefix `x-` against collisions; nothing enforces it, because it is a convention rather than syntax.
+Meanings live outside this document. That `math` means TeX and `rust` means Rust is convention, recorded in the non-normative Appendix C and in a validator's list of recognized words, both revisable without touching the language. An unrecognized word parses as plain verbatim content and earns a validator warning, never a parse error. Prefixing `x-` is the usual guard against collisions; nothing checks it, because it is a convention rather than syntax.
 
-There is consequently **no `text` label**. It is not forbidden — forbidding a word would reserve it — but it is never blessed either: nothing here assigns it a meaning, a validator reports it as redundant, and the canonical formatter removes it.
+There is consequently **no `text` label**. Nothing rules it out — ruling a word out would reserve it — but nothing blesses it either: nothing here assigns it a meaning, a validator reports it as redundant, and the canonical formatter removes it.
 
 A labelled span and an unlabelled span are **different nodes**. They may render identically; the tree records which the author wrote.
 
@@ -452,7 +452,7 @@ What such a line is *instead* is a question this exclusion raises and does not a
 
 **The first character selects the shape:** `#` makes the token an anchor, anything else makes it the format word. Sigils are significant only in first position, so `#` inside a token is an ordinary character.
 
-**Legibility.** `` `x=y`{math #eq-euler} `` is the ceiling of this grammar rather than its normal use, and a decorator can grow longer than the content it decorates. The grammar permits it anyway, because forbidding the full form inline only would be an "unless" clause. House style carries that cost instead: anchors belong on fences, where a block has room for them, and an inline decorator normally carries the format word alone. What keeps even the ceiling inside invariant 1 is the postfix order — the content reads first, and the decoration is a suffix on a span the reader has already finished.
+**Legibility.** `` `x=y`{math #eq-euler} `` is the ceiling of this grammar rather than its normal use, and a decorator can grow longer than the content it decorates. The grammar has room for it anyway, because closing off the full form inline only would be an "unless" clause. House style carries that cost instead: anchors belong on fences, where a block has room for them, and an inline decorator normally carries the format word alone. What keeps even the ceiling inside invariant 1 is the postfix order — the content reads first, and the decoration is a suffix on a span the reader has already finished.
 
 ### 4.6 Mathematics
 
@@ -497,13 +497,13 @@ Because there is no raw passthrough, **a Markleft document is inert by construct
 
 ### 4.8 File names
 
-Exactly two extensions: **`.markleft`**, the long form, canonical in documentation; and **`.lf`**, the short form. A language with one meaning per input should not have four names for its files. `.lft` is held in reserve as a fallback and is not a live option.
+Exactly two extensions: **`.markleft`**, the long form, canonical in documentation; and **`.lf`**, the short form. A language with one meaning per input should not have four names for its files. `.lft` is held in reserve as a fallback rather than offered as a live option.
 
 No media type is registered. That is an open item, listed in Appendix D.
 
 ## 5. The binding decisions
 
-This section is informative. It records what was decided and why, including the alternatives that were rejected, so that a reader can evaluate the language rather than merely learn it, and so that a later contributor does not relitigate a settled question from scratch.
+This section is informative. It records what was decided and why, including the alternatives it set aside, so that a reader can evaluate the language rather than merely learn it, and so that a later contributor finds the analysis instead of rebuilding it.
 
 **The numbering is stable and citable.** Decisions are referred to by number throughout this project — in this document, in the deltas appendix, in commit messages, and in design memos. Numbers are never reused and never renumbered.
 
@@ -513,9 +513,9 @@ This section is informative. It records what was decided and why, including the 
 
 **Why:** section 1.2. Dollar-delimited mathematics was never in any Markdown specification, and every implementation of it is a heuristic operating outside the parser. The goal here was never to specify a mathematics engine. It was unequivocalness — to end the dollar mess — and the language achieves that by guaranteeing what the source unambiguously *is* while saying nothing about what a renderer does with it.
 
-**Rejected — `\(…\)` for inline mathematics.** This was the original design and it is withdrawn, for two reasons. It cannot coexist with decision 3, which yields the character after any backslash with no exception list, so `\(` is simply a literal parenthesis and those delimiters cannot exist. The deeper failure is in the content rather than the delimiters: inline TeX is dense with backslashes, so `\(\frac{a}{b}\)` loses `\f` to an escape and offers no way to tell a closing `\)` from an escaped parenthesis. **Inline mathematics has to be verbatim**, which is why the fenced form was never in trouble and why the inline form belongs in the same machinery.
+**Not adopted — `\(…\)` for inline mathematics.** This was the original design and it is withdrawn, for two reasons. It cannot coexist with decision 3, which yields the character after any backslash with no exception list, so `\(` is simply a literal parenthesis and those delimiters cannot exist. The deeper failure is in the content rather than the delimiters: inline TeX is dense with backslashes, so `\(\frac{a}{b}\)` loses `\f` to an escape and offers no way to tell a closing `\)` from an escaped parenthesis. **Inline mathematics has to be verbatim**, which is why the fenced form was never in trouble and why the inline form belongs in the same machinery.
 
-**Rejected — carving `\(` and `\)` out of decision 3.** It costs the "no exception list" guarantee *and* does not fix the content problem, so it buys nothing.
+**Not adopted — carving `\(` and `\)` out of decision 3.** It costs the "no exception list" guarantee *and* does not fix the content problem, so it buys nothing.
 
 ### Decision 2 — Underscore is not syntax
 
@@ -527,7 +527,7 @@ This section is informative. It records what was decided and why, including the 
 
 **Rule:** a backslash before any character yields that character. No exception list, line endings included.
 
-**Why:** an exception list is an "unless" clause, and invariant 2 forbids those. Uniformity here also gives the language its one visible hard line break (decision 13) for free.
+**Why:** an exception list is an "unless" clause, and invariant 2 leaves no room for those. Uniformity here also gives the language its one visible hard line break (decision 13) for free.
 
 **The cost, stated honestly:** this is the most dangerous entry in the migration guide, because a backslash that used to survive as a literal character now consumes the character after it. That is a silent change in output rather than an error, so a migrator has to report every occurrence.
 
@@ -537,7 +537,7 @@ This section is informative. It records what was decided and why, including the 
 
 **Why:** one sentence with a uniform fallback disposes of every case that Markdown legislates separately — seven number signs, hashtags, numbered items, the lone number sign, indentation, and closing runs — with no exception clause and no new error class. Underlined headings additionally violate invariant 4, because an underlined heading is a heading only on account of the *next* line.
 
-**Rejected — keeping the optional closing run.** CommonMark's rule for when a trailing run of number signs closes a heading and when it does not (`# foo #` closes, `# foo #bar` does not) is the clearest available specimen of the clause invariant 2 exists to forbid.
+**Not adopted — keeping the optional closing run.** CommonMark's rule for when a trailing run of number signs closes a heading and when it does not (`# foo #` closes, `# foo #bar` does not) is the clearest available specimen of the clause invariant 2 was written against.
 
 *This decision, with 5 and 6, carries the highest muscle-memory risk in the language. See section 5's closing note.*
 
@@ -559,7 +559,7 @@ What that buys is measurable rather than asserted. **`+` becomes free everywhere
 
 This is the same subtraction as decisions 4, 5, and 13. Setext headings, closing runs, indented code, and trailing-space breaks were each a second spelling of one construct. Three spellings of a bullet was the largest instance still standing.
 
-**Rejected — alphabetic and Roman markers** (`a.`, `A.`, `i.`). They fail the addition bar in section 2.2 on its second half, because they cost plain-text clarity. `A. Smith argues that…` and `J. R. R. Tolkien wrote…` are initials and author names, ordinary in citations and bibliographies, so letters put a frequent collision at the start of a line — a form that occurs naturally in writing, promoted to structure, which is the dollar-sign failure in another costume.
+**Not adopted — alphabetic and Roman markers** (`a.`, `A.`, `i.`). They fail the addition bar in section 2.2 on its second half, because they cost plain-text clarity. `A. Smith argues that…` and `J. R. R. Tolkien wrote…` are initials and author names, ordinary in citations and bibliographies, so letters put a frequent collision at the start of a line — a form that occurs naturally in writing, promoted to structure, which is the dollar-sign failure in another costume.
 
 They also arrive with three questions, one of which needs an "unless": `i.` is both the ninth letter and Roman numeral one, so admitting letters forces a choice that surprises somebody either way; nothing says what follows `z.`, since `aa.` is a numbering scheme rather than a marker; and with one marker per list gone, no rule says whether `a.` followed by `B.` is one list or two.
 
@@ -577,9 +577,9 @@ The deciding objection is a fourth. Under renumbering, a marker is a *presentati
 
 **What removal buys:** a document that is inert by construction; no lock-in to a target format, where a raw HTML block had put HTML *inside* a language claiming independence from any serialization; and a simpler decorator grammar, since the format-escape token shape leaves with it.
 
-**What it costs, stated rather than hidden:** an escape hatch is what lets a small language *refuse* feature requests. "Markleft cannot do X" is answerable with "drop to a raw block" only while one exists. Without it, every gap presses directly on the core, which is the force that has broken the five-minute property everywhere else. Collapsible sections on GitHub are the concrete casualty.
+**What it costs, stated rather than hidden:** an escape hatch is what lets a small language answer a feature request without growing. "Markleft cannot do X" is answerable with "drop to a raw block" only while one exists. Without it, every gap presses directly on the core, which is the force that has broken the five-minute property everywhere else. Collapsible sections on GitHub are the concrete casualty.
 
-**Rejected — keeping the raw block as a loudly-marked exception**, where the cardinal rule holds *except* inside a fence that warns the reader the plain text is not the whole story. Honest, but still an "unless" clause on the cardinal rule, and the rule is worth more intact.
+**Not adopted — keeping the raw block as a loudly-marked exception**, where the cardinal rule holds *except* inside a fence that warns the reader the plain text is not the whole story. Honest, but still an "unless" clause on the cardinal rule, and the rule is worth more intact.
 
 ### Decision 8 — Pipe tables in the core, strictly
 
@@ -593,9 +593,9 @@ The deciding objection is a fourth. Under renumbering, a marker is a *presentati
 
 **Why block cells.** Not line length, though that is the visible symptom. A table row *is* a line, so soft wrapping destroys the column alignment that was the format's whole reason for existing, hard wrapping is not available because the row cannot be broken, and changing one word in one cell shows the entire row as changed. This is the fourth application of one principle in this project — after unwrapped prose, `1.` numerals, and named rather than numbered anchors: **keep the unit of the source close to the unit of the edit.** A Markdown table is the only one of the four where the author has no good spelling available at all.
 
-**Rejected — width hints in the rule row** (`|70:---|`). Not on the grounds first offered, three of which were wrong and are withdrawn in the decision record: a proportion *can* be shown in plain text, because the canonical formatter already chooses source column widths; a proportion is medium-independent in a way that page-layout measures are not; and a stated proportion is in fact more consistent across renderers than automatic sizing, not less. What decides it is that a width is a hand-maintained number that goes stale silently as content grows — the same shape rejected for list numerals and numbered anchors — and that a number in the source would actively work against whatever sizing a renderer or formatter later does well. Alignment survives the same test on a real distinction: it is closed, three-valued, and describes the content, where width is open, continuous, and describes only the display, and it is the continuity that invites the endless tuning that decision 9 removed classes to avoid. Full analysis, and what would reopen it, in `notes/table-width-hints.md`.
+**Not adopted — width hints in the rule row** (`|70:---|`). Not on the grounds first offered, three of which were wrong and are withdrawn in the decision record: a proportion *can* be shown in plain text, because the canonical formatter already chooses source column widths; a proportion is medium-independent in a way that page-layout measures are not; and a stated proportion is in fact more consistent across renderers than automatic sizing, not less. What decides it is that a width is a hand-maintained number that goes stale silently as content grows — the same shape set aside for list numerals and numbered anchors — and that a number in the source would actively work against whatever sizing a renderer or formatter later does well. Alignment survives the same test on a real distinction: it is closed, three-valued, and describes the content, where width is open, continuous, and describes only the display, and it is the continuity that invites the endless tuning that decision 9 removed classes to avoid. Full analysis, and what would reopen it, in `notes/table-width-hints.md`.
 
-**Rejected — a closing rule row**, and **a blank line**, and **two blank lines**, as the table's terminator. A closing rule row strains when inline and block cells mix in one table and carries the load of remembering to write one. A blank line cannot work, since a blank line is what separates the paragraphs a block cell exists to hold. Two blank lines would work and contradicts decision 6, where blank lines never split a list.
+**Not adopted — a closing rule row**, and **a blank line**, and **two blank lines**, as the table's terminator. A closing rule row strains when inline and block cells mix in one table and carries the load of remembering to write one. A blank line cannot work, since a blank line is what separates the paragraphs a block cell exists to hold. Two blank lines would work and contradicts decision 6, where blank lines never split a list.
 
 **The cost, stated:** a list item marks every line it owns, and a block cell does not. Two solutions to one problem is a real charge against invariant 2, accepted because the pipe already does for a cell what indentation does for a list item, and because a table is a distinct editing mode in an author's mental model however it is spelled.
 
@@ -605,11 +605,11 @@ The deciding objection is a fourth. Under renumbering, a marker is a *presentati
 
 **Why:** the language needs a way to say "this verbatim content is Rust" and "the reader arrives here", and it needs exactly one such way rather than one per construct. Two token shapes, each at most one, is the smallest grammar that does both jobs. That no word is reserved is the stronger half of the decision: it means no future word can become a directive by accident, because words have no parse-level power at all.
 
-**Rejected — `.class`.** Classes were in the design and were removed. Four counts against them. They fail the design test in decision 15: a platform that sanitizes CSS strips the class attribute, so the mark is consumed and nothing replaces it, which is exactly the information destruction that decision forbids. They pay for nothing under the addition bar in section 2.2: no ambiguity removed, and the only gap filled is "Markdown has no styling", which is the richer-Markdown trap. They balloon the source, so the cost falls on invariant 1. And they invite mixing styling with content — the thing many people came to Markdown to escape. Being freed from styling decisions is a feature, not a deprivation, and Markdown's lack of styling is part of why its text pastes anywhere.
+**Not adopted — `.class`.** Classes were in the design and were removed. Four counts against them. They fail the design test in decision 15: a platform that sanitizes CSS strips the class attribute, so the mark is consumed and nothing replaces it, which is exactly the information destruction that decision rules out. They pay for nothing under the addition bar in section 2.2: no ambiguity removed, and the only gap filled is "Markdown has no styling", which is the richer-Markdown trap. They balloon the source, so the cost falls on invariant 1. And they invite mixing styling with content — the thing many people came to Markdown to escape. Being freed from styling decisions is a feature, not a deprivation, and Markdown's lack of styling is part of why its text pastes anywhere.
 
-**Rejected — key-value attributes.** Arbitrary attributes only ever existed to feed arbitrary HTML, so decisions 7 and 9 removed each other's reason to exist.
+**Not adopted — key-value attributes.** Arbitrary attributes only ever existed to feed arbitrary HTML, so decisions 7 and 9 removed each other's reason to exist.
 
-**Rejected — a `text` label.** Blessing a second spelling of "verbatim plain text" costs the one-way-to-do-it discipline for nothing, and naming the label invites peppering prose with monospace for emphasis.
+**Not adopted — a `text` label.** Blessing a second spelling of "verbatim plain text" costs the one-way-to-do-it discipline for nothing, and naming the label invites peppering prose with monospace for emphasis.
 
 ### Decision 10 — Tabs are not structural
 
@@ -621,13 +621,13 @@ The deciding objection is a fourth. Under renumbering, a marker is a *presentati
 
 **Rule:** no smart punctuation in the core; Markdown's muscle memory is kept wherever Markdown was not broken — links, block quotes, and backtick verbatim.
 
-**Why:** djot (MacFarlane, 2022) is the nearest prior art and most of this language's syntax decisions are djot-vetted. Where we differ, we differ deliberately. Smart punctuation modifies what the author wrote, which decision 14's no-normalization clause forbids for the same reason.
+**Why:** djot (MacFarlane, 2022) is the nearest prior art and most of this language's syntax decisions are djot-vetted. Where we differ, we differ deliberately. Smart punctuation modifies what the author wrote, which decision 14's no-normalization clause leaves out for the same reason.
 
 **Challenged and kept — backtick verbatim.** The backtick is genuinely hostile to non-US keyboards: it is a dead key on QWERTZ, AZERTY, Nordic, and Spanish layouts, it is visually close to the apostrophe and the acute accent, and mobile keyboards bury it. The proposed replacement was the pipe. The pipe fails twice before compatibility is even considered: it is already the table delimiter, and it breaks prose-safety, since `|x| < 5`, `P(A|B)`, and shell pipelines are ordinary prose.
 
 No substitute exists, and the reason is structural and worth keeping: **the backtick's inaccessibility and its prose-safety are the same property.** It is hard to reach because almost nobody types it in ordinary writing, and almost nobody typing it in ordinary writing is exactly what qualifies it as a delimiter. Any character reachable enough to fix the complaint is common enough to re-create the collision. The concern is answered with tooling instead — editor snippets, a line on the reference card about non-US layouts, and a validator diagnostic that catches a decorator following something that is not a verbatim span and asks whether an apostrophe or an acute accent was typed for a backtick.
 
-Reopening this requires a candidate character, not an argument.
+What would reopen this is a candidate character, not another argument.
 
 ### Decision 12 — Compatibility with CommonMark
 
@@ -647,33 +647,33 @@ Reopening this requires a candidate character, not an argument.
 
 **Why UTF-8, in a specification written in 2026:** its age is the argument in its favour, and four independent lines of evidence agree. The WHATWG Encoding Standard requires it for new formats exclusively, and its encoding table is closed to additions. RFC 3629 froze UTF-8's definition permanently, so it cannot grow new cases. Deployment is roughly 99% of the web. And there is no successor and no candidate: the historical succession was UTF-1 to UTF-8, and it stopped.
 
-**Rejected — UTF-16**, which reintroduces every problem UTF-8 removes: endianness, surrogate pairs that break naive indexing, no ASCII compatibility, and loss of self-synchronization. Its footprint is internal string APIs, none of which is an interchange format. **Rejected — UTF-32**, which costs four bytes per character to buy a fixed-width property that is a fiction, since combining marks mean one code point was never one user-perceived character.
+**Not adopted — UTF-16**, which reintroduces every problem UTF-8 removes: endianness, surrogate pairs that break naive indexing, no ASCII compatibility, and loss of self-synchronization. Its footprint is internal string APIs, none of which is an interchange format. **Not adopted — UTF-32**, which costs four bytes per character to buy a fixed-width property that is a fiction, since combining marks mean one code point was never one user-perceived character.
 
 **The durability risk is the Unicode version, not the encoding.** UTF-8 is frozen; Unicode releases annually. So the risk attaches only to rules that consult a Unicode table, and "content is never normalized" already immunizes the bulk of the language. The two rules that would have consulted a table — how anchors and labels match, and what "column" means — are defined version-independently in section 4.1, by code-point identity and code-point count. A pinned Unicode version is a dependency that ages, and it puts this definition on somebody else's release schedule.
 
 ### Decision 15 — No generated content
 
-**Rule:** everything a reader will see is written in the source, in the order it appears there. A renderer may style, link, and lay out what is written; it may never supply text that is not.
+**Rule:** everything a reader will see is written in the source, in the order it appears there. A renderer styles, links, and lays out what is written, and never supplies text that is not.
 
 This is invariant 5's operative detail. The rest of this entry is the part a reader needs in order to apply it.
 
 **The boundary, precisely.** The rule is *not* that the source must look like the rendered form: `**bold**` is not bold, and a TeX fraction is not a typeset fraction. It is that the source must be **semantically equivalent to the rendered form, up to format.** Rendering may change how written content appears; it may never create content.
 
-So the test for any future construct is one question: **is this changing the presentation of written content, or manufacturing content?** Presentation instructions stay admissible in principle — a decorator is one. Content-manufacturing constructs are closed permanently.
+So the test for any future construct is one question: **is this changing the presentation of written content, or manufacturing content?** Presentation instructions stay open in principle — a decorator is one. Content-manufacturing constructs are closed.
 
 Reference links pass the test: the visible text is written where it appears, and only the destination lives elsewhere in the same document, a destination being metadata rather than content. A table of contents fails, because its entries appear where nobody wrote them.
 
 **The back half: rendering is lossy on marks and lossless on content.** The front half says rendering adds nothing. The converse is that rendering *removes*: `` `E=mc^2`{math} `` becomes a typeset equation and the word `math` is gone from the page. Nothing is lost by that. The statement "this is an equation" was not deleted but **re-expressed as typography**, exactly as `**bold**` surrenders its asterisks to boldness. A decorator is the plain-text stand-in for a visual distinction the plain-text reader cannot receive, which is why these are two halves of one rule rather than two rules.
 
-The constraint on this direction is narrow and absolute: **only marks may be consumed, and every unit of content survives.** A renderer that dropped the content a mark identified would break the rule as surely as one that invented content.
+The constraint on this direction is narrow and absolute: **only marks are consumed, and every unit of content survives.** A renderer that dropped the content a mark identified would break the rule as surely as one that invented content.
 
-**The design test that follows:** every format word must name something a conforming renderer visibly distinguishes. A format whose rendered output is indistinguishable from undecorated content destroys information on render, and is refused. Anchors are exempt by kind rather than by exception: an anchor is navigation, metadata in the same category as a link destination, and metadata carries no content to lose.
+**The design test that follows:** every format word names something a conforming renderer visibly distinguishes. A format whose rendered output is indistinguishable from undecorated content destroys information on render, and does not clear the test. Anchors are exempt by kind rather than by exception: an anchor is navigation, metadata in the same category as a link destination, and metadata carries no content to lose.
 
 **Worked consequence — citations and bibliographies.** Both generate text, so both are excluded from the language, and the capability moves to authoring time rather than being lost. A preprocessor or editor extension reads a bibliography file and writes the citation text and the reference list *into* the source, where they become plain text like everything else: `As [Smith (2020)](#ref-smith2020) showed…` above a references section whose entries carry `{#ref-smith2020}` anchors. The anchor is the citation key, serving as the reader's navigation target and the tool's stable identifier at once.
 
 This is better than the alternative on the rule's own terms, because the plain-text reader sees "Smith (2020)" rather than a citation key. **The cost is restyling:** changing citation style is a flag in a citation processor and a full re-run with a large diff here. Immaterial for a document with one venue; a genuine loss for a paper shopped across journals. The trade is diffable-and-readable always, against cheap-restyling sometimes, and this project takes the first consistently.
 
-**Worked consequence — file includes stay forbidden.** Could an image-like construct include a text file in place? No, and the rule decides it with no amendment, which is the test of an invariant rather than a carve-out. An include inserts text the source does not contain, so a plain-text reader has not read the document. The legitimate want behind it — keeping a code sample in sync with the file it came from — gets the same answer tables of contents got: a tool writes the snippet into the source. An include directive hides drift; an inlined snippet shows it in the diff.
+**Worked consequence — file includes stay out of the language.** Could an image-like construct include a text file in place? No, and the rule decides it with no amendment, which is the test of an invariant rather than a carve-out. An include inserts text the source does not contain, so a plain-text reader has not read the document. The legitimate want behind it — keeping a code sample in sync with the file it came from — gets the same answer tables of contents got: a tool writes the snippet into the source. An include directive hides drift; an inlined snippet shows it in the diff.
 
 ### Decision 16 — Images are core, and the line is textual
 
@@ -681,13 +681,13 @@ This is better than the alternative on the rule's own terms, because the plain-t
 
 **Why an image is legal where raw HTML is not:** decision 15 governs the document's *text*, and an image contributes none. A reader of the plain source has read every word of the document.
 
-**The bend, stated honestly.** What that reader lacks — what the picture shows — is real content, and no alternative text recovers it, because an image is worth a thousand words and an alt attribute is sized for a screen reader. So the cardinal rule *is* bent here, deliberately and in one bounded place, for two reasons that do not generalize: images are essential to clarity in most real documents, and unlike text there is no way to carry one in plain text at all. **A rule bent knowingly, at a named place, with the reason written down, is not the same thing as a rule with a hole in it** — which is why this does not license the next request.
+**The bend, stated honestly.** What that reader lacks — what the picture shows — is real content, and no alternative text recovers it, because an image is worth a thousand words and an alt attribute is sized for a screen reader. So the cardinal rule *is* bent here, deliberately and in one bounded place, for two reasons that do not generalize: images are essential to clarity in most real documents, and unlike text there is no way to carry one in plain text at all. **A rule bent knowingly, at a named place, with the reason written down, is not the same thing as a rule with a hole in it** — which is why the next case is read on its own terms rather than inheriting this one.
 
 An inline frame imports arbitrary text that becomes part of what the reader reads. An image is bounded and inert, occupies one non-textual slot, runs no scripts, and cannot embed recursively. That is the whole distinction, and it is why "no transclusion" in decision 15 means no *textual* transclusion.
 
-**Rejected — `` `path`{image} ``,** despite fitting the decorator notation exactly. A decorator must mean the same thing in both positions, and an `image` fence is meaningless: a word that works only inline is a special case wearing the notation. Worse, a decorator labels content that is *present*, where a path references content that is *absent*. And it has nowhere to put alternative text.
+**Not adopted — `` `path`{image} ``,** despite fitting the decorator notation exactly. A decorator must mean the same thing in both positions, and an `image` fence is meaningless: a word that works only inline is a special case wearing the notation. Worse, a decorator labels content that is *present*, where a path references content that is *absent*. And it has nowhere to put alternative text.
 
-**Rejected — `[alt](src){image}`,** the strongest alternative, which fails on cost rather than on principle. Principle favours it, since `![]()` is the only inline construct whose type marker precedes its content. But decision 12 forbids diverging from an unambiguous, harmless CommonMark construct for legibility alone; it would open a third decorator position, growing the rule rather than shrinking it; and it would make nearly every real document invalid CommonMark, since almost every project README carries badges or screenshots.
+**Not adopted — `[alt](src){image}`,** the strongest alternative, which fails on cost rather than on principle. Principle favours it, since `![]()` is the only inline construct whose type marker precedes its content. But under decision 12 a divergence from an unambiguous, harmless CommonMark construct needs more than legibility; it would open a third decorator position, growing the rule rather than shrinking it; and it would make nearly every real document invalid CommonMark, since almost every project README carries badges or screenshots.
 
 ### Decision 17 — Anchors are positional; references are ordinary links
 
@@ -697,7 +697,7 @@ An inline frame imports arbitrary text that becomes part of what the reader read
 
 **Markleft's contribution to cross-referencing is the removal of a heuristic, not the addition of a feature.** Platforms derive anchors by slugifying heading text, and every platform slugifies differently, so the same link resolves on one and dangles on another. That is the founding exhibit in navigation form. Explicit anchors delete the guess, and cost no new construct at all.
 
-**Rejected — a bare reference sigil,** in every spelling considered. Two independent failures. It would have to **generate its own text**: rendering a bare reference means emitting either the useless raw identifier or the target's title or number, which is text pulled from elsewhere and inserted where nobody wrote it — decision 15, arriving through a smaller door than a table of contents but through the same door. And a bare `#identifier` is prose-unsafe, since `#general` and `#nowplaying` are ordinary technical prose; it would also make a hash-word text at the start of a line and syntax in the middle of one. As a consequence no digit-guard rule is needed anywhere: with references written as links, `#1` in prose is never syntax.
+**Not adopted — a bare reference sigil,** in every spelling considered. Two independent failures. It would have to **generate its own text**: rendering a bare reference means emitting either the useless raw identifier or the target's title or number, which is text pulled from elsewhere and inserted where nobody wrote it — decision 15, arriving through a smaller door than a table of contents but through the same door. And a bare `#identifier` is prose-unsafe, since `#general` and `#nowplaying` are ordinary technical prose; it would also make a hash-word text at the start of a line and syntax in the middle of one. As a consequence no digit-guard rule is needed anywhere: with references written as links, `#1` in prose is never syntax.
 
 **A closed gap worth noting.** Decision 16 left open whether decorators needed a third position so that `## Heading {#custom-id}` could be written. This decision closes it without a new position: an anchor is valid anywhere inline content is, and a heading's text is inline content, so `## The five-minute property {#five-minute}` already works.
 
@@ -755,7 +755,7 @@ Every cell of the last row exists somewhere else in the table. The conjunction e
 
 - **CommonMark** — the specification-as-tests methodology, and the byte-compatibility baseline in decision 12.
 - **djot** — the linear-time architecture, uniform escaping, attributes (reduced here to decorators), and bracketed emphasis. **Not** its raw-content design: decision 7 removes passthrough entirely.
-- **MyST and reStructuredText** — the directive concept, disciplined here into a closed extension point, and never the content-generating directive that decision 15 forbids.
+- **MyST and reStructuredText** — the directive concept, disciplined here into a closed extension point, and never the content-generating directive that decision 15 leaves out.
 - **Markdoc** — proof of demand for schema validation and documents-as-data.
 - **Typst** — the standard to meet for error messages, and the Rust-plus-playground approach to credibility.
 - **AsciiDoc and the Eclipse Foundation** — the technology compatibility kit concept, which is what the conformance suite is, and a cautionary timeline.
@@ -811,7 +811,7 @@ By running the conformance suite. It is published separately so that an implemen
 
 ### 9.3 The precedence rule
 
-**When the suite and this document disagree, this document governs and the test is presumed to be the defect.** But the disagreement must be triaged, because sometimes the test is the evidence that the document is wrong. Exactly one of three things is true:
+**When the suite and this document disagree, this document governs and the test is presumed to be the defect.** But the disagreement is triaged, because sometimes the test is the evidence that the document is wrong. Exactly one of three things is true:
 
 1. **The test is wrong.** It asserts something this document does not say. Fix the test. This is the common case and needs no ceremony.
 2. **This document means the right thing but says it unclearly.** The test did its job: it found an ambiguity, which under invariant 3 is a defect whether or not any implementation has tripped over it. Fix the prose or the grammar so that the intended reading is the only reading. Behaviour does not change; the text that determines it does.
@@ -819,7 +819,7 @@ By running the conformance suite. It is published separately so that an implemen
 
 "The document governs" settles *where a change must land*, not *who was right*. It is a routing rule, not a claim of infallibility. The kilogram was redefined because realizations outran the artefact; a discrepant comparison is sometimes a finding about the definition.
 
-**What the rule forbids is exactly one thing: a behaviour that exists in the suite and nowhere in this document.** That is how a standard quietly relocates into its tests.
+**What the rule excludes is exactly one thing: a behaviour that exists in the suite and nowhere in this document.** That is how a standard quietly relocates into its tests.
 
 ### 9.4 The conformance mark
 
@@ -833,13 +833,13 @@ The project reserves the possibility of a lightly governed "Markleft-conformant"
 
 **Licensing.** This definition and the conformance suite are licensed **CC BY 4.0**. Copy them, quote them, adapt them, implement them, and sell what you build on them. Attribution is the only condition. All code produced by the project is licensed **MIT**.
 
-CC BY was chosen over the share-alike variant deliberately: share-alike would force anyone quoting substantial parts into their own documentation to license that documentation alike, which is friction a specification meant to be reimplemented must not impose.
+CC BY was chosen over the share-alike variant deliberately: share-alike would force anyone quoting substantial parts into their own documentation to license that documentation alike, which is friction a specification meant to be reimplemented is better without.
 
 ## 11. Governance
 
 Markleft is maintained by its authors and governed by no institution.
 
-The process today is exactly this: one maintainer decides, and writes the decision down with its rationale and its rejected alternatives. That record is public, and section 5 of this document is its distillation. Describing anything more elaborate would be describing a committee that does not exist.
+The process today is exactly this: one maintainer decides, and writes the decision down with its rationale and the alternatives it set aside. That record is public precisely so that the next person can argue with it, and section 5 of this document is its distillation. Describing anything more elaborate would be describing a committee that does not exist.
 
 The trigger for something more is specific: **more than one decision-maker.** At that point the decision record becomes a request-for-comments process, the binding decisions in section 5 become numbered proposals retroactively, and contributor-facing process — a contributing guide, a code of conduct — is published alongside it. Standing that up sooner would produce ceremony and no contributors, which is a failure this project has studied in others.
 
@@ -853,7 +853,7 @@ The trigger for something more is specific: **more than one decision-maker.** At
 
 **No behaviour may exist only in the suite** (section 9.3). A reviewer of a new conformance example should ask which clause of this document determines it, and treat "none" as a finding rather than a formality.
 
-**Every change is recorded before it is made.** A challenge to a settled decision is written down with its argument and its outcome, whether it succeeds or fails, so that a later contributor finds the analysis instead of repeating it.
+**Every change is recorded before it is made.** A challenge to a settled decision is written down with its argument and its outcome, whether it succeeds or fails, so that a later contributor finds the analysis instead of rebuilding it.
 
 ## Appendix A — Deltas from Markdown
 

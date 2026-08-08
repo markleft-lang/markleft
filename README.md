@@ -22,7 +22,7 @@ A formally specified, ambiguity-free successor to Markdown: the same size and th
 
 Not a feature platform. Markdown's problem was never a shortage of features — it was that the same source produces different documents. The job here is to remove that ambiguity while keeping what made Markdown win: source that reads as plain text, a core small enough to learn in one sitting, and familiarity for anyone who already writes Markdown.
 
-It is a little richer than Markdown where the richness pays for itself. Math is part of the core in the way that matters: `$` is never math syntax, and there is a first-class construct — fenced and inline — whose content is verbatim and safe from reinterpretation. A renderer still chooses the typesetting, as it always did; what it can no longer do is change what the source says. Decorators and pipe tables earn their place too, several of them adopted from djot, whose design solved these problems well and is credited throughout. Every addition clears the same bar: it removes an ambiguity or fills a genuine gap, **and it costs nothing in plain-text clarity**. A construct that makes ordinary, unmarked prose read worse is declined regardless of merit.
+It is a little richer than Markdown where the richness pays for itself. Math is part of the core in the way that matters: `$` is never math syntax, and there is a first-class construct — fenced and inline — whose content is verbatim and safe from reinterpretation. A renderer still chooses the typesetting, as it always did; what it can no longer do is change what the source says. Decorators and pipe tables earn their place too, several of them adopted from djot, whose design solved these problems well and is credited throughout. Every addition clears the same bar: it removes an ambiguity or fills a genuine gap, **and it costs nothing in plain-text clarity**. A construct that makes ordinary, unmarked prose read worse does not clear the bar, however much it offers elsewhere.
 
 **The five-minute property is the budget.** Most of the language decisions remove something; a few add; the total still has to fit on one reference card. "Markleft could also do X" is therefore not an argument on its own — the argument has to be that X is worth what it costs every reader who never uses it.
 
@@ -34,7 +34,7 @@ Everything in this repository is part of the standard, **except `CLAUDE.md` and 
 
 Within the standard, `notes/` holds non-normative memos: design challenges, and the reasoning behind decisions the normative text does not explain about itself.
 
-The specification document governs. The conformance suite in [markleft-lang/tests](https://github.com/markleft-lang/tests) is how conformance is *checked* — mandatory for any conformance claim, and binding, but subordinate to this document. Where the two disagree, this document governs and the test is presumed to be at fault, unless the test turns out to be the evidence that the specification needs revising.
+The specification document governs. The conformance suite in [markleft-lang/tests](https://github.com/markleft-lang/tests) is how conformance is *checked* — mandatory for any conformance claim, and binding, but subordinate to this document. Where the two disagree, this document governs and the test is presumed to be at fault — unless the test turns out to be the evidence that the specification needs revising. "Governs" settles where a change lands, not who was right.
 
 ## Status
 

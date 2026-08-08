@@ -8,19 +8,19 @@ Column widths written into the rule row, alongside the alignment colons that are
 
 It addresses a genuine frustration. A table with one prose column and three short ones renders badly almost everywhere, because automatic sizing has no way to know which column deserves the room. The author knows and cannot say so.
 
-## What was wrong with the first refusal
+## What was wrong with the first answer
 
 Three arguments were offered against it and all three fail. They are recorded because leaving a bad argument in the record is how a good decision gets overturned later by someone who notices.
 
 **"A percentage has no meaning in plain text, because there is no canvas."** False. The canvas is the source line, and the canonical formatter already has to choose column widths in order to pad cells at all. If it can express alignment in the source — and editors already do exactly this, padding cells so text sits left, right, or centred — then it can express proportions the same way, approximately. So a width hint *would* be visibly distinguished in plain text, which is the test decision 15's back half sets. This was the strongest-sounding argument and it is simply not true.
 
-**"It is page or layout awareness, which §2 rules out."** Weak. A proportion carries no page geometry and no absolute measure. It is medium-independent in a way that inches, points, and pixels are not, and the non-goal was written against document-preparation systems that know about pages.
+**"It is page or layout awareness, which §2 leaves out."** Weak. A proportion carries no page geometry and no absolute measure. It is medium-independent in a way that inches, points, and pixels are not, and the non-goal was written against document-preparation systems that know about pages.
 
 **"It reintroduces the founding exhibit — same source, different documents."** Backwards. A stated proportion is *more* deterministic across renderers than automatic sizing, which varies with font metrics and content measurement. And width does not change what the text says, so the founding exhibit was never the right analogy.
 
 ## What actually decides it
 
-**A width is a number maintained by hand, and it goes stale silently.** Content grows, a column that wanted seventy per cent now wants forty-five, and nothing says so — the table simply renders worse until somebody notices and re-tunes it. That is the same shape this project has already rejected three times: hand-maintained ordered-list numerals (decision 6), numbered rather than named anchors (decision 17), and hard-wrapped prose (`.claude/markdown-conventions.md`). Each one is a value written into the source that has to be maintained against something that moves, and each fails invisibly.
+**A width is a number maintained by hand, and it goes stale silently.** Content grows, a column that wanted seventy per cent now wants forty-five, and nothing says so — the table simply renders worse until somebody notices and re-tunes it. That is the same shape this project has already set aside three times: hand-maintained ordered-list numerals (decision 6), numbered rather than named anchors (decision 17), and hard-wrapped prose (`.claude/markdown-conventions.md`). Each one is a value written into the source that has to be maintained against something that moves, and each fails invisibly.
 
 The sharper form of it, and the one that settled the question: **a number in the source would actively fight whatever sizing code someone writes later.** Automatic sizing is a formatter and renderer problem, and it is a solvable one — measuring content and distributing width well is ordinary engineering that will keep improving. A hint in the source is a permanent override of every future improvement, applied by an author who was looking at one version of one table in one medium.
 
@@ -56,4 +56,4 @@ Evidence, and a spelling — the same bar as `notes/backtick-verbatim-challenge.
 
 - **And** a spelling that a plain-text formatter can express faithfully, so the mark is not consumed with nothing replacing it on platforms that strip inline styles.
 
-Without both, the challenge has nowhere to go: the want is real, the mechanism is available, and the reason for refusing is that the number will be wrong later and nobody will be told.
+Without both, the challenge has nowhere to go: the want is real, the mechanism is available, and the reason for leaving it out is that the number will be wrong later and nobody will be told.

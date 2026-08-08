@@ -6,7 +6,7 @@
 
 **Row numbers here are not stable identifiers.** They renumber whenever a delta is inserted, which has happened four times already, so cite the *decision* number when referring to a divergence anywhere outside this file. Decision numbers never move; these do.
 
-This document is Appendix A of `definition.md`, and it has two audiences at once. For an implementer it is the normative list of every point where Markleft departs from CommonMark. For someone moving documents across, it is the migration guide. Decision 12 requires that every divergence appear here: matching CommonMark byte-for-byte wherever that is unambiguous and harmless is the rule, so each entry below has to justify its own existence.
+This document is Appendix A of `definition.md`, and it has two audiences at once. For an implementer it is the normative list of every point where Markleft departs from CommonMark. For someone moving documents across, it is the migration guide. Under decision 12 every divergence appears here: matching CommonMark byte-for-byte wherever that is unambiguous and harmless is the rule, so each entry below has to justify its own existence.
 
 ## The deltas
 
@@ -46,7 +46,7 @@ Each row above becomes a subsection here, and each subsection needs the same fou
 
 - **What changed** — the CommonMark behaviour and the Markleft behaviour, stated as a pair.
 
-- **Why** — which invariant or decision forces it. A delta that cannot name one is a delta that should not exist, per decision 12.
+- **Why** — which invariant or decision forces it. A delta that cannot name one is a delta with nothing holding it up, per decision 12.
 
 - **What breaks** — the realistic input that renders differently, not the contrived one. This is what a reader came for.
 
@@ -62,6 +62,6 @@ Deltas 12, 13, and 14 are the marker reduction, and they are the friendliest ent
 
 Deltas 17 to 21 are the table rewrite, and they are unusual in this table for being mostly *additions* — 19 and 20 take nothing away, and 21 changes nothing at all for a table written the way Markdown writes them. Only 17 and 18 make the migrator touch an existing document, and both do so mechanically: adding the pipes GFM let you omit, and padding a rule row that used fewer than three hyphens. Write these entries so a reader sees that immediately, because "we rewrote tables" reads alarming until you learn that every table you already have converts without a judgement call.
 
-Delta 18 is the one to explain rather than merely state, because the reason is a hazard rather than a preference. GFM accepts a single hyphen in a rule-row cell, and it gets away with it because a delimiter row can only ever be a table's second line. Once a rule row may also come first — delta 19 — a headerless table opening `| - | - |` would parse as structure and **those two cells would disappear.** Silently losing content is the one failure this project treats as disqualifying, so the minimum went to three, which is what fences and thematic breaks already require.
+Delta 18 is the one to explain rather than merely state, because the reason is a hazard rather than a preference. GFM accepts a single hyphen in a rule-row cell, and it gets away with it because a delimiter row can only ever be a table's second line. Once a rule row may also come first — delta 19 — a headerless table opening `| - | - |` would parse as structure and **those two cells would disappear.** Silently losing content is the one failure this project treats as disqualifying, so the minimum went to three, which is what fences and thematic breaks already ask for.
 
 Deltas 5, 6, and 7 are the muscle-memory cluster. They are the three the decision record flags as carrying the highest risk, and the corpus that would have measured their real-world impact was dropped. Expect the migrator's change report to be the first real evidence about them, which is late; write these entries so that evidence is easy to act on when it arrives.

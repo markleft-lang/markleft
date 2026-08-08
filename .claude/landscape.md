@@ -52,7 +52,7 @@ LaTeX's modern replacement: markdown-ish markup + real scripting language + incr
 
 ### Quarto/R Markdown, LaTeX itself, etc.
 
-See the strategies 3/5 overlap; all confirm: page-aware, programmable documents are a *different product* from a lightweight prose format. Markleft must never drift here (definition non-goal).
+See the strategies 3/5 overlap; all confirm: page-aware, programmable documents are a *different product* from a lightweight prose format. Markleft stays out of that space (definition non-goal).
 
 ## Strategy 6 — The elder statesmen (pre-Markdown or parallel lineages)
 
@@ -66,7 +66,7 @@ Semantically rich, book-class features (includes, conditionals, row-span tables,
 
 ### Org-mode (Emacs, 2003)
 
-Arguably the most capable plain-text format ever (outlining, literate programming, agendas, tables with formulas) and permanently trapped in its editor. **Lesson: editor-coupled formats don't propagate; Markleft must be editor-agnostic with LSP-grade tooling.**
+Arguably the most capable plain-text format ever (outlining, literate programming, agendas, tables with formulas) and permanently trapped in its editor. **Lesson: editor-coupled formats don't propagate; Markleft stays editor-agnostic, with LSP-grade tooling.**
 
 ## The gap Markleft targets (positioning summary)
 
@@ -88,9 +88,9 @@ Nobody combines: small + formally specified + prose-safe + collision-free math +
 
 - **CommonMark:** spec-as-tests methodology; byte-compatibility baseline.
 
-- **djot:** linear-time architecture, uniform escaping, attributes (as decorators), bracketed emphasis; most of our syntax decisions are djot-vetted. **Not** its raw-content design — decision 7 removes passthrough entirely, because raw HTML is transclusion and decision 15 forbids it.
+- **djot:** linear-time architecture, uniform escaping, attributes (as decorators), bracketed emphasis; most of our syntax decisions are djot-vetted. **Not** its raw-content design — decision 7 removes passthrough entirely, because raw HTML is transclusion and decision 15 leaves it out.
 
-- **MyST/rST:** the directive/role concept, disciplined into a closed namespace — the extension *point*, never the content-generating directive, which decision 15 forbids outright.
+- **MyST/rST:** the directive/role concept, disciplined into a closed namespace — the extension *point*, never the content-generating directive, which decision 15 leaves out entirely.
 
 - **Markdoc:** proof of demand for schema validation and docs-as-data.
 

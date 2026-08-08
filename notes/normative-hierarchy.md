@@ -14,7 +14,7 @@
 
 CommonMark made its example suite normative for a specific reason: it had no grammar. Emphasis there needs seventeen interlocking rules and a delimiter stack, which is not expressible as a context-free grammar, so the only precise statement of behavior available was a large set of worked examples. That was the right call under those constraints.
 
-Markleft is not under those constraints, and paying the cost of formalization while declining its benefit would be a poor trade. Invariant 3 requires an executable spec — grammar plus tests — and invariant 4 buys prefix-decidable, backtracking-free parsing. A formal grammar is a *documentary* artifact that is nonetheless unambiguous: it is not prose with interpretive slack. That is precisely what earns the document its normative status here.
+Markleft is not under those constraints, and paying the cost of formalization while declining its benefit would be a poor trade. Invariant 3 calls for an executable spec — grammar plus tests — and invariant 4 buys prefix-decidable, backtracking-free parsing. A formal grammar is a *documentary* artifact that is nonetheless unambiguous: it is not prose with interpretive slack. That is precisely what earns the document its normative status here.
 
 The framing is borrowed from metrology as an intellectual model — it confers no authority and implies no institutional backing — and `.claude/decisions.md` §7 already used the correct term without following it through: the conformance suite is **a key comparison for parsers**. In metrology a key comparison is not a definition; it is how independent realizations are checked against each other and against the definition. Compare the SI: the metre is defined by a single sentence about the speed of light, and that definition has outlived every technology used to realize it, precisely because it was written to be independent of all of them.
 
@@ -26,7 +26,7 @@ So the suite is not a nice-to-have that trails the document. It ships with the d
 
 ## The precedence rule
 
-**When the suite and the document disagree, the document governs and the test is presumed to be the bug — but the disagreement must be triaged, because sometimes the test is the evidence that the document is wrong.**
+**When the suite and the document disagree, the document governs and the test is presumed to be the bug — but the disagreement is triaged, because sometimes the test is the evidence that the document is wrong.**
 
 Exactly one of three things is true, and the fix differs in each case:
 
@@ -36,13 +36,13 @@ Exactly one of three things is true, and the fix differs in each case:
 
 3. **The document is clear, and wrong.** The design is defective. This is a specification revision: it goes through the decision record — and later the RFC process — never through a quiet edit, and never by letting the suite silently carry the corrected behavior on its own.
 
-The point of "the document governs" is that it settles *where a change must land*, not *who was right*. Routing, not infallibility. The kilogram was redefined because realizations outran the artefact; a discrepant comparison is sometimes a finding about the definition. What the rule forbids is only this: a behavior that exists in the suite and nowhere in the document, which is how a standard quietly relocates into its tests.
+The point of "the document governs" is that it settles *where a change must land*, not *who was right*. Routing, not infallibility. The kilogram was redefined because realizations outran the artefact; a discrepant comparison is sometimes a finding about the definition. What the rule excludes is only this: a behavior that exists in the suite and nowhere in the document, which is how a standard quietly relocates into its tests.
 
 ## Consequences
 
 - **Conformance examples assert against the specified JSON AST, not against HTML.** CommonMark's `spec.txt` asserts HTML output, which binds the standard to a serialization target unrelated to the language and is the main reason test suites age badly. HTML rendering becomes one downstream mapping among several — tested, documented, not normative.
 
-- **No behavior may exist only in the suite.** A test that asserts something the grammar does not determine is a specification defect, filed upstream. Reviewers of a new example should ask which clause determines it, and treat "none" as a finding rather than a formality.
+- **No behavior exists only in the suite.** A test that asserts something the grammar does not determine is a specification defect, filed upstream. Reviewers of a new example should ask which clause determines it, and treat "none" as a finding rather than a formality.
 
 - **Version the document; the suite follows it.** The suite records the spec revision it exercises, and the spec is never tagged ahead of the suite that exercises it.
 

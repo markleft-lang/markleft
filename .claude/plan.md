@@ -10,7 +10,7 @@ Two things stand between us and a stable language. Everything else is downstream
 
 - **Settle the definition.** `definition.md` is now a full draft — twelve sections and four appendices, the language stated in prose in §4 and the seventeen decisions with rationale in §5. What is left is the author's read-through and Appendix D, which lists every point the draft leaves open. Four of those it answers for the first time and needs confirmed; six it does not answer at all. Confirming any of them is a decision, so it goes in the record before it goes in the prose.
 
-- **Write the prose corpus** (in the `tests` repo, `corpus/`). Original prose written specifically to *break* prose-safety — money amounts, `snake_case`, `5 * 3 = 15`, shell snippets, file globs, lines that accidentally start with `#` or `-`. Deliberately deferred until the definition settles, so the corpus is written against a stable target. Everything in it must be written by contributors; nothing scraped or borrowed.
+- **Write the prose corpus** (in the `tests` repo, `corpus/`). Original prose written specifically to *break* prose-safety — money amounts, `snake_case`, `5 * 3 = 15`, shell snippets, file globs, lines that accidentally start with `#` or `-`. Deliberately deferred until the definition settles, so the corpus is written against a stable target. Everything in it is contributor-written; nothing scraped or borrowed.
 
 The corpus matters more than it looks: it is the only thing that produces *evidence* rather than reasoning. Three decisions carry real risk of annoying people who already know Markdown — headings, code blocks, and lists — and nothing has tested them against actual prose.
 
@@ -18,7 +18,7 @@ The corpus matters more than it looks: it is the only thing that produces *evide
 
 The ladder, in order. Nothing gets built ahead of its rung; the definition fixes the language before any parser encodes it.
 
-1. **Grammar and tests** — the formal grammar, plus a suite of worked examples that any implementation must pass.
+1. **Grammar and tests** — the formal grammar, plus a suite of worked examples that any implementation is checked against.
 2. **Reference parser** — the first realization, in Rust, producing a documented syntax tree.
 3. **The tools that make it worth adopting** — a validator with genuinely good error messages, a canonical formatter, and a migrator from Markdown. This is where most of the value to users lives.
 4. **Ecosystem** — cheat sheet, web playground, conformance badge, and a short language description sized for an AI model's system prompt.

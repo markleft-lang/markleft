@@ -1,6 +1,6 @@
 # Memo: should verbatim use some character other than the backtick?
 
-*Non-normative. Status: challenge raised and declined 2026-08-07. Decision 11 stands unchanged. Recorded per the working convention that a challenge to a settled decision is written down rather than resolved silently, so that a later session finds the analysis instead of repeating it.*
+*Non-normative. Status: challenge raised and declined 2026-08-07. Decision 11 stands unchanged. Recorded per the working convention that a challenge to a settled decision is written down rather than resolved silently, so that a later session finds the analysis instead of rebuilding it.*
 
 ## The challenge
 
@@ -34,7 +34,7 @@ That is not bad luck, and this is the part worth keeping:
 
 A second delimiter *alongside* the backtick is not an escape from this either: it costs the "one way to do it" discipline and the five-minute property, for a construct that is not broken.
 
-## Verdict, and where the concern is answered instead
+## Where the concern is answered instead
 
 Keep the backtick. The concern is real but it is a **tooling** problem, and it gets tooling answers — the same place tables of contents went under decision 15:
 

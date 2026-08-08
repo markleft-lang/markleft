@@ -12,7 +12,7 @@ It does three jobs:
 
 - **It catches collisions between decisions.** A new decision is checked against this list before it is recorded. Section "Findings" below is what fell out of the first pass, and it is not empty.
 
-- **It seeds the Phase 1 grammar.** Every rule here becomes one or more BNF productions. This file is deliberately *looser* than that grammar will be: it is prose plus a form sketch, and it is allowed to say "undecided".
+- **It seeds the Phase 1 grammar.** Every rule here becomes one or more BNF productions. This file is deliberately *looser* than that grammar will be: it is prose plus a form sketch, and it can say "undecided".
 
 **It is not a specification.** Where this file and `definition.md` disagree, the definition wins and this file is the bug. Where this file says something the definition does not say at all, that is a gap in the definition, and it belongs in `.claude/decisions.md` before it belongs in either.
 
@@ -40,7 +40,7 @@ Each rule carries the same seven fields:
 | 3 | frequent | shows up in ordinary prose regularly |
 | 4 | hazard | silently changes meaning in common writing, with no visible cue |
 
-**The goal is zero 4s and as few 3s as the language can manage.** A proposed feature that introduces a 3 must pay for it; a 4 is rejected on invariant 1 alone.
+**The goal is zero 4s and as few 3s as the language can manage.** A proposed feature that introduces a 3 has to pay for it; a 4 does not survive invariant 1 on its own.
 
 ---
 
@@ -150,7 +150,7 @@ Applied per line, in the order given. Container rules (R7, R8, R9) consume a pre
 
 *Revised 2026-08-08.* `1)` was an ordered marker and is not any more. It frees nothing — `)` still closes a link destination under R24 — and goes purely for symmetry with R8: one bullet marker, one ordered marker, list syntax stated in two lines.
 
-**Alphabetic and Roman markers (`a.`, `A.`, `i.`) were proposed and declined**, and the collision is why. `A. Smith argues that…` and `J. R. R. Tolkien wrote…` are initials and author names, ordinary in citation prose, so letters would put a **severity 3** collision at the start of a line — a form that occurs naturally in writing, promoted to structure. They also carry an `i.`-is-letter-or-Roman ambiguity, no rule for what follows `z.`, and, decisively, a numbering *style* written into the source, which is what decision 9 removed classes for. Full argument in the decision record; recorded here so the severity is visible next to the rule that would have carried it.
+**Alphabetic and Roman markers (`a.`, `A.`, `i.`) were proposed and set aside**, and the collision is why. `A. Smith argues that…` and `J. R. R. Tolkien wrote…` are initials and author names, ordinary in citation prose, so letters would put a **severity 3** collision at the start of a line — a form that occurs naturally in writing, promoted to structure. They also carry an `i.`-is-letter-or-Roman ambiguity, no rule for what follows `z.`, and, decisively, a numbering *style* written into the source, which is what decision 9 removed classes for. Full argument in the decision record; recorded here so the severity is visible next to the rule that would have carried it.
 
 ### R10 — Content column and continuation
 
