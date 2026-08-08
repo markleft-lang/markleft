@@ -8,24 +8,26 @@ Every ASCII punctuation character, and what it costs plain text. This is the one
 
 Each entry cites the rule that claims it (`R11`, `R29`, …); those rules are the rest of this file, in the order a parser applies them.
 
+**Rows run from the biggest cost to plain text down to none**, so the top of the table is what to watch when writing and the bottom is what is always safe. Within a severity band the original order is kept, which is why a band is not itself ranked.
+
 | Character | At the start of a line | Inside a line | Worst severity |
 |---|---|---|---|
-| `` ` `` | fence, run of 3+ (R11) | verbatim span, any run (R19) | 1 |
-| `#` | heading, run of 1–6 then a space (R12) | free, except after `{` (R23) | 2 |
 | `-` | bullet marker, then a space (R8); thematic break (R13) | free | 3 |
+| `\` | escape (R17) | escape (R17); hard break at end of line (R18) | 3 |
+| `#` | heading, run of 1–6 then a space (R12) | free, except after `{` (R23) | 2 |
 | `*` | thematic break (R13) | emphasis when flanking non-whitespace (R21) | 2 |
 | digits | ordered marker, then `.` and a space (R9) | free | 2 |
-| `+` | **free** | **free** | **0** |
-| `>` | block quote (R7) | free | 1 |
 | `\|` | opens a table (R14) | cell separator inside a table only | 2 |
-| `\` | escape (R17) | escape (R17); hard break at end of line (R18) | 3 |
 | `[` `]` | link reference definition (R15) | link (R24, R25) | 2 |
+| `{` `}` | free | brace group, only before `#` or `*`, or after a backtick run (R20, R22, R23) | 2 |
+| `` ` `` | fence, run of 3+ (R11) | verbatim span, any run (R19) | 1 |
+| `>` | block quote (R7) | free | 1 |
 | `(` `)` | free | link destination, only after `]` (R24) | 1 |
 | `!` | free | image, only immediately before `[` (R27) | 1 |
-| `{` `}` | free | brace group, only before `#` or `*`, or after a backtick run (R20, R22, R23) | 2 |
 | `<` `>` | `>` is a block quote (R7) | autolink, only around a scheme (R26) | 1 |
 | `_` | thematic break, `___` only (R13) | subscript, only immediately before `{` (R29) | 1 |
 | `^` | free | superscript, only immediately before `{` (R29) | 1 |
+| `+` | **free** | **free** | **0** |
 | `$` | **free** | **free** | **0** |
 | `~` | **free** | **free** | **0** |
 | `%` `@` `:` `;` `?` `/` `=` `&` `"` `'` `,` `.` | **free** | **free** | **0** |
@@ -498,5 +500,7 @@ Dropping the shortcut form — keeping `[text][label]` and `[text][]`, which are
 ## Maintenance
 
 Add a rule when a decision creates one, in the same session that records the decision. **Update the reserved-position table in the same edit.** It is the first thing in the file because it is the only part consulted while writing rather than while designing, so it is the part most read and the part where staleness does real damage — a wrong row tells someone a character is safe to type when it is not.
+
+**A row is placed by its severity**, the table running from the biggest cost to plain text down to none. So a character whose severity rises moves *up* the table in the same edit that raises it, and one that is bought back falls to the bottom. The sort is the ledger: a decision's price and its dividend are both visible as movement, before anyone reads the rule that caused it.
 
 When a finding here is settled, replace it with a one-line pointer to the amendment in `.claude/decisions.md`. Findings accumulate; resolutions live in the record.
