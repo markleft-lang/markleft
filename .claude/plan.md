@@ -2,13 +2,13 @@
 
 Where the project is, what comes next, and everything parked along the way. Plain language on purpose — nothing here needs a spec background to read.
 
-**What this file is not.** It is not the decision record, which is `.claude/decisions.md` and holds *why* things were decided. It is not normative, not part of the released standard, and nothing here binds anything. When an idea here turns into a decision, it moves to the decision record and comes off this list. Keep it scruffy and current rather than tidy and stale.
+**What this file is not.** It is not the decision record, which is `.claude/decisions.md` and holds *why* things were decided. It is not the rule list either, which is `.claude/grammar.md` and holds *what each construct takes away from plain text* — check a new decision against that file before recording it. It is not normative, not part of the released standard, and nothing here binds anything. When an idea here turns into a decision, it moves to the decision record and comes off this list. Keep it scruffy and current rather than tidy and stale.
 
 ## Right now — Phase 0
 
 Two things stand between us and a stable language. Everything else is downstream.
 
-- **Write the definition.** `definition.md` has eleven section headings, a scope note under each, and a pointer to the material it should draw on. Nothing in it is normative yet. The job is turning the decision record into prose that reads like a standard. There is plenty to draw on: seventeen decisions with rationale and rejected alternatives, five memos under `notes/`, and a deltas table.
+- **Settle the definition.** `definition.md` is now a full draft — twelve sections and four appendices, the language stated in prose in §4 and the seventeen decisions with rationale in §5. What is left is the author's read-through and Appendix D, which lists every point the draft leaves open. Four of those it answers for the first time and needs confirmed; six it does not answer at all. Confirming any of them is a decision, so it goes in the record before it goes in the prose.
 
 - **Write the prose corpus** (in the `tests` repo, `corpus/`). Original prose written specifically to *break* prose-safety — money amounts, `snake_case`, `5 * 3 = 15`, shell snippets, file globs, lines that accidentally start with `#` or `-`. Deliberately deferred until the definition settles, so the corpus is written against a stable target. Everything in it must be written by contributors; nothing scraped or borrowed.
 
@@ -60,7 +60,13 @@ These need someone else — a registry, a registrar, a lawyer. Worth advancing w
 
 ## Open questions
 
-Nothing blocking. These are answerable, just not answered.
+Mostly not blocking. These are answerable, just not answered.
+
+- **Five questions the first pass over `.claude/grammar.md` turned up**, listed there in full: whether a block may interrupt a paragraph (now worth more than it was, since it would drop the table rule's collision back down); a validator warning to soften the one decision that widens the collision surface; whether tilde fences exist; whether strikethrough and HTML entity references are absent by decision or by accident; and whether shortcut reference links should go, being the only construct in the language that depends on text arbitrarily far away.
+
+- **The sixth is closed.** Pipe tables needed a line of lookahead, which was the one thing blocking Phase 1. The table rewrite of 2026-08-08 removed it by changing the construct rather than the invariant — worth remembering as a pattern: when a finding points at an invariant, try moving the construct first.
+
+- **Ten more the first full draft of `definition.md` turned up**, listed in its Appendix D. Four the draft answers for the first time and needs confirmed; six it does not answer.
 
 - **Should the governance sections split out?** Licensing, governance, and versioning are genuinely charter material sitting in a document that is otherwise a specification. If they split, that document gets the name `charter.md` back, correctly used this time.
 - **What should the formatter normalize?** Several small choices are deferred to when the formatter exists: the order of tokens inside a decorator, whether ordered lists are written all-`1.` or numbered in sequence, and whether a redundant label is removed.
@@ -70,7 +76,11 @@ Nothing blocking. These are answerable, just not answered.
 
 Things the record has *derived* rather than assumed. They explain the shape of several decisions at once, and a reader who has them can predict the rest.
 
-- **Do not encode a position in something other things point at.** Positions shift; references do not want to. This is the reason behind three unrelated calls: not hard-wrapping prose, not hand-numbering ordered lists, and naming anchors rather than numbering them.
+- **Keep the unit of the source close to the unit of the edit.** Change one thing, and the diff should show one thing. This now decides four unrelated calls: not hard-wrapping prose, normalizing ordered-list numerals, naming anchors rather than numbering them, and block table cells — the last being the only one of the four where Markdown offers no good spelling at all, since a table row *is* a line.
+
+- **Do not encode a position in something other things point at.** Positions shift; references do not want to. The narrower sibling of the rule above, and the reason anchors are named rather than numbered.
+
+- **Do not encode a value that a tool will later compute better.** A hand-written number overrides every future improvement to the code that would have derived it, and it goes stale silently besides. This is why there are no column width hints, and it is the general form of the argument against hand-maintained list numerals.
 - **Rarity in ordinary use is what makes a mark safe to give a job.** The backtick survives as a delimiter because nobody types it in prose, and a colon works as a namespace separator for the same reason. It is also why the dollar sign had to lose its job.
 - **The tooling writes into the source, never into the render.** One policy, arrived at separately for tables of contents, file includes, and citations.
 - **The parser is total and local; the validator carries every judgement.** Unknown names, duplicate anchors, missing alt text, structural tabs, redundant labels — six of these now. The parser never fails on them; the validator warns.
