@@ -22,7 +22,7 @@ Every contribution must preserve all five. A feature that violates one is reject
 
 5. **Cardinal rule:** you can always read the entire document in plain text, with no compiler, viewer, or extension; nothing renders that the source does not already say. **Enabling, not restrictive** — the minimal set that lets capability live in tooling and be built cleanly. Detail: decision 15.
 
-**Non-goals (definition-level, from `.claude/landscape.md`):** Markleft is a language, not a toolchain and not a document-preparation system. No templating, no executable code cells, no scripting, no page/layout awareness, no output-format directives. Those make a different product (Quarto, Typst, Quarkdown) and every one of them front-loads complexity that kills the five-minute property. Feature requests in that direction are out of scope, not merely deferred. Decision 15 turns this from a scoping statement into a syntax rule: **nothing renders that is not in the source**, so no TOC directive, no auto-numbering, no transclusion — you can always read the whole document in plain text, with no compiler or viewer.
+**Non-goals (definition-level, from `.claude/landscape.md`):** Markleft is a language, not a toolchain and not a document-preparation system. No templating, no executable code cells, no scripting, no page/layout awareness, no output-format directives. Those make a different product (Quarto, Typst, Quarkdown) and every one of them front-loads complexity that the five-minute property cannot absorb. Feature requests in that direction are out of scope, not merely deferred. Decision 15 turns this from a scoping statement into a syntax rule: **nothing renders that is not in the source**, so no TOC directive, no auto-numbering, no transclusion — you can always read the whole document in plain text, with no compiler or viewer.
 
 **Not a richer Markdown for its own sake — but not an austerity project either.** Markleft *does* add: math in the core, decorators, pipe tables, several adopted from djot. The rule is that every addition pays for itself. It must remove an ambiguity or fill a genuine gap, **and cost nothing in plain-text clarity** — a construct that makes ordinary unmarked prose read worse is declined regardless of merit, because prose-safety is invariant 1 and richness is not an invariant at all.
 
@@ -137,7 +137,7 @@ Immediate work, in order:
 
 3. **Prototype the block parser sketch** — enough of the prefix-decidable block algorithm to run decisions 4, 5, 6 (headings, code blocks, lists) against the corpus; they carry the highest muscle-memory risk.
 
-Where Phase 0 sits in the ladder (full detail: `.claude/decisions.md` §9): Phase 1 grammar & spec-as-tests (PEG inlines + small-step block algorithm) → Phase 2 reference parser & specified JSON AST with source positions → Phase 3 killer tools (validator with real diagnostics, canonical formatter, migrator) → Phase 4 ecosystem (cheat sheet, playground, conformance badge, a system-prompt-sized language description for LLM emitters). Don't build ahead of the phase: the definition fixes the language before any parser encodes it.
+Where Phase 0 sits in the ladder (full detail: `.claude/decisions.md` §9): Phase 1 grammar & spec-as-tests (PEG inlines + small-step block algorithm) → Phase 2 reference parser & specified JSON AST with source positions → Phase 3 tooling (validator with real diagnostics, canonical formatter, migrator) → Phase 4 ecosystem (cheat sheet, playground, conformance badge, a system-prompt-sized language description for LLM emitters). Don't build ahead of the phase: the definition fixes the language before any parser encodes it.
 
 ## Self-hosting goal
 
@@ -176,8 +176,6 @@ Two project-specific riders sit on top of them:
 - A spec change and its examples land as **paired pull requests** across repos — opened together, merged together, neither alone. `tests` records the spec revision it targets; the spec is never tagged ahead of the suite that exercises it. See `notes/repo-layout.md`.
 
 - Dogfood: write all project prose so it's valid under our own rules (no underscore emphasis, fenced code only, no raw HTML) — our own repo is the first thing that has to survive them. Note the one asymmetry: **escape dollars in `.md` files even though Markleft never needs it** — bare `$` is always literal here, but GitHub's math pass will pair them on render, which is the founding exhibit happening to us. (This file uses standard Markdown for Claude Code's benefit; spec documents should dogfood.)
-
-- **The phase checklist in `README.md` is the public status board.** It mirrors the roadmap in `.claude/decisions.md` §9. Check a phase off when it completes, and add or remove phases there in the same edit that changes the roadmap — a stale board is worse than no board, because it is the first thing a visitor reads.
 
 - Prefer boring, explicit rules over clever heuristics — cleverness is how Markdown got here.
 

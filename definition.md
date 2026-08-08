@@ -577,7 +577,7 @@ The deciding objection is a fourth. Under renumbering, a marker is a *presentati
 
 **What removal buys:** a document that is inert by construction; no lock-in to a target format, where a raw HTML block had put HTML *inside* a language claiming independence from any serialization; and a simpler decorator grammar, since the format-escape token shape leaves with it.
 
-**What it costs, stated rather than hidden:** an escape hatch is what lets a small language *refuse* feature requests. "Markleft cannot do X" is answerable with "drop to a raw block" only while one exists. Without it, every gap presses directly on the core, which is the force that has killed the five-minute property everywhere else. Collapsible sections on GitHub are the concrete casualty.
+**What it costs, stated rather than hidden:** an escape hatch is what lets a small language *refuse* feature requests. "Markleft cannot do X" is answerable with "drop to a raw block" only while one exists. Without it, every gap presses directly on the core, which is the force that has broken the five-minute property everywhere else. Collapsible sections on GitHub are the concrete casualty.
 
 **Rejected — keeping the raw block as a loudly-marked exception**, where the cardinal rule holds *except* inside a fence that warns the reader the plain text is not the whole story. Honest, but still an "unless" clause on the cardinal rule, and the rule is worth more intact.
 
