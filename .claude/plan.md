@@ -8,7 +8,7 @@ Where the project is, what comes next, and everything parked along the way. Plai
 
 Two things stand between us and a stable language. Everything else is downstream.
 
-- **Settle the definition.** `definition.md` is now a full draft — twelve sections and four appendices, the language stated in prose in §4 and the eighteen decisions with rationale in §5. What is left is the author's read-through and Appendix D, which lists every point the draft leaves open. Four of those it answers for the first time and needs confirmed; six it does not answer at all. Confirming any of them is a decision, so it goes in the record before it goes in the prose.
+- **Settle the definition.** `definition.md` is now a full draft — twelve sections and four appendices, the language stated in prose in §4 and the nineteen decisions with rationale in §5. What is left is the author's read-through and Appendix D, which lists every point the draft leaves open. Four of those it answers for the first time and needs confirmed; six it does not answer at all. Confirming any of them is a decision, so it goes in the record before it goes in the prose.
 
 - **Write the prose corpus** (in the `tests` repo, `corpus/`). Original prose written specifically to *break* prose-safety — money amounts, `snake_case`, `5 * 3 = 15`, shell snippets, file globs, lines that accidentally start with `#` or `-`. Deliberately deferred until the definition settles, so the corpus is written against a stable target. Everything in it is contributor-written; nothing scraped or borrowed.
 
@@ -66,7 +66,7 @@ Mostly not blocking. These are answerable, just not answered.
 
 - **The sixth is closed.** Pipe tables needed a line of lookahead, which was the one thing blocking Phase 1. The table rewrite of 2026-08-08 removed it by changing the construct rather than the invariant — worth remembering as a pattern: when a finding points at an invariant, try moving the construct first.
 
-- **Eleven more the first full draft of `definition.md` turned up**, listed in its Appendix D. Four the draft answers for the first time and needs confirmed; seven it does not answer. The eleventh arrived on 2026-08-08 with the backtick exclusion: what a line whose decorator list is malformed becomes.
+- **Eleven more the first full draft of `definition.md` turned up**, listed in its Appendix D. Four the draft answers for the first time and needs confirmed; seven it did not answer, of which D.6 (thematic-break spelling) is now closed by decision 19, leaving six. The eleventh arrived on 2026-08-08 with the backtick exclusion: what a line whose decorator list is malformed becomes.
 
 - **Should the governance sections split out?** Licensing, governance, and versioning are genuinely charter material sitting in a document that is otherwise a specification. If they split, that document gets the name `charter.md` back, correctly used this time.
 - **What should the formatter normalize?** Several small choices are deferred to when the formatter exists: the order of tokens inside a decorator, whether ordered lists are written all-`1.` or numbered in sequence, and whether a redundant label is removed.

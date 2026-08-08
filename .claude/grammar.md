@@ -12,10 +12,10 @@ Each entry cites the rule that claims it (`R11`, `R29`, …); those rules are th
 
 | Character | At the start of a line | Inside a line | Worst severity |
 |---|---|---|---|
-| `-` | bullet marker, then a space (R8); thematic break (R13) | free | 3 |
+| `-` | bullet marker, then a space (R8) | free | 3 |
 | `\` | escape (R17) | escape (R17); hard break at end of line (R18) | 3 |
 | `#` | heading, run of 1–6 then a space (R12) | free, except after `{` (R23) | 2 |
-| `*` | thematic break (R13) | emphasis when flanking non-whitespace (R21) | 2 |
+| `*` | **free** | emphasis when flanking non-whitespace (R21) | 2 |
 | digits | ordered marker, then `.` and a space (R9) | free | 2 |
 | `\|` | opens a table (R14) | cell separator inside a table only | 2 |
 | `[` `]` | link reference definition (R15) | link (R24, R25) | 2 |
@@ -25,7 +25,7 @@ Each entry cites the rule that claims it (`R11`, `R29`, …); those rules are th
 | `(` `)` | free | link destination, only after `]` (R24) | 1 |
 | `!` | free | image, only immediately before `[` (R27) | 1 |
 | `<` `>` | `>` is a block quote (R7) | autolink, only around a scheme (R26) | 1 |
-| `_` | thematic break, `___` only (R13) | subscript, only immediately before `{` (R29) | 1 |
+| `_` | **free** | subscript, only immediately before `{` (R29) | 1 |
 | `^` | free | superscript, only immediately before `{` (R29) | 1 |
 | `+` | **free** | **free** | **0** |
 | `$` | **free** | **free** | **0** |
@@ -37,6 +37,8 @@ Each entry cites the rule that claims it (`R11`, `R29`, …); those rules are th
 *(The figure previously read fourteen while the rows totalled fifteen. Restated above so the arithmetic is visible and cannot drift again.)*
 
 *Changed 2026-08-08:* `+` left the reserved column entirely when it stopped being a bullet marker, and `*` dropped from severity 3 to 2 by losing the same job. No character moved the other way.
+
+*Changed 2026-08-08, third revision — the dividend side.* `*` and `_` each got their **line-start column back** when decision 19 removed the thematic break (R13). Neither is free outright, both keeping inline jobs, so the count above is unchanged and no row moved bands. What did change is the first column: the characters still claiming it are `` ` ``, `#`, `-`, digits, `>`, `|`, `\`, and `[`, and that is now the whole list. Read against the entry below, this is the ledger working as intended — decision 18 spent, decision 19 returned, and both are visible in the table before either rule is read.
 
 *Changed 2026-08-08, second revision — the first entry that spends rather than earns.* `^` left the free column, and `_` gained a meaning inside a line, both to decision 18. This is the price side of the sentence above, so it is recorded next to the construct that paid it: two characters moved out, each into one position only — immediately before `{` — and each landing at severity 1. What was bought is a construct with no braceless form, which is why nothing that was safe to write yesterday changed meaning: `2^32`, `[^0-9]`, `ISO_8601`, `file_2.txt`, and `snake_case` are all still text, with no escape.
 
@@ -51,8 +53,6 @@ Each entry cites the rule that claims it (`R11`, `R29`, …); those rules are th
 | 4 | hazard | silently changes meaning in common writing, with no visible cue |
 
 **The goal is zero 4s and as few 3s as the language can manage.** A proposed feature that introduces a 3 has to pay for it; a 4 does not survive invariant 1 on its own.
-
----
 
 ## What this file is for
 
@@ -81,8 +81,6 @@ Each rule carries the same seven fields:
 - **Reserves** — exactly what this rule takes away from plain text, and in what position.
 - **Collision** — realistic writing that trips it, and its severity on the scale at the top of this file.
 - **Escape** — what an author writes to get the literal text instead.
-
----
 
 ## Layer 0 — The document
 
@@ -140,8 +138,6 @@ A leading U+FEFF is not document text; elsewhere it is ordinary text. Content is
 - **Collision:** none in prose; the collision is with *editors* that insert tabs. **Severity 1.**
 - **Escape:** none needed — nothing is lost, only warned about.
 
----
-
 ## Layer 1 — Blocks
 
 Applied per line, in the order given. Container rules (R7, R8, R9) consume a prefix and then the remaining rules are applied to what is left of the line.
@@ -170,13 +166,13 @@ Applied per line, in the order given. Container rules (R7, R8, R9) consume a pre
 
 - **Form:** `-`, then one space, then content.
 - **Range:** `-` is the only bullet marker. A list ends only where a block that is not a list item begins; blank lines never split one.
-- **Order:** 3, as a container prefix. Loses to R13 when the line is also a thematic break.
+- **Order:** 3, as a container prefix. No exception — the one it carried, losing to R13 on a line that was also a thematic break, left with R13.
 - **Decidable from:** this line and the open containers.
 - **Reserves:** `-` in first position when followed by a space.
 - **Collision:** **the largest in the language.** A paragraph that opens with a hyphen used as a dash, a minus sign, or dialogue punctuation — `- 5 degrees below`, `- Bonjour, dit-il` — becomes a list item. **Severity 3.** Inherited from Markdown rather than introduced here, and every Markdown writer has already been trained around it, which is the only reason it is tolerable.
 - **Escape:** `\-`.
 
-*Revised 2026-08-08.* `*` and `+` were bullet markers and are not any more. They existed so that switching marker could separate two touching lists, so removing them left the "one marker per list" rule with nothing to govern, and that rule is deleted rather than reworded. **`+` moves to the free column of the reserved-position table** — it now has no job anywhere in the grammar, which matters because a diff pasted into prose outside a fence carries `+` on every added line. `*` keeps its other jobs (R13, R21, R22) but loses the precedence contest with the thematic break.
+*Revised 2026-08-08.* `*` and `+` were bullet markers and are not any more. They existed so that switching marker could separate two touching lists, so removing them left the "one marker per list" rule with nothing to govern, and that rule is deleted rather than reworded. **`+` moves to the free column of the reserved-position table** — it now has no job anywhere in the grammar, which matters because a diff pasted into prose outside a fence carries `+` on every added line. `*` keeps its other jobs (R21, R22) but loses the precedence contest with the thematic break. *(And on 2026-08-08 it lost the thematic break too — decision 19 — so `*` no longer claims the first column at all.)*
 
 ### R9 — Ordered list item
 
@@ -230,19 +226,23 @@ Applied per line, in the order given. Container rules (R7, R8, R9) consume a pre
 
 The required space is doing almost all the work here, and it is the cleanest example in the language of prose-safety falling out of the form rather than being carved out by an exception.
 
-### R13 — Thematic break
+### R13 — Thematic break — **REMOVED 2026-08-08 (decision 19)**
+
+**This rule is struck, not deleted, and R13 is never reused.** A line of three or more `-`, `_`, or `*` reserved nothing after this date; such a line is ordinary paragraph text under R16, or a bullet item under R8 where it takes that form (`- - -`).
+
+*Struck in words rather than in marks:* the convention elsewhere would be `~~strikethrough~~`, which this language does not have (Finding 5), so a struck rule says so in its heading. Recorded because it is the first time the convention has been needed.
+
+**What it read before removal**, kept so that a note citing R13 still resolves:
 
 - **Form:** three or more `-`, `_`, or `*`, alone on a line, spaces permitted between them.
 - **Range:** any position.
-- **Order:** 7, but ahead of R8 when a line satisfies both (`- - -`). Since 2026-08-08 the `***` case no longer arises, `*` having stopped being a bullet marker.
-- **Decidable from:** this line.
+- **Order:** 7, but ahead of R8 when a line satisfied both (`- - -`).
 - **Reserves:** a line consisting only of those characters.
-- **Collision:** an ASCII horizontal rule written by hand in a plain-text document — which is what the construct means, so this is a match rather than a collision. **Severity 1.**
-- **Escape:** `\-` on the first character.
+- **Collision:** an ASCII horizontal rule written by hand — which is what the construct meant, so a match rather than a collision. **Severity 1.**
 
-Worth noting as a dividend of decision 4: with setext headings removed, `---` under a line of text is unambiguously a thematic break. That ambiguity was one of the worst in CommonMark and it is gone by subtraction rather than by rule.
+**What the removal returns.** `*` and `_` each get their line-start column back, so the only characters left claiming the first column are `` ` ``, `#`, `-`, digits, `>`, `|`, `\`, and `[`. Neither becomes free outright, both keeping inline jobs. And **R8's order line loses its exception** — the "ahead of R8 when a line satisfies both" clause above was the only precedence contest in Layer 1, and an ordering exception is an "unless" clause wearing a different hat, so invariant 2 collects a small dividend that has nothing to do with rendering.
 
-*Undecided:* whether the `___` spelling survives decision 2's removal of underscore. See Finding 5.
+*This also closes the `___` question* — whether that spelling survived decision 2 — by removing the construct that raised it. Appendix D.6 of `definition.md` goes with it.
 
 ### R14 — Table
 
@@ -256,7 +256,7 @@ Worth noting as a dividend of decision 4: with setext headings removed, `---` un
 
 *Rewritten 2026-08-08, and this rule is where the design paid for itself twice.* **Finding 2 is closed** — see below — because a table now opens on its own first line like every other block, so nothing in the language looks ahead. And the **leading pipe becomes mandatory by construction**, closing a prose-safety hole GFM leaves open, where an optional leading pipe makes `a | b` in running prose a valid header row.
 
-*Note on the rule row, recorded because documenting the alignment colons is what surfaced it.* GFM accepts a **single** hyphen in a rule-row cell, and gets away with it because its delimiter row can only ever be a table's second line. Once a rule row may also come first, `| - | - |` opening a headerless table parses as structure and **those cells vanish** — a **severity 4** on the scale above, the only class this language treats as disqualifying. Two changes remove it: a three-hyphen minimum, matching R11 and R13, and recognizing a rule row only as the table's first or second row. The residual exposure is a cell whose genuine content is a dash run, in one of those two positions, which needs `\---`. **Severity 1.**
+*Note on the rule row, recorded because documenting the alignment colons is what surfaced it.* GFM accepts a **single** hyphen in a rule-row cell, and gets away with it because its delimiter row can only ever be a table's second line. Once a rule row may also come first, `| - | - |` opening a headerless table parses as structure and **those cells vanish** — a **severity 4** on the scale above, the only class this language treats as disqualifying. Two changes remove it: a three-hyphen minimum, matching R11, and recognizing a rule row only as the table's first or second row. The residual exposure is a cell whose genuine content is a dash run, in one of those two positions, which needs `\---`. **Severity 1.**
 
 *Note on the terminator, recorded because the first formulation was wrong.* Keying the end of a table on a line **ending** with `|` — the character sequence `|\n\n` — fails on a block cell whose paragraph ends with a pipe: `Write the alternation as a |` would close the table and drop the rest of the cell into the document. Keying on the **first** character adds no hazard the cell rule had not already created, since a content line beginning with `|` already needs `\|`.
 
@@ -278,8 +278,6 @@ Worth noting as a dividend of decision 4: with setext headings removed, `---` un
 - **Decidable from:** nothing — the fallback.
 - **Reserves:** nothing. **Severity 0.**
 - **Escape:** not applicable.
-
----
 
 ## Layer 2 — Inlines
 
@@ -435,10 +433,6 @@ The rule self-sorts as a result. A variable set upright looks wrong to the perso
 - **Order:** last.
 - **Collision:** none. **Severity 0.**
 
----
-
----
-
 ## Findings from the first pass
 
 Six things this list surfaced that the decision record does not settle. Each is a candidate for the record; none is decided here.
@@ -447,7 +441,7 @@ Six things this list surfaced that the decision record does not settle. Each is 
 
 `.claude/landscape.md` lists "block elements can't interrupt paragraphs" among djot's design principles that we share. It appears nowhere in `.claude/decisions.md`, and `definition.md` does not state it.
 
-If adopted, a line inside an open paragraph is text no matter what it looks like, and R8, R9, R12, R13, and R14 all stop firing mid-paragraph. That drops R9 from severity 2 to 1, softens R12, and removes the whole class of "my paragraph turned into a list because it started with a year".
+If adopted, a line inside an open paragraph is text no matter what it looks like, and R8, R9, R12, and R14 all stop firing mid-paragraph. That drops R9 from severity 2 to 1, softens R12, and removes the whole class of "my paragraph turned into a list because it started with a year".
 
 The cost is a real surprise in the other direction: a list written immediately under a line of prose, with no blank line between, stops being a list. That is a genuine break with Markdown habit and belongs in the deltas appendix if it is taken.
 
@@ -494,8 +488,6 @@ Both need a line in the record. The entity question is the substantive one.
 Nothing else in the language behaves this way. Every other rule is decidable from a few code points and their immediate neighbours; this one is decidable only against a document-wide table, and it fails silently when it fires.
 
 Dropping the shortcut form — keeping `[text][label]` and `[text][]`, which are explicit — would be a delta that costs almost nothing and removes the last non-local construct. Worth putting to the record as a prose-safety improvement rather than as a simplification.
-
----
 
 ## Maintenance
 

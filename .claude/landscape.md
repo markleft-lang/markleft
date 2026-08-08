@@ -2,8 +2,6 @@
 
 *Survey of projects that have tried to "fix," extend, or replace Markdown. Researched August 2026. Companion to `.claude/decisions.md`; feeds the definition's prior-art section. Organizing lens: the size/formality quadrant map — Markleft targets **small language + formal spec + prose-safety**, a quadrant no project below occupies.*
 
----
-
 ## Strategy 1 — Standardize Markdown as it is
 
 ### CommonMark (2014, John MacFarlane et al.)

@@ -229,13 +229,13 @@ A block quote is introduced by a `>` at the start of a line, optionally followed
 
 Lists are the most rule-heavy part of any Markdown-like language, and the place where implementations most often disagree. Markleft replaces the archaeology with arithmetic.
 
-**There is one marker of each kind.** A bullet item is `-`, one space, then content. An ordered item is one or more digits, `.`, one space, then content. `*`, `+`, and `1)` are not list markers: a line beginning with one of them is text, or a thematic break where it matches that form.
+**There is one marker of each kind.** A bullet item is `-`, one space, then content. An ordered item is one or more digits, `.`, one space, then content. `*`, `+`, and `1)` are not list markers: a line beginning with one of them is text.
 
 **Content-column alignment.** An item's **content column** is the column at which its content begins — the marker, one space, then content. Every continuation line of that item is indented to exactly that column.
 
 **No lazy continuation.** A line that is not indented to the content column is not part of the item. Markdown's tolerance for under-indented continuation lines is the single largest source of disagreement between implementations, and it is removed.
 
-**Adjacent items are one list.** A list ends only where a block that is not a list item begins — a paragraph, a heading, a fence, a table, or a thematic break. **Blank lines never split a list:** one makes it loose, and two do nothing further. Markdown's trick of switching markers to separate two touching lists does not exist here, because there is no second marker to switch to.
+**Adjacent items are one list.** A list ends only where a block that is not a list item begins — a paragraph, a heading, a fence, or a table. **Blank lines never split a list:** one makes it loose, and two do nothing further. Markdown's trick of switching markers to separate two touching lists does not exist here, because there is no second marker to switch to.
 
 ````
 - The first item.
@@ -312,11 +312,11 @@ Two properties are worth naming, because they are why the construct is shaped th
 
 **A block cell is a container**, in the same sense as a list item or a block quote: inside it, lines belong to the cell. Note the one difference, stated rather than left to discovery — a list item marks every line it owns by indentation, where a block cell marks only its first and relies on the terminator. Both are coherent, and the reason a cell does not use indentation is that the `|` already does the work indentation does in a list.
 
-#### 4.3.7 Thematic break and link reference definitions
+#### 4.3.7 Link reference definitions
 
-Both are inherited from CommonMark unchanged: a thematic break is a line of three or more `-`, `_`, or `*`; a link reference definition binds a label to a destination for use by reference links (section 4.4.6). See Appendix D.6 for one open detail.
+Inherited from CommonMark unchanged: a link reference definition binds a label to a destination for use by reference links (section 4.4.6).
 
-Note that a thematic break no longer competes with anything. Setext headings are gone, so `---` under a line of text is unambiguously a break rather than an underline; and `*` is no longer a bullet marker, so `***` is a break rather than a list item whose content is `**`. Both conflicts were removed by subtraction elsewhere, not by a precedence rule here.
+**There is no thematic break.** A line of three or more `-`, `_`, or `*` reserves nothing; it is paragraph text, or a bullet item where it takes that form (`- - -`). The construct is removed because it never carried a plain-text meaning: a run of hyphens says that something changes and never says what, where a heading says which. Its rendering was a second problem — a horizontal rule is a style choice, and it collides with the rule most house styles already draw under a level-2 heading. **Where a break was wanted, write the heading it stood in for, or a second document.** Decision 19.
 
 ### 4.4 Inline content
 
@@ -517,6 +517,7 @@ Stated explicitly, so that no reader has to infer an absence:
 - no indented code blocks;
 - no lazy list continuation, no alternative list markers, and no alphabetic or Roman numbering;
 - no trailing-space hard breaks;
+- no thematic breaks;
 - no underscore emphasis, and no braceless superscript or subscript;
 - no smart punctuation;
 - no classes, no key-value attributes, and no column width hints;
@@ -586,7 +587,7 @@ This section is informative. It records what was decided and why, including the 
 
 **Why one marker of each kind.** `*` and `+` existed as bullet markers for a single purpose: switching marker was how Markdown separated two touching lists. Remove them and that trick has nothing left to do, so the rule that governed it — "one marker per list" — leaves the language rather than being reworded. A rule is deleted from the reference card, not rewritten.
 
-What that buys is measurable rather than asserted. **`+` becomes free everywhere**, having no other job in the grammar, which puts it beside the dollar sign; it matters in ordinary prose because a diff pasted outside a fence carries a `+` on every added line. **`*` loses one of its three jobs**, and with it the precedence question between a thematic break and a bullet item whose content is `**`. **`1)` frees nothing** — a closing parenthesis still ends a link destination — and goes purely for symmetry: one bullet marker and one ordered marker state the whole of list syntax in two lines.
+What that buys is measurable rather than asserted. **`+` becomes free everywhere**, having no other job in the grammar, which puts it beside the dollar sign; it matters in ordinary prose because a diff pasted outside a fence carries a `+` on every added line. **`*` loses one of its three jobs**, and with it the precedence question between a thematic break and a bullet item whose content is `**`. Decision 19 later removed the thematic break too, so `*` no longer claims a line's first column at all. **`1)` frees nothing** — a closing parenthesis still ends a link destination — and goes purely for symmetry: one bullet marker and one ordered marker state the whole of list syntax in two lines.
 
 This is the same subtraction as decisions 4, 5, and 13. Setext headings, closing runs, indented code, and trailing-space breaks were each a second spelling of one construct. Three spellings of a bullet was the largest instance still standing.
 
@@ -749,6 +750,22 @@ An inline frame imports arbitrary text that becomes part of what the reader read
 **The price, stated where it can be seen.** `^` stops being a character with no meaning anywhere, and `_` gains a meaning inside a line. Both sit at the mildest severity, each in one position only. Two new collisions: raw TeX pasted into prose outside a fence, which decision 3 already mangled before this construct existed and whose answer is unchanged, and `{{^…}}` in Mustache and Handlebars, billed to the audience already paying for `{#if}`. Against that, underscore comes out **safer than CommonMark's**, where it is emphasis and identifiers italicize mid-word under the flanking rules — the language adds a construct and the character gets safer than the baseline.
 
 **The accepted failure mode:** someone writes `E=mc^2` from TeX habit and gets a literal caret. That is visible on the page rather than silent, which is the class this language tolerates — the same class as decision 5's over-long closing fence — and it is a validator diagnostic, on a sigil followed by a bare alphanumeric run.
+
+### Decision 19 — The thematic break is removed
+
+**Rule:** section 4.3.7. A line of three or more `-`, `_`, or `*` reserves nothing.
+
+**Why — the construct has no plain-text meaning to preserve.** This language's method is to ask what a mark tells someone reading the source with no renderer. A run of hyphens on its own line says that something changes, and never says what: a topic shift, a scene break, an aside ending, the document finishing. A heading says which. The construct therefore fails invariant 5 from the inside — not because a reader cannot see it, but because seeing it tells them nothing.
+
+**Why — its rendering is a style choice the language cannot describe.** A horizontal rule is typography, and it collides with the renderer's own: most house styles already draw a thin rule beneath a level-2 heading, so a document that separates sections with breaks *and* headings gets two rules and an argument between them. Decision 15's back half asks that every mark name something a renderer visibly distinguishes; this one asks the renderer to draw something the document has not said.
+
+**The replacement is what it was standing in for: section properly, or write a second document.** A break between two topics is a heading that was not written. That is the same move as decision 4 removing setext headings and decision 6 removing marker-switching — not a capability withdrawn, but a shape whose job another construct already does, more explicitly.
+
+**What the removal returns.** `*` and `_` each get their line-start position back, so the characters still claiming a line's first column are exactly `` ` ``, `#`, `-`, digits, `>`, `|`, `\`, and `[`. Neither becomes free outright, both keeping inline work. And the list rule loses its only exception: the clause by which a thematic break beat a bullet item on `- - -` was the sole precedence contest in the block layer, and an ordering exception is an "unless" clause in other clothing, so invariant 2 collects a dividend unrelated to rendering.
+
+**What it costs, stated plainly.** `---` between two paragraphs is common, and it now renders as three literal hyphens. The failure is loud rather than silent, which is the class this language tolerates, and a migrator can find every instance — though it cannot decide whether the author meant a heading or a document split, so this one is reported rather than converted. `***` and `___` go with it.
+
+**Not adopted — keeping it for compatibility alone.** Decision 12 matches CommonMark wherever that is unambiguous *and harmless*, and this is neither: harmless fails on the renderer collision, and the construct's meaning is under-specified in a way no conformance test could pin down. A delta needs an invariant behind it; this one has invariants 2 and 5 both.
 
 ### A note on risk
 
@@ -936,7 +953,7 @@ That second piece of guidance is a specific case of a principle that decides thr
 
 *Non-normative. Every point this document settles for the first time, and every point it leaves open, so that no gap has to be discovered by a reader.*
 
-Items 1 to 4 are answered in section 4 for the first time; each closes a rider that the decision record left open, and each needs the answer confirmed before it is treated as settled. Items 5 to 11 are not answered at all.
+Items 1 to 4 are answered in section 4 for the first time; each closes a rider that the decision record left open, and each needs the answer confirmed before it is treated as settled. Items 5 to 11 are not answered at all, except item 6, which is closed and kept in place — numbers here are retained rather than reused, so a citation always resolves.
 
 1. **Invalid UTF-8.** Section 4.1 states that a byte sequence which is not well-formed UTF-8 is not a Markleft document. The alternatives were replacement with U+FFFD and passing bytes through; both silently alter content, which decision 3 and invariant 1 argue against.
 
@@ -948,7 +965,7 @@ Items 1 to 4 are answered in section 4 for the first time; each closes a rider t
 
 5. **Tilde fences.** CommonMark admits `~~~` as an alternative fence. Section 4.3.3 describes backtick fences only. Whether tilde fences are inherited or removed is undecided; removing them would be a new entry in Appendix A, and the one-way-to-do-it discipline argues for removal.
 
-6. **The thematic break spelling.** It is inherited unchanged, which admits a run of underscores. Decision 2 removes underscore as *emphasis* syntax only, so there is no conflict, but the interaction should be confirmed rather than assumed.
+6. **The thematic break spelling — CLOSED 2026-08-08 by decision 19.** The item asked whether a run of underscores survived decision 2. The construct is removed entirely, so the question does not arise. The number is retained rather than reused, so that a note citing D.6 still resolves.
 
 7. **Lazy continuation in block quotes.** Decision 6 removes it from lists. Block quotes are inherited from CommonMark, which permits it. Consistency argues for removing it there too; nothing has decided.
 
