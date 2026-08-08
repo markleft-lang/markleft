@@ -345,7 +345,7 @@ Markdown's other spelling — two or more spaces at the end of a line — is rem
 
 #### 4.4.4 Emphasis
 
-`*text*` is emphasis. `**text**` is strong emphasis. Underscore is not emphasis syntax anywhere, which is what makes `snake_case` identifiers safe in running prose with no escape.
+`*text*` is emphasis. `**text**` is strong emphasis. Underscore is not emphasis syntax anywhere, which is what makes `snake_case` identifiers safe in running prose with no escape. Its one structural use is the subscript of section 4.4.8, which needs a brace immediately after it and so leaves identifiers untouched.
 
 The flanking rule is two conditions: an opening delimiter is immediately followed by a non-whitespace character, and a closing delimiter is immediately preceded by one. CommonMark needs seventeen interlocking rules and a delimiter stack here; those seventeen rules are the price of keeping underscore.
 
@@ -400,16 +400,43 @@ Identifiers are opaque. `fig-3` means no more to the language than `banana` does
 
 Uniqueness is a validator check, not a parse rule. A repeated identifier is well-formed syntax and a broken anchor, and a document-wide constraint cannot be checked without abandoning the local, single-pass discipline invariant 4 buys.
 
-#### 4.4.8 Brace groups, disambiguated
+#### 4.4.8 Superscript and subscript
 
-Three constructs use braces. One rule separates them, it is positional, and it needs no lookahead:
+`^{text}` raises its content. `_{text}` lowers it.
 
+````
+H_{2}O and CO_{2}          E=mc^{2}          2^{32} bytes          the 1^{st} of May
+````
+
+**A sigil carries meaning only when the very next code point is `{`.** That single condition is the whole of the prose-safety story, and it is worth spelling out what stays text as a result, with no escape needed:
+
+````
+2^32    [^0-9]    ISO_8601    UTF_8    file_2.txt    snake_case    a^b
+````
+
+The braces are what make the construct safe, so there is no braceless form. A one-character spelling would have to guess where the raised text ends, and a guess that ends it after one digit turns `2^32` into 2³2 — output that is wrong rather than merely limited, with nothing in the source to show it.
+
+**What the construct does is a baseline offset and a size reduction, and nothing else.** No italics, no mathematical spacing, no interpretation of what is inside. This is the definition rather than a limit imposed on it, and it is what separates the construct from mathematics: `E=mc^{2}` is body text with a raised 2, while `` `E=mc^2`{math} `` is typeset mathematics with italic variables. They do not render the same, so they are not two ways of writing one thing.
+
+The practical effect is that each case sorts itself. A variable set upright looks wrong to whoever wrote it, so `x^{n}` pushes its author toward `math`, where variables belong. Digits, units, ordinals and chemical formulae look right upright and stay in prose — chemistry being the case where upright is not an approximation but the correct typesetting.
+
+The boundary, in one sentence: **superscript and subscript position content and interpret nothing; anything that needs interpreting is `math`.**
+
+The content is ordinary inline content, so it nests and `x^{*n*}` emphasizes — the construct never italicizes, and an author still may. An unclosed `^{` is text, under the uniform fallback of section 4.2. `^{}` is well-formed, renders nothing, and is a validator warning.
+
+Because a left-to-right reading reaches the sigil before the brace, a sigil wins over any brace group that follows it: `^{#id}` is a superscript containing the text `#id`.
+
+#### 4.4.9 Brace groups, disambiguated
+
+Braces appear in four constructs. One rule separates them, it is positional, and it needs no lookahead:
+
+- A brace group **immediately preceded by `^` or `_`** is a superscript or a subscript, and the sigil is read first.
 - A brace group **immediately following a verbatim closing run** is a decorator list.
 - A brace group beginning with `#` elsewhere is an anchor.
 - A brace group beginning with `*` is bracketed emphasis.
 - Any other brace group is ordinary text.
 
-The cost of this is real and worth naming: `{#` is structural in prose, so template snippets such as `{#if}` and `{#each}` need `\{` when written outside a verbatim span. The uniform escape covers it and no new rule is required, but it is a papercut for one audience.
+The cost of this is real and worth naming: `{#` is structural in prose, so template snippets such as `{#if}` and `{#each}` need `\{` when written outside a verbatim span. The uniform escape covers it and no new rule is required, but it is a papercut for one audience — and the same audience pays once more for `{{^…}}`, where the second brace pairs with the sigil.
 
 ### 4.5 Decorators
 
@@ -478,6 +505,8 @@ Those three guarantees are exactly what the founding exhibit needed. What failed
 
 So `math` is a **conventional label, not a reserved word**, and this document says nothing about how mathematics is typeset. That is a smaller claim than "mathematics is core" usually implies, and it is the whole of what a *language* can honestly promise: a renderer still chooses the typesetting, as it always did, but it can no longer change what the source says.
 
+**Superscript and subscript are not part of this.** Section 4.4.8 offers `^{…}` and `_{…}` for running prose, and they interpret nothing — a raised or lowered run of ordinary text, set in body type. A simple exponent therefore has two homes and they render differently, which is what keeps them distinct: `E=mc^{2}` is prose with a raised 2, and `` `E=mc^2`{math} `` is an equation. Anything with variables, operators, or structure belongs in the second.
+
 ### 4.7 What the language does not contain
 
 Stated explicitly, so that no reader has to infer an absence:
@@ -488,7 +517,7 @@ Stated explicitly, so that no reader has to infer an absence:
 - no indented code blocks;
 - no lazy list continuation, no alternative list markers, and no alphabetic or Roman numbering;
 - no trailing-space hard breaks;
-- no underscore emphasis;
+- no underscore emphasis, and no braceless superscript or subscript;
 - no smart punctuation;
 - no classes, no key-value attributes, and no column width hints;
 - no reserved words.
@@ -517,11 +546,13 @@ This section is informative. It records what was decided and why, including the 
 
 **Not adopted — carving `\(` and `\)` out of decision 3.** It costs the "no exception list" guarantee *and* does not fix the content problem, so it buys nothing.
 
-### Decision 2 — Underscore is not syntax
+### Decision 2 — Underscore is not emphasis syntax
 
-**Rule:** emphasis is `*em*` and `**strong**` only. Underscore is an ordinary character. Intra-word emphasis uses the bracketed form `{*text*}`.
+**Rule:** emphasis is `*em*` and `**strong**` only. Intra-word emphasis uses the bracketed form `{*text*}`.
 
 **Why:** `snake_case` is ordinary technical prose, and CommonMark's answer to it is seventeen interlocking emphasis rules and a delimiter stack — a construct that cannot be expressed as a context-free grammar. Removing underscore collapses the flanking rules to the two conditions in section 4.4.4, and makes the identifier safe without an escape.
+
+**Scope.** This decision is about emphasis, and its argument is entirely about emphasis. Underscore has one other use, added later: the subscript of decision 18, which requires a brace immediately after the sigil and so leaves every identifier alone. What decision 2 bought is intact.
 
 ### Decision 3 — Uniform escaping
 
@@ -555,7 +586,7 @@ This section is informative. It records what was decided and why, including the 
 
 **Why one marker of each kind.** `*` and `+` existed as bullet markers for a single purpose: switching marker was how Markdown separated two touching lists. Remove them and that trick has nothing left to do, so the rule that governed it — "one marker per list" — leaves the language rather than being reworded. A rule is deleted from the reference card, not rewritten.
 
-What that buys is measurable rather than asserted. **`+` becomes free everywhere**, having no other job in the grammar, which puts it beside the dollar sign and the underscore; it matters in ordinary prose because a diff pasted outside a fence carries a `+` on every added line. **`*` loses one of its three jobs**, and with it the precedence question between a thematic break and a bullet item whose content is `**`. **`1)` frees nothing** — a closing parenthesis still ends a link destination — and goes purely for symmetry: one bullet marker and one ordered marker state the whole of list syntax in two lines.
+What that buys is measurable rather than asserted. **`+` becomes free everywhere**, having no other job in the grammar, which puts it beside the dollar sign; it matters in ordinary prose because a diff pasted outside a fence carries a `+` on every added line. **`*` loses one of its three jobs**, and with it the precedence question between a thematic break and a bullet item whose content is `**`. **`1)` frees nothing** — a closing parenthesis still ends a link destination — and goes purely for symmetry: one bullet marker and one ordered marker state the whole of list syntax in two lines.
 
 This is the same subtraction as decisions 4, 5, and 13. Setext headings, closing runs, indented code, and trailing-space breaks were each a second spelling of one construct. Three spellings of a bullet was the largest instance still standing.
 
@@ -702,6 +733,22 @@ An inline frame imports arbitrary text that becomes part of what the reader read
 **A closed gap worth noting.** Decision 16 left open whether decorators needed a third position so that `## Heading {#custom-id}` could be written. This decision closes it without a new position: an anchor is valid anywhere inline content is, and a heading's text is inline content, so `## The five-minute property {#five-minute}` already works.
 
 **The validator stays a single-document tool.** Duplicate identifiers and dangling same-document fragments are lint. A destination carrying a path or a host is a URL, and Markleft does not validate URLs — an external link can fail and is not checked either, so a cross-document fragment gets the same treatment. This keeps the tooling from needing to know about a set of documents, which would be its first multi-file commitment.
+
+### Decision 18 — Superscript and subscript are core, braced, and typographic only
+
+**Rule:** section 4.4.8.
+
+**Why it is worth a construct at all:** a simple exponent or subscript is painful in Markdown, where the only route is raw HTML, which decision 7 removes outright — and it is current in exactly the scientific and technical writing this language is aimed at. It reads correctly in plain text with no compiler, which satisfies invariant 5 rather than merely surviving it: `H_{2}O` and `E=mc^{2}` are how people have written these in plain-text mail for decades. And it adds nothing to what unmarked prose has to survive, which is the bar in section 2.2 that any addition clears before its usefulness is weighed at all.
+
+**Not adopted — the braceless form,** `^2` and `_2`, capped at a single digit, which is where the proposal started. It fails twice and either failure is enough. Underscore before a digit turns `UTF_8` into UTF₈, `ISO_8601` into ISO₈601, `SHA_256` into SHA₂56, and `file_2.txt` into file₂.txt; the decisive part is not the list but that **`H_2O` and `ISO_8601` have the same local shape** — letter, underscore, digit, alphanumeric — so no condition on the surrounding characters separates them the way a heading's required space separates `#` from `#hashtag`. That lands on `snake_case`, which is invariant 1's founding exhibit, and escaping identifiers would be the dollar-pairing failure of section 1.2 happening again in the character decision 2 was proud of freeing. Separately, a caret capped at one digit truncates: `2^32` becomes 2³2 and `2^64` becomes 2⁶4, silently, and multi-digit exponents are the common case in technical prose. **The cap was not a limit but a silent limit** — and the inversion is the part worth keeping, because a greedy digit run would have been *safer* than one digit. The cap was costing prose-safety while appearing to buy it.
+
+**Why the sigil sits outside the brace,** against this language's own brace-group family. `{^2}` was proposed first and is cheaper: section 4.4.9 already makes `{` plus a sigil one shape, a fourth construct would have joined it for nothing, and it would have moved no character out of the free column. It was set aside on **invariant 5**. `H_{2}O` is a plain-text reading convention that predates Markdown; `H{_2}O` makes a plain-text reader stop. The cardinal rule is a promise to the reader, so where the two arguments met, the reader's governed. Consistency lost to legibility, deliberately and once.
+
+**Why this is not a second way to write mathematics.** The objection is answered on the output rather than in prose: `E=mc^{2}` renders as body text with a raised 2, and `` `E=mc^2`{math} `` renders as typeset mathematics with italic variables. They do not produce the same page, so they are not two spellings of one construct — which is what invariant 2 is concerned with, as setext and ATX headings were. The construct then sorts its own cases, since a variable set upright looks wrong to whoever wrote it. The boundary holding the remaining pressure is one sentence with no "unless", and it is in section 4.4.8.
+
+**The price, stated where it can be seen.** `^` stops being a character with no meaning anywhere, and `_` gains a meaning inside a line. Both sit at the mildest severity, each in one position only. Two new collisions: raw TeX pasted into prose outside a fence, which decision 3 already mangled before this construct existed and whose answer is unchanged, and `{{^…}}` in Mustache and Handlebars, billed to the audience already paying for `{#if}`. Against that, underscore comes out **safer than CommonMark's**, where it is emphasis and identifiers italicize mid-word under the flanking rules — the language adds a construct and the character gets safer than the baseline.
+
+**The accepted failure mode:** someone writes `E=mc^2` from TeX habit and gets a literal caret. That is visible on the page rather than silent, which is the class this language tolerates — the same class as decision 5's over-long closing fence — and it is a validator diagnostic, on a sigil followed by a bare alphanumeric run.
 
 ### A note on risk
 

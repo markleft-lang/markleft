@@ -369,6 +369,26 @@ See Finding 6. This is the one inherited construct whose behaviour depends on te
 - **Collision:** an exclamation mark immediately before a bracket — `Wow![see below]`. Requires no space, which is unusual in real writing. **Severity 1.**
 - **Escape:** `\!`.
 
+### R29 — Superscript and subscript
+
+- **Form:** `^{`, inline content, `}` raises the content; `_{`, inline content, `}` lowers it. **The sigil carries meaning only when the very next code point is `{`.**
+- **Range:** the content is ordinary inline content, so nesting works and emphasis inside it works. There is no braceless form and no length limit. The construct positions content and interprets nothing else — it is not mathematics, and no implementation routes it through a math engine.
+- **Order:** 12. Its position is free, and that is worth recording: `^` and `_` are triggers for no other rule in the language, so R29 competes with nothing. Where it meets a brace group it wins by position rather than by precedence — a left-to-right scan reaches the sigil before the `{`, so `^{#id}` is a superscript holding the text `#id`, not a superscript wrapped around an anchor.
+- **Decidable from:** two code points to open, then the scan for the matching `}` within the block — the same shape as R22.
+- **Reserves:** `^` and `_`, each only when immediately followed by `{`.
+- **Collision:** raw TeX pasted into prose outside a fence — `\int_{0}^{\infty}` — where `_{0}` and `^{\infty}` both fire. **Severity 1**, and barely a change: R17 already eats every backslash in that string, so bare TeX in prose was mangled before this rule existed and the answer is the same either way, which is a `math` span. Mustache and Handlebars `{{^inverted}}`, where the second brace pairs with the sigil, is **severity 1** and lands on the audience R23 already bills for `{#if}`.
+- **Escape:** `\^` and `\_`.
+
+An unclosed `^{` is text, under the uniform fallback — nothing is reserved until the brace closes. `^{}` is well-formed, renders nothing, and is a lint.
+
+**What this rule does not do is the half that keeps it cheap.** It applies a baseline offset and a size reduction, and no other typography: no italics, no math spacing, no symbol interpretation. That is not a restriction bolted on, it is the definition, and it is what stops the construct from being a second way to write mathematics — `E=mc^{2}` and `` `E=mc^2`{math} `` render *differently*, the first as roman body text with a raised 2 and the second as typeset math with italic variables. The two constructs are not two spellings of one thing, because they do not produce the same page.
+
+The rule self-sorts as a result. A variable set upright looks wrong to the person writing it, so `x^{n}` pushes its author toward `math`, where variables belong; digits, units, ordinals and chemical formulae look right upright, so they stay in prose. Chemistry is the case where upright is not an approximation but the correct typesetting — `$H_2O$` renders an italic H and is wrong, which is why mhchem exists.
+
+"No italics" is a non-action rather than a ban: `x^{*n*}` still emphasizes, because the author asked and not because the superscript did.
+
+*Added 2026-08-08 — decision 18.* Recorded as one rule rather than two, following R21, which covers emphasis and strong emphasis together: this is one construct with two sigils, and splitting it would put the same six fields on the page twice.
+
 ### R28 — Text
 
 - **Form:** everything else.
@@ -397,14 +417,19 @@ Every ASCII punctuation character, and what it costs plain text. This is the one
 | `!` | free | image, only immediately before `[` (R27) | 1 |
 | `{` `}` | free | brace group, only before `#` or `*`, or after a backtick run (R20, R22, R23) | 2 |
 | `<` `>` | `>` is a block quote (R7) | autolink, only around a scheme (R26) | 1 |
-| `_` | thematic break, `___` only (R13) | **free** | 1 |
+| `_` | thematic break, `___` only (R13) | subscript, only immediately before `{` (R29) | 1 |
+| `^` | free | superscript, only immediately before `{` (R29) | 1 |
 | `$` | **free** | **free** | **0** |
 | `~` | **free** | **free** | **0** |
-| `^` `%` `@` `:` `;` `?` `/` `=` `&` `"` `'` `,` `.` | **free** | **free** | **0** |
+| `%` `@` `:` `;` `?` `/` `=` `&` `"` `'` `,` `.` | **free** | **free** | **0** |
 
-Fourteen ASCII punctuation characters have no meaning anywhere in the language, and three more — `$`, `_`, and `+` — were deliberately bought back. That is the concrete form of invariant 1, and it is the number to watch: **any future decision that moves a character out of the free column is spending the language's main asset, and any decision that moves one into it is the language's main dividend.**
+**Fourteen** ASCII punctuation characters have no meaning anywhere in the language: the twelve in the last row, plus `$` and `~`. Three characters in this table were deliberately bought back — `$` by decision 1, `+` by the list revision below, and `_` by decision 2, which is why it sits at severity 1 rather than higher. That is the concrete form of invariant 1, and it is the number to watch: **any future decision that moves a character out of the free column is spending the language's main asset, and any decision that moves one into it is the language's main dividend.**
+
+*(The figure previously read fourteen while the rows totalled fifteen. Restated above so the arithmetic is visible and cannot drift again.)*
 
 *Changed 2026-08-08:* `+` left the reserved column entirely when it stopped being a bullet marker, and `*` dropped from severity 3 to 2 by losing the same job. No character moved the other way.
+
+*Changed 2026-08-08, second revision — the first entry that spends rather than earns.* `^` left the free column, and `_` gained a meaning inside a line, both to decision 18. This is the price side of the sentence above, so it is recorded next to the construct that paid it: two characters moved out, each into one position only — immediately before `{` — and each landing at severity 1. What was bought is a construct with no braceless form, which is why nothing that was safe to write yesterday changed meaning: `2^32`, `[^0-9]`, `ISO_8601`, `file_2.txt`, and `snake_case` are all still text, with no escape.
 
 ---
 

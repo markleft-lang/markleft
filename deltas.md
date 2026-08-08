@@ -39,6 +39,7 @@ This document is Appendix A of `definition.md`, and it has two audiences at once
 | 25 | Trailing-space hard breaks removed; `\` before a line ending is the only hard break | 13 | Migrator converts and reports each one |
 | 26 | Unicode throughout, UTF-8 encoded; content is never normalized | 14 | None expected; see the open riders in decision 14 |
 | 27 | Positional anchors `{#id}` valid anywhere; references stay ordinary links | 17 | New capability; nothing to migrate |
+| 28 | Superscript `^{…}` and subscript `_{…}`, braced always, typographic only | 18 | New capability — and the one automatic path out of delta 15: `<sup>` and `<sub>` convert |
 
 ## Per-delta detail
 
@@ -55,6 +56,8 @@ Each row above becomes a subsection here, and each subsection needs the same fou
 ## Notes for drafting
 
 Delta 4 deserves care. Removing the exception list makes escaping uniform, but it also means a backslash that used to survive as a literal character now consumes the character after it. That is a silent change in output rather than a parse error, which makes it the most dangerous entry in this table for anyone porting documents — the opposite of delta 25, which is invisible in the source but noisy in the result.
+
+Delta 28 is the only row in the table that makes delta 15 *easier*. Raw HTML has no automatic migration path in general, and `<sup>` and `<sub>` were the two tags a Markdown author reached for most often with no alternative available — so this pair converts mechanically, and the migrator should say so rather than reporting them alongside the tags it genuinely cannot handle. The entry also has to carry the negative, because that is what a reader arriving from HTML will test first: there is no braceless form, so `x^2` migrated from `x<sup>2</sup>` is wrong and `x^{2}` is right. State the reason next to it — a braceless form would have to guess where the raised text stops, and guessing after one digit renders `2^32` as 2³2, wrongly rather than partially.
 
 Delta 10 is the smallest entry in the table and the easiest to under-explain. Almost no document is affected: it fires only on a closing fence written longer than the fence it closes, which nobody does deliberately. What the entry has to convey is the *reason*, because the reason is the whole counting story — the run length is the only escape available inside verbatim content, and making the match exact gives one counting rule at both sizes instead of two. State the failure mode plainly alongside it: an over-long closing run no longer closes, so the block runs to the end of its container, and the validator is what catches it.
 

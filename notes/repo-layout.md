@@ -125,4 +125,4 @@ Repositories do not repeat the organization name: `markleft-lang/markleft`, neve
 
 ## A note on this file's extension
 
-This memo dogfoods the language rules — ATX headings, fenced code only, `*` emphasis only, no underscore syntax — but carries `.md`, because no Markleft renderer exists yet and GitHub must be able to display it. Rename the spec documents to `.markleft` once the reference parser and site rendering land in Phase 2.
+This memo dogfoods the language rules — ATX headings, fenced code only, `*` emphasis only, no underscore emphasis — but carries `.md`, because no Markleft renderer exists yet and GitHub must be able to display it. Rename the spec documents to `.markleft` once the reference parser and site rendering land in Phase 2.

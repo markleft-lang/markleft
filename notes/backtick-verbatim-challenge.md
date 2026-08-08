@@ -26,7 +26,9 @@ Three counts, of which the first two are fatal on their own.
 
 ## Why no other character works either
 
-The unclaimed ASCII, surveyed: `"` and `'` occur constantly in prose; `~` is GFM strikethrough and is also a dead key on some layouts; `^` is a dead key on *more* layouts than the backtick, and is exponentiation besides; `%`, `!`, `:`, and `/` are ordinary prose and dates and paths; `#`, `\`, `*`, and `_` are already spent; `@` is handles and addresses. Nothing survives.
+The unclaimed ASCII, surveyed: `"` and `'` occur constantly in prose; `~` is GFM strikethrough and is also a dead key on some layouts; `%`, `!`, `:`, and `/` are ordinary prose and dates and paths; `#`, `\`, `*`, `_`, and `^` are already spent; `@` is handles and addresses. Nothing survives.
+
+*Updated 2026-08-08.* `^` moved from the unclaimed list to the spent one. This survey had rejected it on two grounds — a dead key on *more* layouts than the backtick, and exponentiation besides — and decision 18 then took it for superscript, which is the second of those two reasons arriving as a construct. The survey's conclusion is unchanged and its margin is one character narrower.
 
 That is not bad luck, and this is the part worth keeping:
 

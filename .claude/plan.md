@@ -8,7 +8,7 @@ Where the project is, what comes next, and everything parked along the way. Plai
 
 Two things stand between us and a stable language. Everything else is downstream.
 
-- **Settle the definition.** `definition.md` is now a full draft — twelve sections and four appendices, the language stated in prose in §4 and the seventeen decisions with rationale in §5. What is left is the author's read-through and Appendix D, which lists every point the draft leaves open. Four of those it answers for the first time and needs confirmed; six it does not answer at all. Confirming any of them is a decision, so it goes in the record before it goes in the prose.
+- **Settle the definition.** `definition.md` is now a full draft — twelve sections and four appendices, the language stated in prose in §4 and the eighteen decisions with rationale in §5. What is left is the author's read-through and Appendix D, which lists every point the draft leaves open. Four of those it answers for the first time and needs confirmed; six it does not answer at all. Confirming any of them is a decision, so it goes in the record before it goes in the prose.
 
 - **Write the prose corpus** (in the `tests` repo, `corpus/`). Original prose written specifically to *break* prose-safety — money amounts, `snake_case`, `5 * 3 = 15`, shell snippets, file globs, lines that accidentally start with `#` or `-`. Deliberately deferred until the definition settles, so the corpus is written against a stable target. Everything in it is contributor-written; nothing scraped or borrowed.
 

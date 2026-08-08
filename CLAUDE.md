@@ -34,7 +34,7 @@ Summary only — rationale and the alternatives set aside live in `.claude/decis
 
 1. Bare `$` is ALWAYS literal text. Math is core: `` `x=y`{math} `` inline, ```` ```math ```` block. Math content is verbatim — TeX backslashes survive. "Core" = three guarantees: `$` is never syntax, the construct exists at both sizes with verbatim content, the label reaches the AST intact. `math` is a conventional label, not a reserved word (decision 9).
 
-2. Emphasis: `*em*` / `**strong**` only. Underscore is not syntax. `{*...*}` for intra-word.
+2. Emphasis: `*em*` / `**strong**` only. Underscore is not *emphasis* syntax. `{*...*}` for intra-word. Its one structural use is decision 18's subscript, which needs a brace right after it.
 
 3. Backslash before ANY character escapes it. No exception list — explicitly including a line ending, which is the visible line break.
 
@@ -65,6 +65,8 @@ Summary only — rationale and the alternatives set aside live in `.claude/decis
 17. Anchors are positional: `{#id}` valid **anywhere**, marks a point, not an attachment — so no paragraph exclusion and no adjacency rule. **An anchor marks where the reader arrives** (lead for anything longer than a line, trail on a heading). Whitespace around it is optional and insignificant. **References need no new syntax:** `[text](#id)`, `[text](file.md#id)`, and `[text](https://…#id)` are one construct — a link to a URL fragment. Markleft's xref contribution is *removing the slug heuristic*, not adding a feature. No bare sigil (`#id`/`@id`/`@#id`): it would have to generate its own text, and bare `#id` is prose-unsafe. Validator stays single-document; a target with a path or host is a URL and is not validated.
 
 16. Images are core, `![alt](src)` unchanged from CommonMark — no delta. Legal because **an image adds no text**: decision 15 governs the document's text, so "no transclusion" there means no *textual* transclusion. Alt is optional; empty alt is a lint warning, never an error. **The memorable rule: `[…]` links to the target, `![…]` shows it instead — the `!` is a presentation switch, not a different construct.**
+
+18. Superscript `^{…}` and subscript `_{…}` are core. **A sigil means nothing unless the very next character is `{`** — so `2^32`, `[^0-9]`, `ISO_8601`, `file_2.txt`, and `snake_case` are all still text with no escape, and there is no braceless form (a one-digit cap would render `2^32` as 2³2 — wrong, not merely limited). **Baseline offset and size only: no italics, no math spacing, no interpretation.** That is the definition, and it is why this is not a second way to write math — `E=mc^{2}` and `` `E=mc^2`{math} `` render differently. Boundary: *these position content and interpret nothing; anything needing interpretation is `math`.* Content is inline, so `x^{*n*}` emphasizes because the author asked. `^` left the free column to pay for it — the first decision ever to move a character that way.
 
 ## File extensions
 
