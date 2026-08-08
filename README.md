@@ -40,6 +40,16 @@ The specification document governs. The conformance suite in [markleft-lang/test
 
 Phase 0. The definition is being drafted; no implementation has shipped.
 
+- [ ] **Phase 0 — Definition & corpus.** Write the definition: the invariants, and the binding decisions with their rationales and rejected alternatives. Seed the prose corpus with contributor-authored documents written to attack prose-safety.
+
+- [ ] **Phase 1 — Grammar & spec-as-tests.** A PEG for inlines and an explicit small-step block algorithm, honest about the parts that are not context-free. An exhaustive conformance suite in the style of CommonMark's `spec.txt`.
+
+- [ ] **Phase 2 — Reference parser & canonical AST.** A parser in Rust, for speed, a WASM playground, and FFI. The specified JSON AST, with source positions, is itself a deliverable.
+
+- [ ] **Phase 3 — Killer tools.** A validator with real diagnostics; a canonical formatter with one serialization per AST; a CommonMark-to-Markleft migrator that reports every change it makes.
+
+- [ ] **Phase 4 — Ecosystem.** A one-page cheat sheet, a browser playground, editor highlighting, a conformance badge, and a language description small enough to fit in a system prompt.
+
 ## Copyright
 
 Crown copyright, Canada — 2026. An author is a Canadian federal public servant, so the Copyright Act vests copyright in the Crown by operation of law. **This is not sponsorship.** No department, agency, or institution owns, funds, backs, endorses, reviews, or governs Markleft. It is an independent project, maintained by its authors.

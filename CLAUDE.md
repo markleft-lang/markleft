@@ -177,6 +177,8 @@ Two project-specific riders sit on top of them:
 
 - Dogfood: write all project prose so it's valid under our own rules (no underscore emphasis, fenced code only, no raw HTML) — our own repo is the first thing that has to survive them. Note the one asymmetry: **escape dollars in `.md` files even though Markleft never needs it** — bare `$` is always literal here, but GitHub's math pass will pair them on render, which is the founding exhibit happening to us. (This file uses standard Markdown for Claude Code's benefit; spec documents should dogfood.)
 
+- **The phase checklist in `README.md` is the public status board.** It mirrors the roadmap in `.claude/decisions.md` §9. Check a phase off when it completes, and add or remove phases there in the same edit that changes the roadmap — a stale board is worse than no board, because it is the first thing a visitor reads.
+
 - Prefer boring, explicit rules over clever heuristics — cleverness is how Markdown got here.
 
 - Humor budget: the "What's left?" pun and the extension graveyard are canon; everything else in normative text stays sober.
