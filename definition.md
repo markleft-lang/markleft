@@ -46,7 +46,7 @@ Markleft defines what a document **is**. It does not define what a renderer **do
 
 ## 2. Non-goals
 
-Three things Markleft is not. Each rules out a different misreading, and each is held by a rule rather than by intention.
+Four things Markleft is not. Each rules out a different misreading, and each is held by a rule rather than by intention.
 
 ### 2.1 Not a toolchain, and not a document-preparation system
 
@@ -65,6 +65,14 @@ This is invariant 5, stated here as a promise rather than as a rule. There is no
 The important thing about this non-goal is that it does not remove capability; it relocates it. Tables of contents, citation formatting, cross-file snippet synchronization, and figure numbering are all genuinely useful, and all of them are better done by a tool that writes plain text **into** the source at authoring time than by a renderer that produces text at display time. The tool's output is then ordinary text: a reader without the tool still sees it, a diff still shows it, and the format has gained nothing it must carry forever.
 
 That last clause is the strategic point. Because capability accumulates in tools rather than in the language, the first five minutes never get worse however large the ecosystem grows. Most small languages start small and then grow. This one has a structural reason not to.
+
+### 2.4 Not a Markdown dialect, and not compatible with one
+
+**A Markleft document is not a Markdown document.** The two languages share a block layer — headings, lists, block quotes, fences, tables — and every inline construct differs: links, images, emphasis, anchors, and escapes. A Markdown file will not parse as intended here, and a Markleft file will not render as intended there.
+
+That is a deliberate position rather than an accident of design, and the argument for it is Markdown's own history. Near-compatibility is what produced flavour drift: when every implementation is *almost* the same as every other, a writer cannot answer whether their document survives a move between platforms, and the differences stay invisible until they bite. That is section 1.2's failure at ecosystem scale. **A clean break makes the question answerable.** A platform can support Markdown and Markleft side by side, as two languages with two file extensions; what stops paying is the temptation to stretch one implementation across both, which is how a dialect is born.
+
+**The spirit is inherited; the syntax is not.** What Markleft takes from Markdown is the thing Markdown got right — that a source file should read as prose, and that the marks should be few and quiet. Section 6 records the inheritances specifically, and decisions 11, 12, and 20 record where the line falls and why.
 
 ## 3. The invariants
 
@@ -312,44 +320,89 @@ Two properties are worth naming, because they are why the construct is shaped th
 
 **A block cell is a container**, in the same sense as a list item or a block quote: inside it, lines belong to the cell. Note the one difference, stated rather than left to discovery — a list item marks every line it owns by indentation, where a block cell marks only its first and relies on the terminator. Both are coherent, and the reason a cell does not use indentation is that the `|` already does the work indentation does in a list.
 
-#### 4.3.7 Link reference definitions
+#### 4.3.7 What does not open a block
 
-Inherited from CommonMark unchanged: a link reference definition binds a label to a destination for use by reference links (section 4.4.6).
+Six characters open a block, and the list is closed: `` ` ``, `#`, `-`, a digit, `>`, and `|`. Any other line is a paragraph. Two constructs a reader may look for are absent.
 
 **There is no thematic break.** A line of three or more `-`, `_`, or `*` reserves nothing; it is paragraph text, or a bullet item where it takes that form (`- - -`). The construct is removed because it never carried a plain-text meaning: a run of hyphens says that something changes and never says what, where a heading says which. Its rendering was a second problem — a horizontal rule is a style choice, and it collides with the rule most house styles already draw under a level-2 heading. **Where a break was wanted, write the heading it stood in for, or a second document.** Decision 19.
 
+**There is no link reference definition.** A line beginning with `[` reserves nothing. Reference links are absent (section 4.4.6), so there is nothing for a definition to define, and a link's target is written where the link is.
+
 ### 4.4 Inline content
+
+**One rule governs this section: a sigil carries meaning only when the very next code point is `{`.**
+
+Every construct below is an instance of it. Ten sigils share one shape, each opening with a fixed two-character sequence, and each of those characters is ordinary text everywhere else in a line.
+
+| Opener | Construct | Written |
+|---|---|---|
+| `*{` | emphasis | `*{em}` |
+| `**{` | strong emphasis | `**{strong}` |
+| `***{` | both | `***{both}` |
+| `^{` | superscript | `10^{23}` |
+| `_{` | subscript | `H_{2}O` |
+| `#{` | anchor | `#{tessier-2026}` |
+| `@{` | link | `@{https://example.org}` |
+| `@[` | link carrying its own text | `@[Tessier et al.]{#tessier-2026}` |
+| `!{` | image | `!{assets/kangaroo.png}` |
+| `![` | image carrying alternative text | `![a kangaroo in Cairns]{assets/kangaroo.png}` |
+| `\{` | escape range | `a \{|} b` |
+| `` `{ `` | decorator list | `` `x=y`{math} `` |
+
+What follows from the rule, and what makes it worth stating before any construct:
+
+**Prose-safety is by construction here, with nothing left over.** No condition is consulted about what surrounds a character, so no reader has to know one. `5 * 3 = 15`, `snake_case`, `2^32`, `[sic]`, `C:\Users\frederic`, `#hashtag`, `@handle`, `{"key": 1}`, and `f(x)` are all text, and none of them needs an escape.
+
+**Every construct is decidable from two code points.** A left-to-right scan reaches a sigil before anything else, and no two constructs share an opener, so no rule in this section looks ahead, backtracks, or consults a table.
+
+**Every mark sits to the left of its own content.** Blocks mark the left of a line, inlines mark the left of a span, and a backslash before a line ending marks the left of the line ending. The one place the arrow reverses is the decorator list, which follows what it annotates; section 4.5 says why.
+
+The two exceptions to the shape are both principled and both stated where they arise: a verbatim span is delimited on *both* sides, because its content is not interpreted and so cannot be balance-counted (section 4.4.5); and a link or image carrying its own text puts that text in brackets before the brace, because what a reader sees goes in front and what it means goes in the braces (section 4.4.6).
 
 #### 4.4.1 Text
 
 Anything that does not match a construct below.
 
-#### 4.4.2 Escapes
+#### 4.4.2 Escape ranges
 
-**A backslash before any character yields that character.** There is no exception list, and *any* means any.
+**`\{…}` makes its content literal.** No construct is recognized inside it. A backslash followed by anything other than `{` is an ordinary backslash.
 
 ````
-\*not emphasis*     yields   *not emphasis*
-\\                  yields   \
-\a                  yields   a
-\{#not-an-anchor}   yields   {#not-an-anchor}
+a \{|} b               yields   a | b
+\{*{not emphasis}}     yields   *{not emphasis}
+C:\Users\frederic      yields   C:\Users\frederic — unchanged, no escape needed
+\{}                    yields   nothing
 ````
 
-This is the most uniform rule in the language and also the one that most often surprises someone arriving from Markdown, where a backslash before a letter is a literal backslash. Here it is not. A backslash that is the last code point of a document is a literal backslash, because there is no character after it to yield.
+The range is what an escape needs to be in this language, for two reasons that arrive together.
+
+**The escape is visible.** `a \{|} b` says *I meant this pipe*, where a lone `\|` in a paragraph reads as a typo. The braces delimit what is protected, so a search-and-replace that empties one leaves `\{}` behind rather than a stray backslash.
+
+**Almost nothing needs escaping.** Under the rule in section 4.4, ordinary writing produces no operative sequences at all, so a heavier escape is reached for far less often than a lighter one was. The characters that still want one are the six that open blocks, and only in first position: `\{-} 5 degrees below`, `\{#} 5 is my favourite`, `\{|}x| < 5`.
+
+A single backslash is *not* an escape. This is a deliberate departure from CommonMark, which escapes ASCII punctuation, and from an earlier form of this language, which escaped every character with no exception list. That form is what made `C:\Users\frederic` render as `C:Usersfrederic` — text altered with nothing on the page to show it, which is precisely what invariant 1 exists to prevent. Decision 3.
 
 #### 4.4.3 Hard line break
 
-A backslash immediately before a line ending is a hard line break. It is the only one.
+A backslash immediately before a line ending is a hard line break. It is the only one, and it is the backslash's only operand that is not a brace group.
+
+That is not an exception to section 4.4's rule so much as its last case: the sigil sits immediately to the left of the line ending it marks, exactly as it sits to the left of a brace group. A line ending is the one code point that cannot appear inside an inline range, so it cannot be reached any other way.
 
 Markdown's other spelling — two or more spaces at the end of a line — is removed. Invisible syntax cannot satisfy prose-safety or the one-meaning property: a reader cannot see it, a diff barely shows it, editors and commit hooks strip it on save, and the widespread habit of typing two spaces after a full stop turns ordinary prose into structure whenever such a sentence happens to end a line. Nobody can rely on a mark they cannot see.
 
+To write a literal backslash at the end of a line, use an escape range: `the drive root is C:\{\}`.
+
 #### 4.4.4 Emphasis
 
-`*text*` is emphasis. `**text**` is strong emphasis. Underscore is not emphasis syntax anywhere, which is what makes `snake_case` identifiers safe in running prose with no escape. Its one structural use is the subscript of section 4.4.8, which needs a brace immediately after it and so leaves identifiers untouched.
+`*{text}` is emphasis. `**{text}` is strong emphasis. `***{text}` is both.
 
-The flanking rule is two conditions: an opening delimiter is immediately followed by a non-whitespace character, and a closing delimiter is immediately preceded by one. CommonMark needs seventeen interlocking rules and a delimiter stack here; those seventeen rules are the price of keeping underscore.
+Runs of one, two, and three asterisks are defined. A run of four or more is not a construct, so the run and the brace that follows it are text — the same shape as the six-level ceiling on headings.
 
-For emphasis inside a word, use the bracketed form `{*text*}`, adopted from djot. The braces make the boundaries explicit, so no flanking rule is consulted at all.
+There is **no paired form** and **no flanking condition anywhere in the language**. That is the point of the construct rather than a limitation of it: a flanking rule decides whether an asterisk is a mark by looking at what surrounds it, which is prose-safety by heuristic where invariant 1 promises prose-safety by construction. `5 * 3 = 15` is safe here because the form makes it safe, and `2*3*4` — which CommonMark emphasizes — is safe for the same reason.
+
+Underscore is not emphasis syntax anywhere, which is what makes `snake_case` identifiers safe with no escape. Its one structural use is the subscript of section 4.4.8.
+
+Emphasis inside a word needs no separate construct, because the braces already delimit: `un*{frigging}believable`. CommonMark needs seventeen interlocking rules and a delimiter stack for this section; `*{a **{b} c}` is unambiguous by balance alone.
 
 #### 4.4.5 Verbatim spans
 
@@ -368,28 +421,43 @@ A decorator list (section 4.5) may follow the closing run immediately, in braces
 
 **A bare verbatim span, and a bare fence, mean verbatim plain text.** That is their definition, not a fallback from a missing label.
 
+**This is the one construct delimited on both sides rather than marked on the left, and its own semantics require it.** Verbatim content is not interpreted, so a closing delimiter cannot be found by balancing — doing so would mean reading the content. Matching run lengths is the only escape that works without looking inside. That is why a verbatim span keeps the paired form and no other construct does.
+
 #### 4.4.6 Links and images
 
-Links are unchanged from CommonMark: `[text](destination)`, optionally with a title, plus the reference forms that use a link reference definition elsewhere in the document.
+A **link** is `@{target}`, or `@[text]{target}` when it carries its own text. A bare `@{target}` renders the target as its own text.
 
-Cross-references need no new syntax, and that is the point. `[text](#anchor)`, `[text](other.md#anchor)`, and `[text](https://example.org/page#anchor)` are one construct — a link whose destination is a URL carrying a fragment. Internal and external references behave consistently because URL semantics already unified them.
+An **image** is `!{source}`, or `![alt]{source}` when it carries alternative text. Alternative text is optional and empty alternative text is well-formed; missing alternative text is a validator warning, never an error.
 
-Images are also unchanged from CommonMark: `![alt](src)`. Alternative text is optional and empty alternative text is well-formed; missing alternative text is a validator warning, never an error.
+````
+@{https://example.org}
+@[the founding exhibit]{#founding-exhibit}
+@[Tessier et al.]{papers/tessier-2026.markleft#abstract}
+![the Alexandra Bridge at dusk]{assets/bridge-dusk.jpg}
+````
 
-The relationship between the two is worth stating, because it makes the exclamation mark memorable rather than arbitrary: **`[…]` links to the target; `![…]` shows it instead.** The mark is a presentation switch, not a different construct.
+The relationship between the two is worth stating, because it makes the exclamation mark memorable rather than arbitrary: **`@[…]` links to the target; `![…]` shows it instead.** The mark is a presentation switch, not a different construct, and the two forms differ by exactly one character.
+
+**The target is literal.** It is never parsed as inline content, so a target holding `*` or `_` needs no escape.
+
+**Cross-references need no new syntax, and that is the point.** `@[text]{#anchor}`, `@[text]{other.md#anchor}`, and `@[text]{https://example.org/page#anchor}` are one construct — a link whose target is a URL carrying a fragment. Internal and external references behave consistently because URL semantics already unified them.
+
+**There are no reference links and no autolinks.** A target used repeatedly is written repeatedly; that is a repetition, not a missing feature, and the editor and the canonical formatter are where it is answered. What their absence buys is the removal of the only construct in the language whose meaning depended on text arbitrarily far away: under CommonMark's shortcut form, `[sic]`, `[1]`, and `[citation needed]` become links if a definition with a matching label exists anywhere in the same document, including one added later by someone who never saw the paragraph they changed. `@{https://example.org}` covers the autolink case exactly, so `<` carries no meaning either and `a < b` and `Vec<T>` are text.
+
+**Two containers, in reading order.** `@[text]{target}` puts what a reader sees in brackets and what it means in braces — the same order as `` `x=y`{math} ``, where the span is what you see and the label is what it means. This is the one place a sigil's next code point is `[` rather than `{`.
 
 #### 4.4.7 Anchors
 
-`{#identifier}` is an **anchor**. It is valid anywhere inline content is valid, and it marks a **point** in the document rather than decorating any particular construct. There is no attachment rule, so there is no question of what an anchor attaches to, no exclusion for paragraphs, and no adjacency subtlety. Mid-sentence anchoring is free.
+`#{identifier}` is an **anchor**. It is valid anywhere inline content is valid, and it marks a **point** in the document rather than decorating any particular construct. There is no attachment rule, so there is no question of what an anchor attaches to, no exclusion for paragraphs, and no adjacency subtlety. Mid-sentence anchoring is free.
 
 Whitespace on either side of an anchor is optional and insignificant.
 
 The rule that places an anchor well is one sentence: **an anchor marks where the reader arrives.** A link scrolls its target to the top of the reader's view, so an anchor at the end of a long paragraph delivers the reader past the thing they were sent to read.
 
 ````
-{#five-minute}The complete core fits on one reference card.
+#{five-minute}The complete core fits on one reference card.
 
-## The five-minute property {#five-minute}
+## The five-minute property #{five-minute}
 ````
 
 Leading for anything longer than a line, trailing on a heading. Neither is a special case; both follow from asking where the reader should be looking.
@@ -422,21 +490,25 @@ The practical effect is that each case sorts itself. A variable set upright look
 
 The boundary, in one sentence: **superscript and subscript position content and interpret nothing; anything that needs interpreting is `math`.**
 
-The content is ordinary inline content, so it nests and `x^{*n*}` emphasizes — the construct never italicizes, and an author still may. An unclosed `^{` is text, under the uniform fallback of section 4.2. `^{}` is well-formed, renders nothing, and is a validator warning.
+The content is ordinary inline content, so it nests and `x^{*{n}}` emphasizes — the construct never italicizes, and an author still may. An unclosed `^{` is text, under the uniform fallback of section 4.2. `^{}` is well-formed, renders nothing, and is a validator warning.
 
-Because a left-to-right reading reaches the sigil before the brace, a sigil wins over any brace group that follows it: `^{#id}` is a superscript containing the text `#id`.
+This rule was written for two characters before it was the shape of the whole section. Nothing about it changed when the rest of the inline layer adopted it; what changed is that it stopped being a special case.
 
-#### 4.4.9 Brace groups, disambiguated
+#### 4.4.9 Brace groups: nesting and lengthening
 
-Braces appear in four constructs. One rule separates them, it is positional, and it needs no lookahead:
+A brace group opens with a sigil, then a run of one or more `{`, and closes on a run of **exactly the opening length** of `}`. Runs are maximal, in the sense given in section 4.3.3.
 
-- A brace group **immediately preceded by `^` or `_`** is a superscript or a subscript, and the sigil is read first.
-- A brace group **immediately following a verbatim closing run** is a decorator list.
-- A brace group beginning with `#` elsewhere is an anchor.
-- A brace group beginning with `*` is bracketed emphasis.
-- Any other brace group is ordinary text.
+**A brace with no sigil before it is text, everywhere, always.** `{"key": 1}` and `${HOME}` need no escape.
 
-The cost of this is real and worth naming: `{#` is structural in prose, so template snippets such as `{#if}` and `{#each}` need `\{` when written outside a verbatim span. The uniform escape covers it and no new rule is required, but it is a papercut for one audience — and the same audience pays once more for `{{^…}}`, where the second brace pairs with the sigil.
+**The content comes in two flavours, and this is the only distinction that reaches a parser.** *Inline content* — emphasis, superscript, subscript — is parsed recursively, so a nested construct is consumed whole and its braces never reach the outer close. *Literal content* — escape ranges, link and image targets, anchors, decorator lists — is not parsed, so the close is found by counting brace depth. Both are single-pass with no backtracking, and neither changes what an author types.
+
+**Single braces work whenever the content is balanced.** `\{a {b} c}` closes at the final `}` with no lengthening at all.
+
+**Lengthening is the escape hatch for the case that fails.** `*{the } character}` closes early; `*{{the } character}}` does not, because a lone `}` is a run of one and cannot close a run of two.
+
+That gives the language exactly one escape mechanism, and it is the same sentence at every size: **when a delimiter appears in your content, lengthen the delimiter.** Verbatim fences, verbatim spans, and brace groups, identically. There is no second mechanism, and the escape range of section 4.4.2 is not one — it is a construct that happens to hold literal text, not a way of escaping a character.
+
+**The costs, named rather than smoothed over.** Two of the openers occur as idioms in code that a writer may quote outside a verbatim span: `#{` is string interpolation in Ruby and Elixir (`"Hello #{name}"`), and `*{` is shell brace expansion after a glob (`ls *{png,jpg}`). Both are answered by a verbatim span, which is where such text belongs; the rest of the openers have no idiom behind them at all.
 
 ### 4.5 Decorators
 
@@ -457,7 +529,7 @@ There is nothing else. No key-value pairs, no classes, no format sigils, no colo
 ```                    `x`                         unlabelled verbatim
 ````
 
-**The braces belong to the list, not to any token.** They are its delimiter, and they appear only where one is needed: inline, where the sentence continues after the list, and not on a fence, where the rest of the line is the list and nothing follows it. So the same `#identifier` token is written bare on a fence, bare inside an inline list, and braced on its own in running prose — where the braces are the standalone anchor's own delimiter (section 4.4.7), not the anchor's punctuation. Braces on a fence's list would nest inside the inline one, `` `x`{rust {#id}} ``, which is why the fence form carries none.
+**The braces belong to the list, not to any token.** They are its delimiter, and they appear only where one is needed: inline, where the sentence continues after the list, and not on a fence, where the rest of the line is the list and nothing follows it. So the same `#identifier` token is written bare on a fence and bare inside an inline list, while a standalone anchor in running prose is `#{identifier}` — where the sigil comes first and the braces are that construct's own delimiter (section 4.4.7). Braces on a fence's list would nest inside the inline one, `` `x`{rust {#id}} ``, which is why the fence form carries none.
 
 **At most one bare word**, because two format words would claim two content types for one box. There is no meaning to combine them into and no resolution order to appeal to, so a second word buys a race rather than a capability.
 
@@ -471,13 +543,15 @@ There is consequently **no `text` label**. Nothing rules it out — ruling a wor
 
 A labelled span and an unlabelled span are **different nodes**. They may render identically; the tree records which the author wrote.
 
-**Token character set.** A decorator token is a run of Unicode characters excluding whitespace (which separates tokens), control characters (nothing invisible is ever syntax), `{`, `}`, `(`, `)` (which would close a brace group or a link destination), and the backtick (which would put an unpaired run inside a construct delimited by counting runs). Nothing else is excluded: letters in any script, digits, `:`, `-`, `.`, and `_` are all writable. The list is stated by exclusion, and it has five entries, because a list of five exclusions can be audited where an inclusion list is a standing argument.
+**Token character set.** A decorator token is a run of Unicode characters excluding whitespace (which separates tokens), control characters (nothing invisible is ever syntax), `{` and `}` (which would close the brace group), and the backtick (which would put an unpaired run inside a construct delimited by counting runs). Nothing else is excluded: letters in any script, digits, `(`, `)`, `:`, `-`, `.`, and `_` are all writable. The list is stated by exclusion, and it has four entries, because a short exclusion list can be audited where an inclusion list is a standing argument.
 
 The backtick exclusion earns its place twice. On a fence the decorator list runs to the end of the line, so without it ```` ```rust``` ```` would be an opening fence whose label is `` rust``` `` — a line that reads as a closed empty fence and is not one. Inline, a backtick inside a decorator would be a candidate opener for the next span in the paragraph, making the pairing of later runs depend on text inside braces. Nothing is lost: no format word and no identifier wants a backtick, and CommonMark excludes it from a backtick fence's info string for the same reason.
 
 What such a line is *instead* is a question this exclusion raises and does not answer — whether a malformed decorator list makes the whole line paragraph text, under the uniform fallback of section 4.2, or leaves a well-formed fence carrying a validator error. It is the general case and it applies equally to two bare words in one list. See Appendix D.11.
 
 **The first character selects the shape:** `#` makes the token an anchor, anything else makes it the format word. Sigils are significant only in first position, so `#` inside a token is an ordinary character.
+
+**This is the one place in the language where a mark follows what it marks.** A decorator annotates the span before it, so the arrow points backwards even though the brace group is still opened by the code point to its left — the closing backtick run. No other construct opens on a backtick, so nothing collides, and the rule needs no clause of its own. The asymmetry is deliberate: a fence already delimits, so there is nothing for a brace to scope, and a decorator is annotation rather than marking.
 
 **Legibility.** `` `x=y`{math #eq-euler} `` is the ceiling of this grammar rather than its normal use, and a decorator can grow longer than the content it decorates. The grammar has room for it anyway, because closing off the full form inline only would be an "unless" clause. House style carries that cost instead: anchors belong on fences, where a block has room for them, and an inline decorator normally carries the format word alone. What keeps even the ceiling inside invariant 1 is the postfix order — the content reads first, and the decoration is a suffix on a span the reader has already finished.
 
@@ -518,7 +592,10 @@ Stated explicitly, so that no reader has to infer an absence:
 - no lazy list continuation, no alternative list markers, and no alphabetic or Roman numbering;
 - no trailing-space hard breaks;
 - no thematic breaks;
-- no underscore emphasis, and no braceless superscript or subscript;
+- no underscore emphasis, no paired emphasis delimiters, and no flanking rules anywhere;
+- no reference links, no link reference definitions, and no autolinks;
+- no braceless superscript or subscript, and no braceless anchor, link, image, or escape;
+- no single-character backslash escape;
 - no smart punctuation;
 - no classes, no key-value attributes, and no column width hints;
 - no reserved words.
@@ -547,21 +624,31 @@ This section is informative. It records what was decided and why, including the 
 
 **Not adopted — carving `\(` and `\)` out of decision 3.** It costs the "no exception list" guarantee *and* does not fix the content problem, so it buys nothing.
 
-### Decision 2 — Underscore is not emphasis syntax
+### Decision 2 — Emphasis is braced, and underscore is not emphasis at all
 
-**Rule:** emphasis is `*em*` and `**strong**` only. Intra-word emphasis uses the bracketed form `{*text*}`.
+**Rule:** `*{em}`, `**{strong}`, `***{both}`. There is no paired form and no flanking condition anywhere in the language.
 
-**Why:** `snake_case` is ordinary technical prose, and CommonMark's answer to it is seventeen interlocking emphasis rules and a delimiter stack — a construct that cannot be expressed as a context-free grammar. Removing underscore collapses the flanking rules to the two conditions in section 4.4.4, and makes the identifier safe without an escape.
+**Why underscore went:** `snake_case` is ordinary technical prose, and CommonMark's answer to it is seventeen interlocking emphasis rules and a delimiter stack — a construct that cannot be expressed as a context-free grammar. Removing underscore makes the identifier safe with no escape.
 
-**Scope.** This decision is about emphasis, and its argument is entirely about emphasis. Underscore has one other use, added later: the subscript of decision 18, which requires a brace immediately after the sigil and so leaves every identifier alone. What decision 2 bought is intact.
+**Why the paired form went, which is the larger of the two:** flanking rules decide whether an asterisk is a mark or a character by looking at what surrounds it. That is prose-safety by *heuristic*, and invariant 1 promises prose-safety by *construction*. Emphasis was the last construct in the language where those two came apart — `5 * 3 = 15` was safe by a rule rather than by its form, and `2*3*4` was not safe at all. The braced form closes the gap, and with it invariant 1 holds with no residue anywhere in the language.
 
-### Decision 3 — Uniform escaping
+**What comes with it, none of it the point but all of it real:** CommonMark's hardest algorithm disappears, since the delimiter stack exists only to resolve emphasis; `***{…}` falls out of the run rule instead of needing the nesting corner nobody predicts; and intra-word emphasis needs no separate construct, since the braces already delimit.
 
-**Rule:** a backslash before any character yields that character. No exception list, line endings included.
+**The typing cost, counted:** `*em*` → `*{em}` is one character more, `**em**` → `**{em}` is free, and `***em***` → `***{em}` is one character fewer.
 
-**Why:** an exception list is an "unless" clause, and invariant 2 leaves no room for those. Uniformity here also gives the language its one visible hard line break (decision 13) for free.
+**Not adopted — keeping `*em*` alongside `*{em}`.** The paired form reads better in isolation and is what fingers know. Two spellings of one construct is what decisions 4, 5, 6, and 13 each removed, and this one would have kept the heuristic alive in order to serve the spelling that needs it.
 
-**The cost, stated honestly:** this is the most dangerous entry in the migration guide, because a backslash that used to survive as a literal character now consumes the character after it. That is a silent change in output rather than an error, so a migrator has to report every occurrence.
+**Scope.** Underscore keeps the one position decision 18 gave it, immediately before `{`, which leaves every identifier alone.
+
+### Decision 3 — Escaping is a range, not a character
+
+**Rule:** `\{…}` makes its content literal. A backslash followed by anything other than `{` is an ordinary backslash. The one exception is a line ending, which is decision 13.
+
+**Why:** the previous rule — a backslash before *any* character yields that character, with no exception list — read perfectly and was the only rule in the language that made ordinary writing worse than CommonMark makes it. CommonMark escapes ASCII punctuation only, so `\U` survives there; under uniform escaping `C:\Users\frederic` rendered as `C:Usersfrederic`, and `\n` and `\d+` in running prose went the same way. Text silently altered, with nothing on the page to show it, is the failure class invariant 1 exists to prevent, and this was the only place in the language that produced it.
+
+**What the range buys beyond the repair.** It joins the backslash to every other sigil rather than leaving it as the one character that works differently. It is *visible* — `a \{|} b` says "I meant this pipe", where a lone `\|` reads as a typo. And the need for it collapsed: under the rule in section 4.4, ordinary writing produces no operative sequences at all, so the heavier escape is reached for far less often than the lighter one was.
+
+**Literal braces need no backslash.** Content balances, so `\{a {b} c}` closes at the final `}`; genuinely unbalanced content lengthens the run, `\{{…}}`, which is the mechanism fences and verbatim spans already use.
 
 ### Decision 4 — ATX headings only, in one closed form
 
@@ -587,7 +674,7 @@ This section is informative. It records what was decided and why, including the 
 
 **Why one marker of each kind.** `*` and `+` existed as bullet markers for a single purpose: switching marker was how Markdown separated two touching lists. Remove them and that trick has nothing left to do, so the rule that governed it — "one marker per list" — leaves the language rather than being reworded. A rule is deleted from the reference card, not rewritten.
 
-What that buys is measurable rather than asserted. **`+` becomes free everywhere**, having no other job in the grammar, which puts it beside the dollar sign; it matters in ordinary prose because a diff pasted outside a fence carries a `+` on every added line. **`*` loses one of its three jobs**, and with it the precedence question between a thematic break and a bullet item whose content is `**`. Decision 19 later removed the thematic break too, so `*` no longer claims a line's first column at all. **`1)` frees nothing** — a closing parenthesis still ends a link destination — and goes purely for symmetry: one bullet marker and one ordered marker state the whole of list syntax in two lines.
+What that buys is measurable rather than asserted. **`+` becomes free everywhere**, having no other job in the grammar, which puts it beside the dollar sign; it matters in ordinary prose because a diff pasted outside a fence carries a `+` on every added line. **`*` loses one of its three jobs**, and with it the precedence question between a thematic break and a bullet item whose content is `**`. Decision 19 later removed the thematic break too, so `*` no longer claims a line's first column at all. **`1)` freed nothing at the time** — a closing parenthesis still ended a link destination — and went purely for symmetry: one bullet marker and one ordered marker state the whole of list syntax in two lines. Decision 20 later freed the parenthesis outright, so the symmetry argument was paid back with interest.
 
 This is the same subtraction as decisions 4, 5, and 13. Setext headings, closing runs, indented code, and trailing-space breaks were each a second spelling of one construct. Three spellings of a bullet was the largest instance still standing.
 
@@ -649,11 +736,15 @@ The deciding objection is a fourth. Under renumbering, a marker is a *presentati
 
 **Why:** a tab's width is a display setting, so structure that depends on it is structure that depends on the reader's editor. The same family as decision 13: whitespace does not carry meaning here.
 
-### Decision 11 — Deltas from djot
+### Decision 11 — Markdown's block layer is kept; its inline layer is replaced
 
-**Rule:** no smart punctuation in the core; Markdown's muscle memory is kept wherever Markdown was not broken — links, block quotes, and backtick verbatim.
+**Rule:** no smart punctuation in the core. Markdown's muscle memory is kept wherever Markdown was not broken, and the line falls almost exactly on the block/inline boundary.
 
 **Why:** djot (MacFarlane, 2022) is the nearest prior art and most of this language's syntax decisions are djot-vetted. Where we differ, we differ deliberately. Smart punctuation modifies what the author wrote, which decision 14's no-normalization clause leaves out for the same reason.
+
+**Where the line falls.** Headings, bullets, ordered items, block quotes, fences, and tables keep Markdown's shape — tightened by decisions 4, 5, 6, and 8, but recognizable, and a Markdown writer's fingers are right about all six. The inline layer is where CommonMark's ambiguity actually lives: flanking classification and the rule of 3 for emphasis, nested brackets and balanced parentheses for links, and a shortcut reference form that reaches across a whole document. Decision 20 replaces it.
+
+**The clause was tested against emphasis and links, and they came out opposite ways.** The link is the construct this decision was written to protect, and decision 12 explains why it is not protected here. Emphasis was never protected, because it is arguably the most broken construct CommonMark has, and this decision exempts broken constructs by its own terms.
 
 **Challenged and kept — backtick verbatim.** The backtick is genuinely hostile to non-US keyboards: it is a dead key on QWERTZ, AZERTY, Nordic, and Spanish layouts, it is visually close to the apostrophe and the acute accent, and mobile keyboards bury it. The proposed replacement was the pipe. The pipe fails twice before compatibility is even considered: it is already the table delimiter, and it breaks prose-safety, since `|x| < 5`, `P(A|B)`, and shell pipelines are ordinary prose.
 
@@ -661,17 +752,29 @@ No substitute exists, and the reason is structural and worth keeping: **the back
 
 What would reopen this is a candidate character, not another argument.
 
-### Decision 12 — Compatibility with CommonMark
+### Decision 12 — Markleft is not Markdown-compatible, by construction and on purpose
 
-**Rule:** match CommonMark byte-for-byte wherever that is unambiguous and harmless. Diverge only to remove an ambiguity or to protect prose. Every divergence is documented in Appendix A, which doubles as the migration guide.
+**Rule:** a Markleft document containing a link or emphasis is not valid CommonMark and does not render as CommonMark. Appendix A maps the two languages onto each other; it does not promise that a document ports.
 
-**Why:** familiarity is most of what Markdown won on, and a divergence that buys nothing is a divergence that costs adoption for free. This rule is also the reason Appendix A is short: each entry must justify its own existence.
+**Why this is not a reversal.** The rule this replaces said to match CommonMark *wherever that is unambiguous and harmless*, and the inline constructs decision 20 replaced are neither: emphasis needs a delimiter stack, links need balanced-parenthesis rules and nested-bracket rules, and the shortcut reference form reaches across a whole document. The clean break is what the compatibility principle licensed rather than a departure from it. The principle is spent, not abandoned.
+
+**Why the break is taken deliberately rather than absorbed.** Near-compatibility is what produced Markdown's flavour drift. A writer cannot answer whether their document survives a move between platforms, because every implementation is *almost* the same as every other and the differences are invisible until they bite — the founding exhibit of section 1.2, at ecosystem scale. A clean break makes the question answerable. A vendor can support Markdown and Markleft side by side; what stops paying is the temptation to stretch one implementation across both.
+
+**The file extensions are the instrument.** `.markleft` and `.lf` (section 4.8) are what keeps the two languages from blending, and they were decided before this rule needed them.
+
+**What remains true of the block layer is an observation, not a constraint.** Headings, fences, lists, quotes, and tables are Markdown's because Markdown's were right, not because compatibility asked for them.
+
+**The cost, stated plainly.** A Markdown user's fingers are wrong about links, images, emphasis, and escapes on the first day. A migrator is buildable and remains a Phase 3 deliverable, since the rewrites are mechanical; what it cannot promise is that its output means what the input meant on any particular platform, which was never true of any two Markdown implementations either.
 
 ### Decision 13 — Hard breaks are explicit; trailing whitespace is never significant
 
 **Rule:** section 4.4.3.
 
 **Why:** invisible syntax cannot satisfy invariant 1 or invariant 3. The deciding argument is not aesthetic: typing two spaces after a full stop is a live habit forty years after typewriters, so an ordinary sentence that happens to end a line silently becomes structure. Everything else compounds it — editors and commit hooks strip end-of-line whitespace to keep diffs clean, so the syntax is not merely invisible but actively unstable.
+
+**Why the backslash form survived decision 20 unchanged**, when every other use of the backslash was rewritten. It is the most cardinal-rule-compliant construct in the language: the source line ends exactly where the output line ends, and nothing else here is isomorphic to its own rendering. Its one realistic collision *renders correctly* — a shell continuation quoted in unfenced prose, `gcc -o foo \`, becomes a hard break, which is the line break the author already wanted, and no other collision in the language has a benign failure mode. And it needs no new machinery to escape: `the drive root is C:\{\}`.
+
+**Not adopted — `\\`, matching TeX.** A trailing `\\` is exactly as invisible as a trailing `\`, so it buys nothing on intentionality, and it puts UNC paths and escaped backslashes in quoted code into the blast radius. **Not adopted — `\n`**, which would reintroduce the exception list decision 3 was rewritten to remove.
 
 ### Decision 14 — Unicode is the character set; UTF-8 is the encoding
 
@@ -701,7 +804,7 @@ The constraint on this direction is narrow and absolute: **only marks are consum
 
 **The design test that follows:** every format word names something a conforming renderer visibly distinguishes. A format whose rendered output is indistinguishable from undecorated content destroys information on render, and does not clear the test. Anchors are exempt by kind rather than by exception: an anchor is navigation, metadata in the same category as a link destination, and metadata carries no content to lose.
 
-**Worked consequence — citations and bibliographies.** Both generate text, so both are excluded from the language, and the capability moves to authoring time rather than being lost. A preprocessor or editor extension reads a bibliography file and writes the citation text and the reference list *into* the source, where they become plain text like everything else: `As [Smith (2020)](#ref-smith2020) showed…` above a references section whose entries carry `{#ref-smith2020}` anchors. The anchor is the citation key, serving as the reader's navigation target and the tool's stable identifier at once.
+**Worked consequence — citations and bibliographies.** Both generate text, so both are excluded from the language, and the capability moves to authoring time rather than being lost. A preprocessor or editor extension reads a bibliography file and writes the citation text and the reference list *into* the source, where they become plain text like everything else: `As @[Smith (2020)]{#ref-smith2020} showed…` above a references section whose entries carry `#{ref-smith2020}` anchors. The anchor is the citation key, serving as the reader's navigation target and the tool's stable identifier at once.
 
 This is better than the alternative on the rule's own terms, because the plain-text reader sees "Smith (2020)" rather than a citation key. **The cost is restyling:** changing citation style is a flag in a citation processor and a full re-run with a large diff here. Immaterial for a document with one venue; a genuine loss for a paper shopped across journals. The trade is diffable-and-readable always, against cheap-restyling sometimes, and this project takes the first consistently.
 
@@ -709,7 +812,7 @@ This is better than the alternative on the rule's own terms, because the plain-t
 
 ### Decision 16 — Images are core, and the line is textual
 
-**Rule:** `![alt](src)`, unchanged from CommonMark. Alternative text is optional; empty alternative text is legal and missing alternative text is a validator warning.
+**Rule:** `![alt]{src}`, or `!{src}` with no alternative text. Alternative text is optional; empty alternative text is well-formed and missing alternative text is a validator warning.
 
 **Why an image is legal where raw HTML is not:** decision 15 governs the document's *text*, and an image contributes none. A reader of the plain source has read every word of the document.
 
@@ -719,7 +822,9 @@ An inline frame imports arbitrary text that becomes part of what the reader read
 
 **Not adopted — `` `path`{image} ``,** despite fitting the decorator notation exactly. A decorator must mean the same thing in both positions, and an `image` fence is meaningless: a word that works only inline is a special case wearing the notation. Worse, a decorator labels content that is *present*, where a path references content that is *absent*. And it has nowhere to put alternative text.
 
-**Not adopted — `[alt](src){image}`,** the strongest alternative, which fails on cost rather than on principle. Principle favours it, since `![]()` is the only inline construct whose type marker precedes its content. But under decision 12 a divergence from an unambiguous, harmless CommonMark construct needs more than legibility; it would open a third decorator position, growing the rule rather than shrinking it; and it would make nearly every real document invalid CommonMark, since almost every project README carries badges or screenshots.
+**Not adopted — `[alt](src){image}`,** proposed as the strongest alternative when this decision was first written, on the principle that `![]()` was then the only inline construct whose type marker preceded its content. Decision 20 resolved that tension in the opposite direction and the proposal is moot twice over: every inline construct is now marked by a prefix, so the image is no longer the odd one out, and a decorator naming a construct rather than labelling content is the shape decision 15 leaves out — the same objection that sank `` `path`{image} ``.
+
+**The mnemonic survived the form change and got cheaper.** `@[…]` links to the target, `![…]` shows it instead. The two constructs now differ by exactly one character, where before they differed by a bracket-and-parenthesis dance.
 
 ### Decision 17 — Anchors are positional; references are ordinary links
 
@@ -729,9 +834,9 @@ An inline frame imports arbitrary text that becomes part of what the reader read
 
 **Markleft's contribution to cross-referencing is the removal of a heuristic, not the addition of a feature.** Platforms derive anchors by slugifying heading text, and every platform slugifies differently, so the same link resolves on one and dangles on another. That is the founding exhibit in navigation form. Explicit anchors delete the guess, and cost no new construct at all.
 
-**Not adopted — a bare reference sigil,** in every spelling considered. Two independent failures. It would have to **generate its own text**: rendering a bare reference means emitting either the useless raw identifier or the target's title or number, which is text pulled from elsewhere and inserted where nobody wrote it — decision 15, arriving through a smaller door than a table of contents but through the same door. And a bare `#identifier` is prose-unsafe, since `#general` and `#nowplaying` are ordinary technical prose; it would also make a hash-word text at the start of a line and syntax in the middle of one. As a consequence no digit-guard rule is needed anywhere: with references written as links, `#1` in prose is never syntax.
+**Not adopted — a bare reference sigil,** in every spelling considered. Two independent failures, and only one of them survives. It would have to **generate its own text**: rendering a bare reference means emitting either the useless raw identifier or the target's title or number, which is text pulled from elsewhere and inserted where nobody wrote it — decision 15, arriving through a smaller door than a table of contents but through the same door. That objection is untouched by anything since. The second was that a bare `#identifier` is prose-unsafe, since `#general` and `#nowplaying` are ordinary technical prose, and a bare hash-word would be text at the start of a line and syntax in the middle of one. **Decision 20 answered the second and left the first standing**, which is exactly why `@{#five-minute}` exists and a bare sigil does not: the brace makes the sigil prose-safe, and a link with no text renders its target rather than inventing one. No digit-guard rule is needed anywhere as a consequence: `#1` in prose is never syntax.
 
-**A closed gap worth noting.** Decision 16 left open whether decorators needed a third position so that `## Heading {#custom-id}` could be written. This decision closes it without a new position: an anchor is valid anywhere inline content is, and a heading's text is inline content, so `## The five-minute property {#five-minute}` already works.
+**A closed gap worth noting.** Decision 16 left open whether decorators needed a third position so that a heading could carry a custom identifier. This decision closes it without a new position: an anchor is valid anywhere inline content is, and a heading's text is inline content, so `## The five-minute property #{five-minute}` already works.
 
 **The validator stays a single-document tool.** Duplicate identifiers and dangling same-document fragments are lint. A destination carrying a path or a host is a URL, and Markleft does not validate URLs — an external link can fail and is not checked either, so a cross-document fragment gets the same treatment. This keeps the tooling from needing to know about a set of documents, which would be its first multi-file commitment.
 
@@ -743,13 +848,15 @@ An inline frame imports arbitrary text that becomes part of what the reader read
 
 **Not adopted — the braceless form,** `^2` and `_2`, capped at a single digit, which is where the proposal started. It fails twice and either failure is enough. Underscore before a digit turns `UTF_8` into UTF₈, `ISO_8601` into ISO₈601, `SHA_256` into SHA₂56, and `file_2.txt` into file₂.txt; the decisive part is not the list but that **`H_2O` and `ISO_8601` have the same local shape** — letter, underscore, digit, alphanumeric — so no condition on the surrounding characters separates them the way a heading's required space separates `#` from `#hashtag`. That lands on `snake_case`, which is invariant 1's founding exhibit, and escaping identifiers would be the dollar-pairing failure of section 1.2 happening again in the character decision 2 was proud of freeing. Separately, a caret capped at one digit truncates: `2^32` becomes 2³2 and `2^64` becomes 2⁶4, silently, and multi-digit exponents are the common case in technical prose. **The cap was not a limit but a silent limit** — and the inversion is the part worth keeping, because a greedy digit run would have been *safer* than one digit. The cap was costing prose-safety while appearing to buy it.
 
-**Why the sigil sits outside the brace,** against this language's own brace-group family. `{^2}` was proposed first and is cheaper: section 4.4.9 already makes `{` plus a sigil one shape, a fourth construct would have joined it for nothing, and it would have moved no character out of the free column. It was set aside on **invariant 5**. `H_{2}O` is a plain-text reading convention that predates Markdown; `H{_2}O` makes a plain-text reader stop. The cardinal rule is a promise to the reader, so where the two arguments met, the reader's governed. Consistency lost to legibility, deliberately and once.
+**Why the sigil sits outside the brace** — the choice that turned out to be the language's organizing principle. `{^2}` was proposed first and looked cheaper, since the brace-first constructs of the day already made `{` plus a sigil one shape and a fourth would have joined them for nothing. It was set aside on **invariant 5**. `H_{2}O` is a plain-text reading convention that predates Markdown; `H{_2}O` makes a plain-text reader stop. The cardinal rule is a promise to the reader, so where the two arguments met, the reader's governed.
+
+That was recorded at the time as consistency losing to legibility, deliberately and once. **It was neither once nor a loss.** Decision 20 turned the other constructs around to match this one rather than the reverse, so the sigil-outside form became the rule and the brace-first form left the language. What looked like a bounded exception was the correct shape arriving early — and the general lesson is that the reader's argument and the consistency argument were never opposed here: taking the reader's side found the more consistent design.
 
 **Why this is not a second way to write mathematics.** The objection is answered on the output rather than in prose: `E=mc^{2}` renders as body text with a raised 2, and `` `E=mc^2`{math} `` renders as typeset mathematics with italic variables. They do not produce the same page, so they are not two spellings of one construct — which is what invariant 2 is concerned with, as setext and ATX headings were. The construct then sorts its own cases, since a variable set upright looks wrong to whoever wrote it. The boundary holding the remaining pressure is one sentence with no "unless", and it is in section 4.4.8.
 
-**The price, stated where it can be seen.** `^` stops being a character with no meaning anywhere, and `_` gains a meaning inside a line. Both sit at the mildest severity, each in one position only. Two new collisions: raw TeX pasted into prose outside a fence, which decision 3 already mangled before this construct existed and whose answer is unchanged, and `{{^…}}` in Mustache and Handlebars, billed to the audience already paying for `{#if}`. Against that, underscore comes out **safer than CommonMark's**, where it is emphasis and identifiers italicize mid-word under the flanking rules — the language adds a construct and the character gets safer than the baseline.
+**The price, stated where it can be seen.** `^` stops being a character with no meaning anywhere, and `_` gains a meaning inside a line. Both sit at the mildest severity, each in one position only. One new collision survives: raw TeX pasted into prose outside a fence, where both braced runs fire. Against that, underscore comes out **safer than CommonMark's**, where it is emphasis and identifiers italicize mid-word under the flanking rules — the language adds a construct and the character gets safer than the baseline.
 
-**The accepted failure mode:** someone writes `E=mc^2` from TeX habit and gets a literal caret. That is visible on the page rather than silent, which is the class this language tolerates — the same class as decision 5's over-long closing fence — and it is a validator diagnostic, on a sigil followed by a bare alphanumeric run.
+**The accepted failure mode:** someone writes `E=mc^2` from TeX habit and gets a literal caret. That is visible on the page rather than silent, which is the class this language tolerates — the same class as decision 5's over-long closing fence — and it is a validator diagnostic, on a sigil followed by a bare alphanumeric run. **Decision 20 generalized that diagnostic along with the rule:** every sigil in the language now means nothing without a brace, so one check covers all of them and the validator's most useful message is the same sentence in every place it fires.
 
 ### Decision 19 — The thematic break is removed
 
@@ -761,15 +868,39 @@ An inline frame imports arbitrary text that becomes part of what the reader read
 
 **The replacement is what it was standing in for: section properly, or write a second document.** A break between two topics is a heading that was not written. That is the same move as decision 4 removing setext headings and decision 6 removing marker-switching — not a capability withdrawn, but a shape whose job another construct already does, more explicitly.
 
-**What the removal returns.** `*` and `_` each get their line-start position back, so the characters still claiming a line's first column are exactly `` ` ``, `#`, `-`, digits, `>`, `|`, `\`, and `[`. Neither becomes free outright, both keeping inline work. And the list rule loses its only exception: the clause by which a thematic break beat a bullet item on `- - -` was the sole precedence contest in the block layer, and an ordering exception is an "unless" clause in other clothing, so invariant 2 collects a dividend unrelated to rendering.
+**What the removal returns.** `*` and `_` each get their line-start position back. Neither becomes free outright, both keeping inline work — but this was the first of the two changes that emptied that column of everything except block markers, decision 20 being the second. And the list rule loses its only exception: the clause by which a thematic break beat a bullet item on `- - -` was the sole precedence contest in the block layer, and an ordering exception is an "unless" clause in other clothing, so invariant 2 collects a dividend unrelated to rendering.
 
 **What it costs, stated plainly.** `---` between two paragraphs is common, and it now renders as three literal hyphens. The failure is loud rather than silent, which is the class this language tolerates, and a migrator can find every instance — though it cannot decide whether the author meant a heading or a document split, so this one is reported rather than converted. `***` and `___` go with it.
 
 **Not adopted — keeping it for compatibility alone.** Decision 12 matches CommonMark wherever that is unambiguous *and harmless*, and this is neither: harmless fails on the renderer collision, and the construct's meaning is under-specified in a way no conformance test could pin down. A delta needs an invariant behind it; this one has invariants 2 and 5 both.
 
+### Decision 20 — Every inline construct opens with a sigil and a brace
+
+**Rule:** section 4.4. A sigil carries meaning only when the very next code point is `{`.
+
+**Why it is one decision and not ten.** That sentence was decision 18, written for `^` and `_` and treated as a bounded cost. It was not bounded: it was the shape of the whole inline layer, discovered on two characters. Applying it to the rest costs *less* than the two-character version did, because one rule on the reference card replaces eight constructs with a shape each.
+
+**The case rests on three findings, not on consistency.**
+
+**Decision 3 was less prose-safe than CommonMark.** Uniform escaping rendered `C:\Users\frederic` as `C:Usersfrederic` where CommonMark leaves it alone. Ordinary technical writing, silently altered, with nothing on the page to show it. That is the failure class invariant 1 exists to prevent, and it had been in the language for two days behind a rule that reads perfectly.
+
+**Decision 11 never protected emphasis.** The muscle-memory clause is conditional on Markdown not being broken, and emphasis is arguably the most broken construct CommonMark has.
+
+**Braced emphasis removes invariant 1's last heuristic.** Flanking rules are prose-safety by heuristic; invariant 1 promises prose-safety by construction. After this decision the invariant holds with no residue, and no other available change does that.
+
+**What it buys beyond the invariants.** The **last inline lookahead closes** — decision 8 claimed to close the last one and that was not quite true, since bare `[` still required a scan to `]` and a check for `(`, where `@[` decides on the second code point. **Two heuristic rescues become constructions**: `[sic]` rendered literally under CommonMark *because no `(` followed*, and a brace in JSON or a shell snippet was safe for want of a neighbour. **CommonMark's hardest algorithm evaporates.** **Search becomes exact**, since every construct has a fixed two-character opener, so one pattern finds every operative inline construct at any depth — the un-regular part is only the *extent*, never the *presence* — and the constructs holding opaque targets cannot nest at all, so a regular expression over them is complete rather than approximate. **Syntax highlighting can be correct**, where editor grammars mis-highlight CommonMark emphasis everywhere because flanking is not expressible in the pattern languages they use. And **a language model gets shorter instructions**: flanking and the rule of 3 to emit CommonMark, `sigil{content}` to emit Markleft — which lands on the adoption argument in section 1 and was not available to Markdown in 2004.
+
+**The three classes, which are the reference card.** *Blocks* are decided by position in the line — the start opens one, the end breaks one. *Inlines* are decided by a sigil immediately followed by `{`. *Verbatim* is delimited by matching backtick runs. The third is an exception that explains itself in one sentence, given in section 4.4.5, and one sentence is the bar invariant 2 sets.
+
+**The ledger.** One character is spent: `@` stops being free, at the mildest severity, in one position only. Six are earned — the backslash drops two severity bands, the asterisk one, brackets and braces one each, and parentheses and the angle bracket become free outright. Seventeen of the thirty-two ASCII punctuation characters now mean nothing anywhere in the language, `-` is the only character left in the worst-but-one band, and a line's first column holds exactly the six characters that open blocks.
+
+**The costs, none of them hidden.** A **clean break with Markdown**, which is decision 12 and is chosen rather than absorbed. **New collisions**, small and named in section 4.4.9. **Keyboard load**, since braces are a modified keystroke on several common layouts and this puts every operative inline construct behind that — the counter is the one decision 11 already accepted, that a character's inaccessibility and its prose-safety are the same property, and the mitigation is tooling and partial by construction, because a phone keyboard and a web textarea have no extension.
+
+**Not adopted — keeping `*em*` alongside `*{em}`;** decision 2 records why. **Not adopted — a depth cap on brace nesting**, which would make the language regular for a regular expression's benefit and cost invariant 2 an "unless" clause; approximation belongs in the tool, not the definition. **Not adopted — prohibiting nesting outright**, which would kill the emphasis inside a superscript that decision 18 explicitly blesses.
+
 ### A note on risk
 
-Decisions 4, 5, and 6 — one heading form, fenced blocks only, strict lists — carry the highest risk in the language, and the risk is not correctness but habit. They break what a fluent Markdown author's fingers already do. Every one of them is defensible on the invariants, and none of them has yet been tested against a large body of real documents. That evidence will arrive from the migrator's change report in Phase 3, which is later than anyone would like, and it is recorded here so that when it arrives it is read as evidence rather than as complaint.
+Decisions 4, 5, and 6 — one heading form, fenced blocks only, strict lists — carry the highest habit risk in the *block* layer, and decision 20 carries more than all of them together in the inline layer. They break what a fluent Markdown author's fingers already do. Every one of them is defensible on the invariants, and none of them has yet been tested against a large body of real documents. That evidence will arrive from the migrator's change report in Phase 3, which is later than anyone would like, and it is recorded here so that when it arrives it is read as evidence rather than as complaint.
 
 ## 6. Prior art and inheritances
 
@@ -817,8 +948,8 @@ Every cell of the last row exists somewhere else in the table. The conjunction e
 
 ### 6.3 Explicit inheritances
 
-- **CommonMark** — the specification-as-tests methodology, and the byte-compatibility baseline in decision 12.
-- **djot** — the linear-time architecture, uniform escaping, attributes (reduced here to decorators), and bracketed emphasis. **Not** its raw-content design: decision 7 removes passthrough entirely.
+- **CommonMark** — the specification-as-tests methodology, and the block layer that decision 11 keeps.
+- **djot** — the linear-time architecture, the principle of a uniform escape, attributes (reduced here to decorators), and the brace-delimited emphasis that decision 20 generalized into the whole inline layer. **Not** its raw-content design: decision 7 removes passthrough entirely.
 - **MyST and reStructuredText** — the directive concept, disciplined here into a closed extension point, and never the content-generating directive that decision 15 leaves out.
 - **Markdoc** — proof of demand for schema validation and documents-as-data.
 - **Typst** — the standard to meet for error messages, and the Rust-plus-playground approach to credibility.
@@ -833,7 +964,13 @@ Four readings, all of which describe the whole language rather than one feature:
 1. **The compass.** An orthogonal move: the same size as Markdown, different rigour.
 2. **What is left.** The language is what *remains* after fifteen years of curation. Most of the binding decisions in section 5 remove something.
 3. **We left.** A departure from the informal era. The fourth direction stays unclaimed, left to whoever comes next to do it "right".
-4. **The left margin.** The natural state of plain text — prose-safety, subliminally.
+4. **Marks on the left.** **Every construct's mark sits to the left of that construct's content.** Blocks mark the left of a line; inlines mark the left of a span; a backslash before a line ending marks the left of the line ending. The one place the arrow reverses is the decorator, which annotates what precedes it. This is a retronym and worth saying so: the name came first, and it turned out to describe the design.
+
+**The tagline states two invariants at once.**
+
+> **Everything that is not prose leaves a mark.**
+
+Its content is the contrapositive — **no mark, therefore prose** — which is invariant 1 from the reader's side and the cardinal rule at the same time, without naming either. Note that the name is the verb: *leaves a mark* and *Markleft* are the same two words in different tenses.
 
 **The copyleft lineage is structural rather than decorative.** Copyleft used copyright's own machinery to guarantee openness. Markleft uses formal-specification machinery to guarantee prose freedom: the formalism exists so that plain text stays plain.
 
@@ -919,13 +1056,23 @@ The trigger for something more is specific: **more than one decision-maker.** At
 
 **Every change is recorded before it is made.** A challenge to a settled decision is written down with its argument and its outcome, whether it succeeds or fails, so that a later contributor finds the analysis instead of rebuilding it.
 
+**Version numbers follow semantic versioning, and for a specification the public interface is the language** — what parses, and to what. That makes the bands decidable rather than a judgement call each time:
+
+- **`0.x.0`** — the language changed. A decision landed that changes what parses or what it means.
+- **`0.x.y`** — everything else. Prose, rationale, corrections, worked examples. The language is byte-identical.
+- **`1.0.0`** — this document is normative and a realization passes the conformance suite.
+
+The `0.0.x` series covers the scaffolding pass, when nothing was stable and nothing claimed to be. `0.1.0` is the first release of the language as described here.
+
 ## Appendix A — Deltas from Markdown
 
 *Normative.*
 
-The complete list of every point where Markleft departs from CommonMark is maintained in `deltas.md` and incorporated here by reference. It doubles as the migration guide.
+The complete list of every point where Markleft departs from CommonMark is maintained in `deltas.md` and incorporated here by reference. Under decision 12 it is a **translation guide** rather than a migration guide: it maps the two languages onto each other for a reader who already knows Markdown, and it makes no promise that a document ports.
 
-Two entries deserve advance warning. **Uniform escaping (decision 3)** is the most dangerous change for anyone porting documents, because a backslash that used to survive as a literal character now consumes the character after it — a silent change in output rather than a visible failure. **The removal of trailing-space hard breaks (decision 13)** is the second, because the old syntax is invisible, so a reader cannot audit that conversion by eye and has to trust the migrator's report.
+Three things deserve advance warning, and the first is the shape of the whole appendix. **Under decision 20, every inline construct differs from Markdown's** — links, images, emphasis, anchors, and escapes. A Markdown document is not a Markleft document, and a Markleft document is not Markdown; the two languages share a block layer and nothing below it. That is a break taken on purpose, and decision 12 gives the argument.
+
+Beyond that, two entries are the ones a migrator has to report rather than silently convert. **The removal of trailing-space hard breaks (decision 13)** is invisible in the source, so a reader cannot audit that conversion by eye. **The removal of the thematic break (decision 19)** cannot be converted at all, because nothing in the source says whether the author meant a heading or a document split.
 
 ## Appendix B — Formal grammar
 
@@ -953,7 +1100,7 @@ That second piece of guidance is a specific case of a principle that decides thr
 
 *Non-normative. Every point this document settles for the first time, and every point it leaves open, so that no gap has to be discovered by a reader.*
 
-Items 1 to 4 are answered in section 4 for the first time; each closes a rider that the decision record left open, and each needs the answer confirmed before it is treated as settled. Items 5 to 11 are not answered at all, except item 6, which is closed and kept in place — numbers here are retained rather than reused, so a citation always resolves.
+Items 1 to 4 are answered in section 4 for the first time; each closes a rider that the decision record left open, and each needs the answer confirmed before it is treated as settled. Items 5 to 14 are not answered at all, except item 6, which is closed and kept in place — numbers here are retained rather than reused, so a citation always resolves. Items 12 to 14 were raised by decision 20.
 
 1. **Invalid UTF-8.** Section 4.1 states that a byte sequence which is not well-formed UTF-8 is not a Markleft document. The alternatives were replacement with U+FFFD and passing bytes through; both silently alter content, which decision 3 and invariant 1 argue against.
 
@@ -976,5 +1123,11 @@ Items 1 to 4 are answered in section 4 for the first time; each closes a rider t
 10. **Media type.** No media type is registered for either file extension.
 
 11. **A malformed decorator list.** Section 4.5 states the form of a decorator list without saying what a line that fails it becomes. Two answers are available and both are defensible: the uniform fallback of section 4.2 makes the whole line paragraph text, which is what CommonMark does with ```` ```rust``` ```` and keeps the grammar honest; or the fence opens anyway and the malformed list is a validator error, which keeps a document's block structure from collapsing over a typo in a label. The cases are a token containing a backtick, two bare words, and two anchors. Raised by the backtick exclusion decided 2026-08-08; it applies to all three.
+
+12. **Whether a brace group may span a line ending.** Section 4.4.9 defines how a brace group closes without saying whether the close may fall on a later line of the same paragraph. It matters for a long link target and for emphasis in a hard-wrapped document. The natural answer is that a paragraph is one logical unit of inline content, so a group closes anywhere within it — but nothing states that, and an implementer would have to guess. Raised by decision 20.
+
+13. **Whether `**{…}` is worth having.** Strong emphasis inside a word is close to unattested, and symmetry with `*{…}` and `***{…}` is the only argument for it. Keeping it costs no rule, since it falls out of the run count; removing it would be the first arbitrary gap in a run sequence. Raised by decision 20 and deliberately not settled by it.
+
+14. **Strikethrough and HTML entity references.** Neither is mentioned anywhere in this document, and both are absent by accident rather than by decision. Strikethrough is a GitHub extension, and under decision 20 a braced form would be `~{text}`, which would cost `~` its position as a character with no meaning anywhere. Entity references are in CommonMark, and they render a character the source does not contain, which is decision 15's front half through a very small door; the compatibility argument for keeping them ended with decision 12.
 
 Formatter behaviour — the order of tokens inside a decorator, whether ordered-list numerals are normalized to all-`1.` or written in sequence, and whether a redundant label is removed — is deliberately not in this list. Those are questions about a tool, not about the language, and they are settled when the formatter is built.
