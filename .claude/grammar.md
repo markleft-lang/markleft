@@ -41,7 +41,7 @@ Two things are worth reading off the table directly, because neither is stated b
 
 **The line-start column holds exactly the six block markers** — `` ` ``, `#`, `-`, digits, `>`, `|` — and nothing else. That is Layer 1 stated as a table, and it is what makes a block's type decidable from its own first character.
 
-*Changed 2026-08-09 — decision 20, the largest single revision this table has had.* One character spent, six earned, and the language's last severity-3 inline meaning removed.
+*Changed 2026-08-09 — decision 20, the largest single revision this table has had.* One character spent (`@`), nine characters across the six other rows eased or freed outright, and the language's last severity-3 inline meaning removed.
 
 | Character | Before | After | What moved |
 |---|---|---|---|
@@ -75,7 +75,7 @@ The `\` row is the one that mattered, and it closed a defect rather than tidying
 
 ### The doublet table
 
-Layer 2 in one table. **A sigil means nothing unless the very next character is `{`** — so every operative inline construct opens with a fixed two-character literal, and every character in the list below is ordinary text everywhere else.
+Layer 2 in one table. **A sigil means nothing unless the very next character is `{`** — extended by `[` for the link and image forms that carry their own text — so every operative inline construct opens on a sigil run and one deciding code point, and every character in the list below is ordinary text everywhere else.
 
 | Opener | Construct | Written | Brace holds | Rule |
 |---|---|---|---|---|
@@ -184,7 +184,7 @@ A leading U+FEFF is not document text; elsewhere it is ordinary text. Content is
 
 Applied per line, in the order given. Container rules (R7, R8, R9) consume a prefix and then the remaining rules are applied to what is left of the line.
 
-**Every rule in this layer is decided by the first character of the line's remaining content**, and the six characters that can be that character are `` ` ``, `#`, `-`, a digit, `>`, and `|`. Nothing else opens a block, and no rule here looks at any line but its own.
+**Every block-opening rule in this layer is decided by the first character of the line's remaining content**, and the six characters that can be that character are `` ` ``, `#`, `-`, a digit, `>`, and `|`. Nothing else opens a block. The two rules that read no character make no exception to that — a blank line (R6) has no remaining content, and continuation (R10) is measured as indentation before any character is read — and no rule here looks at any line but its own.
 
 ### R6 — Blank line
 
@@ -329,9 +329,9 @@ The required space is doing almost all the work here, and it is the cleanest exa
 
 Applied within any block that takes inline content. Verbatim content (R11, R19) is never reached by any rule in this layer.
 
-**One rule governs this layer: a sigil means nothing unless the very next character is `{`.** R30 states the shared machinery; R17, R21, R23, R24, R27, and R29 are its instances, and they differ only in which sigil opens them and what the brace holds.
+**One rule governs this layer: a sigil means nothing unless the very next character is `{`** — extended by `[` for the link and image forms that carry their own text. R30 states the shared machinery; R17, R20, R21, R23, R24, R27, and R29 are its instances, and they differ only in which sigil opens them and what the brace holds.
 
-**Order barely matters here, and that is the point.** A left-to-right scan reaches a sigil before it reaches anything else, and no two constructs share an opener, so the numbering below records the parser's convenience rather than a precedence contest. Every rule in this layer is decidable from two code points.
+**Order barely matters here, and that is the point.** A left-to-right scan reaches a sigil before it reaches anything else, and no two constructs share an opener, so the numbering below records the parser's convenience rather than a precedence contest. Every rule in this layer is decidable from its sigil run and the code point after it — the verbatim span alone also needs the search for its matching run (R19), which is the price of uninterpreted content.
 
 ### R17 — Escape range
 
@@ -459,7 +459,7 @@ R22 is the rule that should have been read as a signal rather than a special cas
 
 **Parentheses come back.** `(` and `)` return to the free column, and CommonMark's balanced-paren rules for destinations go with them.
 
-**The two containers are not an inconsistency, they are the reading order.** `@[text]{target}` puts what you see in brackets and what it means in braces — the same order as `` `x=y`{math} ``, where the span is what you see and the label is what it means. It is the one place a sigil's next character is `[` rather than `{`, and that is the footnote on the one-line rule.
+**The two delimited parts are not an inconsistency, they are the reading order.** `@[text]{target}` puts what you see in brackets and what it means in braces — the same order as `` `x=y`{math} ``, where the span is what you see and the label is what it means. R24 and R27 are the only rules where a sigil's next character may be `[` rather than `{` — the stated extension on the one-line rule.
 
 ### R25 — Reference link — **REMOVED 2026-08-09 (decision 20)**
 
@@ -487,6 +487,12 @@ The cost is a real one and it is not hidden: a URL used twenty times is written 
 
 *Rewritten 2026-08-09 — decision 20.* The previous form was `![alt](src)`, unchanged from CommonMark; it is now the same delta as R24 and for the same reasons. **The mnemonic survives intact and is the reason the parallel matters:** `@[…]` links to the target, `![…]` shows it instead. The `!` is a presentation switch on the same construct, not a different one, and the two rules now differ by exactly one character rather than by a bracket-and-paren dance.
 
+### R28 — Text
+
+- **Form:** everything else.
+- **Order:** last.
+- **Collision:** none. **Severity 0.**
+
 ### R29 — Superscript and subscript
 
 - **Form:** `^{`, inline content, `}` raises the content; `_{`, inline content, `}` lowers it.
@@ -507,16 +513,10 @@ The rule self-sorts as a result. A variable set upright looks wrong to the perso
 
 *Added 2026-08-08 — decision 18. Generalized 2026-08-09 — decision 20.* This rule was written for two characters and turned out to be the shape of the whole layer. It is unchanged in form; what changed around it is that it stopped being a special case.
 
-### R28 — Text
-
-- **Form:** everything else.
-- **Order:** last.
-- **Collision:** none. **Severity 0.**
-
 ### R30 — The brace group
 
 - **Form:** a sigil, then a run of one or more `{`, then content, then a run of **exactly the opening length** of `}`.
-- **Range:** the shared machinery of R17, R21, R23, R24, R27, and R29. Runs are maximal, as in R11 and R19.
+- **Range:** the shared machinery of R17, R20, R21, R23, R24, R27, and R29 — R20's "sigil" being the closing backtick run it follows. Runs are maximal, as in R11 and R19.
 - **Order:** not applicable — a definition, not a match. Every rule in this layer is an instance of it.
 - **Decidable from:** the sigil and the code point after it.
 - **Reserves:** `{` and `}` only immediately after a sigil. A brace with no sigil before it is text, everywhere, always.
@@ -561,7 +561,7 @@ Kept because it is the clearest instance of a pattern worth watching for: **a ru
 
 CommonMark admits `~~~` as an alternative fence. The decision record never mentions it, `deltas.md` has no row for it, and every statement of decision 9's decorator grammar is written in terms of backticks.
 
-Removing them is what the one-way-to-do-it discipline argues for, and under decision 20's clean break it is no longer even a delta worth counting. Note the knock-on: `~` is in the free column above, and admitting tilde fences takes it out.
+Removing them is what the one-way-to-do-it discipline argues for, and under decision 20's clean break it is no longer even a delta worth counting. Note the knock-on: `~` is in the free column above, and admitting tilde fences takes it out. *`definition.md` Appendix D.5 now states the as-drafted answer — not inherited — pending confirmation; confirming it closes this finding.*
 
 ### Finding 5 — Strikethrough and HTML entity references are absent by accident, not by decision
 
@@ -569,7 +569,7 @@ Removing them is what the one-way-to-do-it discipline argues for, and under deci
 
 - **HTML entity references (`&amp;`, `&#169;`)** should almost certainly go: an entity reference renders a character the source does not contain, which is decision 15's front half through a very small door, and resolving one requires an HTML entity table, a dependency on a serialization the language claims independence from. Under the clean break the compatibility argument for keeping them is gone entirely.
 
-Both need a line in the record. The entity question is the substantive one.
+Both need a line in the record. The entity question is the substantive one. *Held as `definition.md` Appendix D.14.*
 
 ### Finding 6 — CLOSED 2026-08-09 — shortcut reference links were the only construct with action at a distance
 
@@ -579,7 +579,7 @@ Both need a line in the record. The entity question is the substantive one.
 
 Every Layer 2 rule opens and closes within one block, and R30's brace groups are no exception — an unclosed group is text under the uniform fallback. Nothing says whether a brace group may contain a line ending, which matters for a long link target or a wrapped emphasis in a hard-wrapped document.
 
-Raised by the R30 rewrite. It has a natural answer — a paragraph is one logical line, so a group closes anywhere within it — but nothing states it, and an implementer would have to guess.
+Raised by the R30 rewrite. It has a natural answer — a paragraph is one logical line, so a group closes anywhere within it — but nothing states it, and an implementer would have to guess. *Held as `definition.md` Appendix D.12.*
 
 ## Maintenance
 
