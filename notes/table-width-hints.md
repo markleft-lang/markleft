@@ -36,7 +36,7 @@ The parallel is fair and has to be answered rather than dodged: alignment is pre
 
 Right alignment says *these are quantities*. Centring says *these are short labels*. A reader can apply either in their head, and a plain-text reader who ignores both loses nothing. Seventy per cent says nothing about what the column contains; it is an instruction to a layout engine and to nothing else.
 
-Alignment also keeps GFM tables working unchanged, which matters under decision 12's spirit even though pipe tables are not in CommonMark and therefore not protected by it.
+Alignment also keeps GFM tables converting mechanically, which still matters under decision 12's clean break: the familiar spelling was kept for authors' hands, and alignment is part of what makes every existing table translate without a judgement call.
 
 ## Where the want goes instead
 

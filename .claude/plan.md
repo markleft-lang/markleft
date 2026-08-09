@@ -10,7 +10,7 @@ Where the project is, what comes next, and everything parked along the way. Plai
 
 Two things stand between us and a stable language. Everything else is downstream.
 
-- **Settle the definition.** `definition.md` is a full draft — twelve sections and four appendices, the language in prose in §4 and the twenty decisions with rationale in §5. What is left is the author's read-through and Appendix D, which lists every point it leaves open. Four it answers for the first time and needs confirmed; ten it does not answer, three of them raised by decision 20. Confirming any of them is a decision, so it goes in the record before it goes in the prose.
+- **Settle the definition.** `definition.md` is a full draft — twelve sections and four appendices, the language in prose in §4 and the twenty decisions with rationale in §5. What is left is the author's read-through and Appendix D, which lists every point it leaves open. Five it answers for the first time and needs confirmed; eight remain open, two of them raised by decision 20; one is closed with its number kept. Confirming any of them is a decision, so it goes in the record before it goes in the prose.
 
 - **Write the prose corpus** (in the `tests` repo, `corpus/`). Original prose written specifically to *break* prose-safety. **Decision 20 moved the targets**: money amounts, `snake_case`, `5 * 3 = 15`, and file globs are now safe by construction and are worth one document each as regression evidence rather than as attacks. What is actually attackable is the set of doublet openers — `#{` in Ruby and Elixir interpolation, `*{` in shell brace expansion, `\{` in TeX — and the six block markers at line start, which is where every remaining collision above severity 1 lives. Contributor-written; nothing scraped or borrowed.
 
@@ -49,12 +49,12 @@ None of these are commitments. They are things worth remembering when the releva
 
 ## Errands with outside dependencies
 
-These need someone else — a registry, a registrar, a lawyer. Worth advancing whenever the opportunity appears. The master copy is `.claude/decisions.md` §10; update both or they drift.
+These need someone else — a registry, a registrar, a lawyer. Worth advancing whenever the opportunity appears. The master copy is `.claude/decisions.md` §10, and `CLAUDE.md`'s checklist is the third copy — update all three or they drift.
 
 - [ ] Claim the `@markleft` package scope on npm
 - [ ] Claim `markleft` (or `markleft-core`) on crates.io
 - [ ] Register a domain — `markleft.org` or `markleft.ca`
-- [ ] Set the GitHub About box and topics on `markleft` (needs the web UI or `gh`). Proposed description: *"A formally specified successor to Markdown — prose-safe by construction, exactly one parse for every input. This repository is the standard."* Proposed topics: `markdown`, `markup-language`, `commonmark`, `specification`, `formal-grammar`, `markleft`. Six on purpose — more dilutes to the same effect as none
+- [x] Set the GitHub About box and topics on `markleft` — **done**; a description and five topics are live. The live wording differs from the proposal that follows, and the sixth topic was not applied; whether to adopt them is an editorial call, not an errand. Proposed description: *"A formally specified successor to Markdown — prose-safe by construction, exactly one parse for every input. This repository is the standard."* Proposed topics: `markdown`, `markup-language`, `commonmark`, `specification`, `formal-grammar`, `markleft`. Six on purpose — more dilutes to the same effect as none
 - [ ] Give `tests` and `.github` their own About boxes, consistent with the above and distinct from each other. `tests` is the key comparison, not a copy of the standard
 - [x] Add `LICENSE` (CC BY 4.0) to `tests` — **done 2026-08-09.** That repo had said "to be released CC0 pending review" since before the licence was settled on 2026-08-07, so it contradicted the record for two days. Worth remembering as a pattern: **a decision recorded in one repo does not propagate to the others by itself**, and the repos most likely to go stale are the ones nobody is editing
 - [ ] Legal: trademark search
@@ -64,11 +64,11 @@ These need someone else — a registry, a registrar, a lawyer. Worth advancing w
 
 Mostly not blocking. These are answerable, just not answered.
 
-- **Three of the grammar findings remain open**, listed in `.claude/grammar.md` in full: whether a block may interrupt a paragraph, which is now the largest item on that list; whether tilde fences exist; and whether strikethrough and HTML entity references are absent by decision or by accident. A seventh arrived with decision 20: whether a brace group may span a line ending.
+- **Four of the grammar findings remain open**, listed in `.claude/grammar.md` in full: whether a block may interrupt a paragraph, which is now the largest item on that list; tilde fences, which the definition now answers as drafted (not inherited — Appendix D.5, pending confirmation); strikethrough and HTML entity references (Appendix D.14); and whether a brace group may span a line ending (Appendix D.12, raised by decision 20).
 
 - **Three are closed, and all three closed the same way — by moving the construct rather than the invariant.** Pipe tables needed a line of lookahead, and the table rewrite removed it. Uniform escaping was the only decision that *widened* the collision surface, and decision 20 replaced the rule instead of adding the validator warning that had been proposed. Shortcut reference links were the only construct depending on text arbitrarily far away, and decision 20 removed them. **That pattern is now three for three and is the most reusable thing on this page.**
 
-- **Fourteen more in `definition.md` Appendix D.** Four the draft answers for the first time and needs confirmed; ten unanswered, of which D.6 is closed by decision 19. The three newest came with decision 20: whether a brace group may span a line ending, whether `**{…}` is worth having at all, and strikethrough and entity references.
+- **Fourteen more in `definition.md` Appendix D.** Five the draft answers for the first time and needs confirmed (invalid UTF-8, leading BOM, matching, "column", and tilde fences); eight remain open, two of them — the brace group spanning a line ending, and whether `**{…}` is worth having — raised by decision 20; and D.6 is closed by decision 19, its number kept.
 
 - **Should the governance sections split out?** Licensing, governance, and versioning are genuinely charter material sitting in a document that is otherwise a specification. If they split, that document gets the name `charter.md` back, correctly used this time.
 - **What should the formatter normalize?** Several small choices are deferred to when the formatter exists: the order of tokens inside a decorator, whether ordered lists are written all-`1.` or numbered in sequence, and whether a redundant label is removed.
@@ -83,11 +83,11 @@ Things the record has *derived* rather than assumed. They explain the shape of s
 - **Do not encode a position in something other things point at.** Positions shift; references do not want to. The narrower sibling of the rule above, and the reason anchors are named rather than numbered.
 
 - **Do not encode a value that a tool will later compute better.** A hand-written number overrides every future improvement to the code that would have derived it, and it goes stale silently besides. This is why there are no column width hints, and it is the general form of the argument against hand-maintained list numerals.
-- **Rarity in ordinary use is what makes a mark safe to give a job — and a rare *pair* is cheaper than a rare character.** The backtick survives as a delimiter because nobody types it in prose, and a colon works as a namespace separator for the same reason. Decision 20 is the general form: no character needs to be rare if the two-character sequence is, which is how `@`, `*`, `#`, `!`, and `\` all became safe while staying free on their own. The dollar sign lost its job for want of this rule fifteen years earlier.
+- **Rarity in ordinary use is what makes a mark safe to give a job — and a rare *pair* is cheaper than a rare character.** The backtick survives as a delimiter because nobody types it in prose, and a colon works as a namespace separator for the same reason. Decision 20 is the general form: no character needs to be rare if the two-character sequence is, which is how `*`, `#`, `!`, and `\` all became safe while staying free on their own — and how `@` could be spent at all, at severity 1, in one position. The dollar sign lost its job for want of this rule fifteen years earlier.
 
 - **Audit the rules that read best.** Decision 3's "backslash before any character, no exception list" was the cleanest sentence in the record and was silently mangling Windows paths and regular expressions — worse than the CommonMark behaviour it diverged from. It survived two days and a finding that recorded the symptom, because nobody re-read a rule that sounded that good. A rule nobody questions is a rule nobody checks.
 - **The tooling writes into the source, never into the render.** One policy, arrived at separately for tables of contents, file includes, and citations.
-- **The parser is total and local; the validator carries every judgement.** Unknown names, duplicate anchors, missing alt text, structural tabs, redundant labels, a fence closed only by the end of its container — seven of these now. The parser never fails on them; the validator warns.
+- **The parser is total and local; the validator carries every judgement.** Unknown names, duplicate anchors, dangling fragments, missing alt text, structural tabs, redundant labels, a fence closed only by the end of its container, an empty superscript or subscript group, a decorator after a non-backtick, a sigil before a bare alphanumeric run — ten of these now, consolidated in `definition.md` §4.2. The parser never fails on them; the validator warns.
 
 ## How to use this file
 

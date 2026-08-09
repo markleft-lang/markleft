@@ -48,7 +48,7 @@ Markdown + embedded JSX; "docs as code"; arbitrarily complex JavaScript in conte
 
 ### Typst (Rust, company-backed, stable language past v0.13)
 
-LaTeX's modern replacement: markdown-ish markup + real scripting language + incremental compiler + excellent error messages; instant preview; growing academic use, though journals still demand .tex. Not a Markdown fix — a document *preparation* system where markup is one layer of a programming language. Notable for us: Typst chose `$...$` for math and `_` for emphasis — the very collisions we're eliminating — acceptable there because Typst documents are programs, not prose-safe plain text. **Lessons: (a) meaningful error messages are a standout feature people rave about — validates Phase 3; (b) Rust + fast compiler + playground = the modern credibility stack; (c) different design goals legitimately produce different dollar verdicts — scope discipline matters.**
+LaTeX's modern replacement: markdown-ish markup + real scripting language + incremental compiler + excellent error messages; instant preview; growing academic use, though journals still demand .tex. Not a Markdown fix — a document *preparation* system where markup is one layer of a programming language. Notable for us: Typst chose `$...$` for math and `_` for emphasis — the very collisions Markleft removed, `$` freed outright and `_` narrowed to one position before `{` — acceptable there because Typst documents are programs, not prose-safe plain text. **Lessons: (a) meaningful error messages are a standout feature people rave about — validates Phase 3; (b) Rust + fast compiler + playground = the modern credibility stack; (c) different design goals legitimately produce different dollar verdicts — scope discipline matters.**
 
 ### Quarto/R Markdown, LaTeX itself, etc.
 
@@ -86,9 +86,9 @@ Nobody combines: small + formally specified + prose-safe + collision-free math +
 
 ## Standing on shoulders — explicit inheritances to acknowledge in the definition
 
-- **CommonMark:** spec-as-tests methodology; byte-compatibility baseline.
+- **CommonMark:** spec-as-tests methodology; and the block layer decision 11 keeps. *(The byte-compatibility baseline once listed here ended with decision 12's clean break.)*
 
-- **djot:** linear-time architecture, uniform escaping, attributes (as decorators), bracketed emphasis; most of our syntax decisions are djot-vetted. **Not** its raw-content design — decision 7 removes passthrough entirely, because raw HTML is transclusion and decision 15 leaves it out.
+- **djot:** linear-time architecture; attributes (as decorators); the uniform-escape principle, kept as delimiter lengthening after decision 20 retired the backslash form; its bracketed emphasis was the stepping stone to the braced form. Most of our syntax decisions are djot-vetted. **Not** its raw-content design — decision 7 removes passthrough entirely, because raw HTML is transclusion and decision 15 leaves it out.
 
 - **MyST/rST:** the directive/role concept, disciplined into a closed namespace — the extension *point*, never the content-generating directive, which decision 15 leaves out entirely.
 

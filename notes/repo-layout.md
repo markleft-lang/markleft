@@ -6,9 +6,9 @@
 
 The GitHub organization `markleft-lang` is the top-level home for every project repository, and the layout mirrors the normative hierarchy in `notes/normative-hierarchy.md` — one repository per layer.
 
-- `markleft-lang/markleft` — **the standard itself**: definition, grammar, normative prose, deltas appendix. CC0-intent.
+- `markleft-lang/markleft` — **the standard itself**: definition, grammar, normative prose, deltas appendix. CC BY 4.0, with CC0 the stated intent.
 
-- `markleft-lang/tests` — the conformance suite and prose corpus: the key comparison. Standalone and vendorable. CC0-intent.
+- `markleft-lang/tests` — the conformance suite and prose corpus: the key comparison. Standalone and vendorable. CC BY 4.0, with CC0 the stated intent.
 
 - `markleft-lang/markleft-rs` — the Rust realization: reference parser, canonical formatter, migrator, playground. MIT. Deferred to Phase 2; it does not exist yet.
 
@@ -35,6 +35,7 @@ A repository under an individual account signals a personal project, and a stand
 ```
 markleft/
   README.md      # what this is; states the normative boundary
+  LICENSE        # CC BY 4.0 legal code, verbatim — GitHub reads this
   definition.md     # normative
   grammar/       # normative
   deltas.md      # normative — the translation guide
@@ -53,7 +54,7 @@ The standard contains the standard and nothing else: no tests, no measurement da
 
 The conformance suite is its own repository rather than a directory, because its audience is not this project. Third-party implementations in other languages need to be able to vendor it — as a submodule, a subtree, or a release tarball — without cloning a Rust parser, a website, and a migrator they will never build. That is the whole point of a suite meant to serve as the key comparison: it has to be cheap for a stranger to run against their own parser.
 
-It is also the cleanest possible licensing surface. The repository is CC0-intent in its entirety, with no MIT code anywhere inside it, so a vendoring implementer never has to reason about which directory carries which terms.
+It is also the cleanest possible licensing surface. The repository is CC BY 4.0 in its entirety — CC0 the stated intent — with no MIT code anywhere inside it, so a vendoring implementer never has to reason about which directory carries which terms.
 
 ```
 tests/
@@ -75,9 +76,9 @@ Note that the pairing burden is not a cost of splitting the specification out of
 
 ## Corpus: original material only
 
-`tests/corpus/` holds prose documents **written for this project**. Nothing is scraped, imported, quoted, or adapted from anywhere else — no READMEs collected from GitHub, no excerpts from published writing, no third-party samples of any kind. Every file is original work by a project contributor, released under the same CC0-intent terms as the rest of the repository, so the suite carries exactly one licence and a vendoring implementer inherits no obligations from it.
+`tests/corpus/` holds prose documents **written for this project**. Nothing is scraped, imported, quoted, or adapted from anywhere else — no READMEs collected from GitHub, no excerpts from published writing, no third-party samples of any kind. Every file is original work by a project contributor, released under the same CC BY 4.0 terms as the rest of the repository, so the suite carries exactly one licence and a vendoring implementer inherits no obligations from it.
 
-This directly serves invariant 1: `.claude/decisions.md` §3 specifies that prose-safety is "testable via a prose corpus in CI," and that is what this corpus is for. Documents should be written to *attack* the invariant, not to flatter it — money amounts and bare dollars, `snake_case` identifiers, arithmetic like `5 * 3 = 15`, shell snippets, file globs, emoticons, mid-word punctuation, and prose that happens to begin a line with a hash or a hyphen. A corpus of well-behaved paragraphs proves nothing.
+This directly serves invariant 1: `.claude/decisions.md` §3 specifies that prose-safety is "testable via a prose corpus in CI," and that is what this corpus is for. Documents should be written to *attack* the invariant, not to flatter it. Decision 20 moved the targets: money amounts, `snake_case`, arithmetic like `5 * 3 = 15`, and file globs are now safe by construction and worth one document each as regression evidence, and the live targets are the doublet openers — `#{` in Ruby and Elixir interpolation, `*{` in shell brace expansion, `\{` in TeX — plus the six block markers at line start, where every collision above severity 1 lives. A corpus of well-behaved paragraphs proves nothing.
 
 **The known weakness, stated plainly.** We author the documents, so we author documents our rules already handle. Selection bias is unavoidable here in a way it would not be with collected material, and no amount of adversarial intent fully removes it — you cannot reliably write the input you did not think of. Two partial mitigations are worth the effort: recruit prose from contributors who have not read the grammar, and treat every real document that breaks under the Phase 3 migrator as a corpus submission.
 
@@ -121,8 +122,8 @@ Repositories do not repeat the organization name: `markleft-lang/markleft`, neve
 
 **A binding is not a realization, and does not take the name.** A thin wrapper over the Rust core — via WASM, FFI, or a subprocess — belongs in `markleft-rs/bindings/`, because it is a way of reaching that realization rather than an independent one. The distinction is not pedantry: running the conformance suite against a wrapper compares a realization with itself, which measures nothing while looking exactly like a passing key comparison. An ecosystem of five bindings and one parser has *one* implementation, and a standard that cannot tell the difference has lost the guarantee the suite exists to provide.
 
-`markleft-lang/tests` reads unambiguously in the organization listing. It reads less well once vendored, where a checkout named `tests` inside someone else's project says nothing about whose tests they are; `conformance` would survive that context better. The rename is free today and expensive after the first implementation vendors the URL, so it is worth settling before the repository is created rather than after.
+`markleft-lang/tests` reads unambiguously in the organization listing. It reads less well once vendored, where a checkout named `tests` inside someone else's project says nothing about whose tests they are; `conformance` would survive that context better. The rename was free before the repository was created and grows expensive after the first implementation vendors the URL; the repo now exists as `tests`, so the window is closing with every external link, and reopening the question means moving a published URL.
 
 ## A note on this file's extension
 
-This memo dogfoods the language rules — ATX headings, fenced code only, `*` emphasis only, no underscore emphasis — but carries `.md`, because no Markleft renderer exists yet and GitHub must be able to display it. Rename the spec documents to `.markleft` once the reference parser and site rendering land in Phase 2.
+This memo is ordinary Markdown, like every `.md` file in these repositories: decision 20 ended the dogfood rule, because a document containing a link is one language or the other and GitHub renders only Markdown. The spec documents move to `.markleft` sources with generated `.md` companions at Phase 3, when the reference parser and the canonical formatter exist — one stage, and the only one.

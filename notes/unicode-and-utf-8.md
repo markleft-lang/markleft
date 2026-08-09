@@ -38,9 +38,9 @@ Decision 14's **content is never normalized** clause already immunizes most of t
 
 - **What "column" means for decision 6.** Content-column alignment defined in terms of display width depends on East Asian Width, which is a versioned property with entries that have moved between releases.
 
-**Recommendation for the definition:** define both version-independently — code-point identity for label matching, code-point count for columns — rather than pinning a minimum Unicode version. A pinned version is a dependency that ages, and it puts the specification on someone else's release schedule; the argument is the one in `notes/normative-hierarchy.md`, that a definition written to be independent of its realizations outlives all of them. The cost is that a language with wide characters aligns by count rather than by apparent width, which is worth stating plainly in the definition rather than burying.
+**Recommendation for the definition — adopted:** `definition.md` §4.1 now defines both version-independently, exactly as recommended here — code-point identity for label matching, code-point count for columns — held as Appendix D items 3 and 4 pending confirmation, rather than pinning a minimum Unicode version. A pinned version is a dependency that ages, and it puts the specification on someone else's release schedule; the argument is the one in `notes/normative-hierarchy.md`, that a definition written to be independent of its realizations outlives all of them. The cost is that a language with wide characters aligns by count rather than by apparent width, which is worth stating plainly in the definition rather than burying.
 
-The other two riders — byte-order mark handling and what a conforming parser does with invalid UTF-8 — are unaffected by version drift. They are one-time choices about a frozen encoding, and this memo does not settle them.
+The other two riders — byte-order mark handling and what a conforming parser does with invalid UTF-8 — are unaffected by version drift. They are one-time choices about a frozen encoding; this memo did not settle them, and `definition.md` §4.1 now answers both (a leading U+FEFF is not document text; invalid UTF-8 is rejected, not repaired), held as Appendix D items 1 and 2 pending confirmation.
 
 ## Sources
 

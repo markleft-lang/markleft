@@ -46,7 +46,7 @@ The point of "the document governs" is that it settles *where a change must land
 
 - **Version the document; the suite follows it.** The suite records the spec revision it exercises, and the spec is never tagged ahead of the suite that exercises it.
 
-- **Repository layout follows the hierarchy** — one repo per layer: `markleft-lang/markleft` is the definition (CC0), `markleft-lang/tests` is the key comparison (CC0), and `markleft-lang/markleft-rs` will hold the Rust realization (MIT, Phase 2). The namesake repo is the standard itself, which states the hierarchy in the org listing before anyone reads a word of it. See `notes/repo-layout.md`.
+- **Repository layout follows the hierarchy** — one repo per layer: `markleft-lang/markleft` is the definition (CC BY 4.0), `markleft-lang/tests` is the key comparison (CC BY 4.0), and `markleft-lang/markleft-rs` will hold the Rust realization (MIT, Phase 2). The namesake repo is the standard itself, which states the hierarchy in the org listing before anyone reads a word of it. See `notes/repo-layout.md`.
 
 ## What changed, and why it is recorded here
 
