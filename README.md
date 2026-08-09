@@ -1,14 +1,31 @@
 # Markleft
 
+> **Everything that is not prose leaves a mark.**
+
 A formally specified, ambiguity-free successor to Markdown: the same size and the same prose-like source, with a formal grammar, an executable conformance suite, and exactly one parse for every input.
 
 **This repository is the standard.** Not a parser that happens to define the language by its behavior — the specification itself. Implementations live elsewhere, and none of them is privileged.
 
+## One rule for every inline construct
+
+**A sigil means nothing unless the very next character is `{`.**
+
+```
+*{emphasis}      **{strong}      ***{both}
+^{superscript}   _{subscript}    #{anchor}
+@{link}          @[text]{link}   ![alt]{image}
+\{escaped}       `verbatim`{label}
+```
+
+So the whole language is three sentences. **Blocks** are decided by position in the line — the start opens one, the end breaks one. **Inlines** are decided by a sigil immediately followed by a brace. **Verbatim** is delimited by matching backtick runs, because content that is not interpreted cannot be closed by balancing.
+
+Everything else follows, including the part that matters most: `5 * 3 = 15`, `snake_case`, `2^32`, `[sic]`, `C:\Users\name`, `#hashtag`, `@handle`, and `{"key": 1}` are all ordinary text, and none of them needs an escape.
+
 ## Six guarantees
 
-- **Prose-safety.** Natural-language prose renders verbatim. Money, snake_case, `5 * 3 = 15`, and shell snippets are safe by construction, never by heuristic.
+- **Prose-safety.** Natural-language prose renders verbatim. Money, snake_case, `5 * 3 = 15`, and shell snippets are safe by construction, never by heuristic — there is no flanking rule and no lookahead anywhere in the language.
 
-- **Verbatim means verbatim.** A backslash before any character yields that character — line endings included, no exception list. Any means any: the full Unicode range is text.
+- **Verbatim means verbatim.** Content inside a fence or a span is carried through untouched; TeX backslashes survive. Where a delimiter appears in your content, you lengthen the delimiter — one escape mechanism, at every size, with no exception list.
 
 - **Five minutes.** The complete core fits on one reference card. No rule has an "unless" clause.
 
@@ -20,13 +37,19 @@ A formally specified, ambiguity-free successor to Markdown: the same size and th
 
 ## What Markleft is not
 
-Not a feature platform. Markdown's problem was never a shortage of features — it was that the same source produces different documents. The job here is to remove that ambiguity while keeping what made Markdown win: source that reads as plain text, a core small enough to learn in one sitting, and familiarity for anyone who already writes Markdown.
+**Not Markdown, and not compatible with it.** Markleft keeps Markdown's block layer — headings, lists, block quotes, fences, tables — and replaces its inline layer entirely. A Markdown document does not parse as intended here, and a Markleft document does not render as intended there. That break is deliberate: near-compatibility is exactly what produced Markdown's flavour drift, where every implementation is *almost* the same as every other and a writer cannot tell whether their document survives a move between platforms. A platform can support both languages side by side, as two languages with two file extensions. What stops paying is the temptation to stretch one implementation across both.
+
+The spirit is inherited; the syntax is not. What Markleft takes from Markdown is the thing Markdown got right — that a source file should read as prose, and that the marks should be few and quiet.
+
+Not a feature platform, either. Markdown's problem was never a shortage of features — it was that the same source produces different documents. The job here is to remove that ambiguity while keeping source that reads as plain text and a core small enough to learn in one sitting.
 
 It is a little richer than Markdown where the richness pays for itself. Math is part of the core in the way that matters: `$` is never math syntax, and there is a first-class construct — fenced and inline — whose content is verbatim and safe from reinterpretation. A renderer still chooses the typesetting, as it always did; what it can no longer do is change what the source says. Decorators and pipe tables earn their place too, several of them adopted from djot, whose design solved these problems well and is credited throughout. Every addition clears the same bar: it removes an ambiguity or fills a genuine gap, **and it costs nothing in plain-text clarity**. A construct that makes ordinary, unmarked prose read worse does not clear the bar, however much it offers elsewhere.
 
 **The five-minute property is the budget.** Most of the language decisions remove something; a few add; the total still has to fit on one reference card. "Markleft could also do X" is therefore not an argument on its own — the argument has to be that X is worth what it costs every reader who never uses it.
 
-Concretely, Markleft is not a document-preparation system (Typst, Quarkdown, Quarto), not an extension layer grown over an ambiguous base (MyST, MDX, Markdoc), and not a superset of Markdown.
+Concretely, Markleft is not a document-preparation system (Typst, Quarkdown, Quarto), not an extension layer grown over an ambiguous base (MyST, MDX, Markdoc), and not a dialect, superset, or flavour of Markdown.
+
+**The name turns out to describe the design.** Every construct's mark sits to the left of its content: blocks mark the left of a line, inlines mark the left of a span. That was not planned — the name came first — and it is where the tagline at the top comes from. Read it backwards and it is the guarantee: no mark, therefore prose.
 
 ## What is normative
 
@@ -38,7 +61,9 @@ The specification document governs. The conformance suite in [markleft-lang/test
 
 ## Status
 
-Phase 0. The definition is being drafted; no implementation has shipped.
+**Version 0.1.0.** Phase 0 — the definition is drafted and no implementation has shipped. The version bands are stated in the definition, section 12: `0.x.0` when the language changes, `0.x.y` for everything else, `1.0.0` when this document is normative and a realization passes the conformance suite.
+
+The `.md` files in this repository are Markdown, and they are not written in Markleft. They cannot be: a document containing a link is one language or the other, and GitHub renders only the first. Markleft sources arrive when the reference parser and the canonical formatter do.
 
 The phase checklist on the [organization profile](https://github.com/markleft-lang) is the status board, and it is the single source of truth. It is kept there rather than here because the work spans repositories: the conformance suite lands alongside the grammar, and the reference parser arrives in a repository that does not exist yet.
 
