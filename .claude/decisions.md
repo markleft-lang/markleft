@@ -305,13 +305,15 @@ Exactly two extensions ship: a one-meaning language shouldn't have four names fo
 
 - [ ] Trademark search via counsel (CIPO, USPTO, EUIPO)
 
-- [ ] CC0 instrument legal review (Crown copyright interaction)
+- [ ] CC0 instrument legal review (Crown copyright interaction) — the licence itself is settled at CC BY 4.0 and applied in both repos; what remains is the prior question of whether this is Crown copyright at all, and the exact notice wording
 
-- [ ] Draft the Phase 0 definition (public-standard voice from day one — a standard has to read like one), including the explicit non-endorsement statement
+- [x] Draft the Phase 0 definition — **done**, twelve sections and four appendices, rewritten for decision 20 and tagged 0.1.0. The non-endorsement statement is §10. What remains is the author's read-through and Appendix D, which is Phase 0 work rather than this item
 
-- [ ] Seed `tests/corpus/` with contributor-authored prose
+- [x] Add `LICENSE` (CC BY 4.0) to `tests` — **done 2026-08-09.** That repo had read "to be released CC0 pending review" since before the licence was settled on 2026-08-07, contradicting §7 for two days. **The pattern is worth keeping: a decision recorded in one repo does not propagate to the others by itself, and the repo most likely to go stale is the one nobody is editing.** Both sibling repos were swept for the same class of error in the same session
 
-- [ ] Create the `tests` and `.github` repos under the org
+- [ ] Seed `tests/corpus/` with contributor-authored prose — targets restated for 0.1.0 in that repo's `README.md` and `CLAUDE.md`
+
+- [x] Create the `tests` and `.github` repos under the org — **done**, both exist with remotes and are aligned to 0.1.0
 
 ## 11. Amendments
 

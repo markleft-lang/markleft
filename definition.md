@@ -1050,6 +1050,8 @@ The trigger for something more is specific: **more than one decision-maker.** At
 
 **The specification is never tagged ahead of the suite that exercises it.** A standard whose suite silently lags it is precisely the drift this project exists to prevent.
 
+*The rule binds from the first release of the suite onward, and saying so is not a loophole.* Version 0.1.0 of this document was tagged while the suite was still a skeleton, which looks like a violation and is not one: the rule protects against a suite that once matched a specification and quietly stopped, and before any suite exists there is nothing that can lag. What the suite records in the meantime is which revision it *targets*, which it does now. Stating the qualifier is better than leaving a reader to find an apparent contradiction between this clause and the tag history — and it is the only version of the rule that can survive Phase 0, where the definition necessarily comes first.
+
 **A change to the language and its conformance examples land together.** They are opened together and merged together across the two repositories; neither lands alone. This is weaker than atomicity and will occasionally be violated by accident, which is why continuous integration checks it.
 
 **No behaviour may exist only in the suite** (section 9.3). A reviewer of a new conformance example should ask which clause of this document determines it, and treat "none" as a finding rather than a formality.
