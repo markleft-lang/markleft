@@ -107,6 +107,8 @@ This makes the language's escape story one sentence: **when a delimiter appears 
 
 - A literal trailing backslash keeps an answer with no new machinery: `the drive root is C:\{\}`.
 
+It is also not the exception to left-marking that it first appears to be. `\` before a line ending is the sigil operating on the line ending — sitting immediately to its left, which is the shape of `\{` exactly. So `\` takes two operands, a brace range and a line ending, and the second is structurally forced rather than chosen: a line ending is the one character that cannot appear inside a brace range, because a brace range is inline. Decision 3 already said as much, in the clause about "explicitly including a line ending."
+
 `\\` was considered and does not earn its place. A trailing `\\` is exactly as invisible as a trailing `\`, so it buys nothing on intentionality, and it puts UNC paths (`\\server\share`) and escaped backslashes in quoted code into the blast radius. `\n` reintroduces the exception list decision 3 exists to avoid.
 
 **`\{}` is a no-op**, and correctly so: an escape range with no content renders nothing. It is not a hard break, and it is what a search-and-replace leaves behind when it empties one.
@@ -149,11 +151,27 @@ One character, on one of three forms, and the heaviest form gets cheaper.
 
 ## The name turns out to describe the design
 
-Every mark in the language sits to the **left** of what it marks. Blocks mark the left of a line; inlines mark the left of a span. The block layer was already left-marked — `#`, `-`, `>`, `|` are all line-start prefixes — so this is not a property of the new inline rule, it is a property of the whole language that the new rule completes.
+**Every construct's mark sits to the left of that construct's content.** Blocks mark the left of a line; inlines mark the left of a span. The block layer was already left-marked — `#`, `-`, `>`, `|` are all line-start prefixes — so this is not a property of the new inline rule, it is a property of the whole language that the new rule completes.
 
-Two things are marked otherwise, and both are already argued for on other grounds: verbatim is delimited on both sides, and the hard break is marked at the right end of a line.
+Stated that way it holds without exception, and the two constructs that look like exceptions are worth working through, because the loose phrasing "everything is marked on the left" needs footnotes the exact one does not.
 
-This is a retronym and the prose should say so — the name came first, and it turns out to describe the design. Three readings now stack: *sideways* from markup and markdown, *what is left* after fifteen years of curation, and *marks on the left*. The third is a mnemonic rather than a joke, so it does not spend the humour budget.
+**Verbatim is not an exception.** A span is an opener plus a scope end, which is what `*{…}` is. Only the closing character differs — a matching backtick run rather than `}` — and the mark is the opening run either way.
+
+**The hard break is not an exception**, for the reason given under Mechanics: `\` sits immediately to the left of the line ending it marks.
+
+**Decorators are, and they are a different thing.** `` `x=y`{math} `` and ```` ```math ```` place the annotation after what it annotates. The mark is still left of its own content — `{math}` is opened by the backtick before it — but the relationship points backwards. That is annotation rather than marking, and it is the one place in the language the arrow reverses. It is also open question 5 from a second direction.
+
+This is a retronym and the prose should say so — the name came first, and it turns out to describe the design. Four readings now stack: *sideways* from markup and markdown, *what is left* after fifteen years of curation, *marks on the left*, and the tagline below, where the name is the verb in the past tense. Only the second is a joke, so the humour budget is untouched.
+
+### The tagline
+
+> **Everything that is not prose leaves a mark.**
+
+Its content is the contrapositive: **no mark, therefore prose.** That is invariant 1 stated from the reader's side rather than the parser's, and the cardinal rule at the same time, without naming either.
+
+It is also not true of the language as it stands. "Leaves a mark" requires that a mark be findable, and emphasis today is decided by flanking — whether `*` is a mark or a character is settled by what surrounds it, which a reader cannot see. So the sentence is an argument for this proposal rather than a description of the language, and it becomes true on the day the proposal lands.
+
+*"Leaves a **clear** mark"* was considered and the adjective went. It adds nothing the sentence does not already carry, and it invites a footnote about the hard break — the one mark a reader cannot see — which the shorter form does not need.
 
 **Markless** was considered and does not survive this change. "Less" reads as austerity, which `CLAUDE.md` explicitly disclaims, and the language now marks more visibly rather than less.
 
