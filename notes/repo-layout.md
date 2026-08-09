@@ -37,7 +37,7 @@ markleft/
   README.md      # what this is; states the normative boundary
   definition.md     # normative
   grammar/       # normative
-  deltas.md      # normative — doubles as the migration guide
+  deltas.md      # normative — the translation guide
   notes/         # non-normative memos, like this one
   CLAUDE.md      # project scaffolding — not part of the standard
   .claude/       # decision record and prior-art survey — likewise

@@ -114,7 +114,7 @@ markleft/         # this repo — the standard itself, at its root
   LICENSE         # CC BY 4.0 legal code, verbatim — GitHub reads this
   definition.md      # normative — scaffold so far, no normative text yet
   grammar/        # normative — not created yet (Phase 1)
-  deltas.md       # normative — doubles as the migration guide; scaffold so far
+  deltas.md       # normative — the translation guide; scaffold so far
   notes/          # non-normative memos (design challenges, layout decisions)
   CLAUDE.md       # scaffolding — not part of the released standard
   .claude/        # scaffolding — decision record, prior-art survey, conventions

@@ -20,7 +20,9 @@ Direct implementation of the "Beyond Markdown" ideas: linear-time parsing, no ba
 
 ### Quarkdown (v2.0 April 2026, Kotlin/JVM)
 
-"Markdown with superpowers": single source → paper/slides/site/notes via a `.doctype` directive; templating; standard library. In practice a typesetting language with markdown-shaped syntax (family: LaTeX/Typst/AsciiDoc). No compatibility mode with existing Markdown pipelines — adoption is a switch, not incremental; commentators note it thereby inherits AsciiDoc's exact adoption problem. **Lesson: "markdown-shaped" is not "markdown-compatible"; our byte-for-byte-where-harmless principle is the answer.**
+"Markdown with superpowers": single source → paper/slides/site/notes via a `.doctype` directive; templating; standard library. In practice a typesetting language with markdown-shaped syntax (family: LaTeX/Typst/AsciiDoc). No compatibility mode with existing Markdown pipelines — adoption is a switch, not incremental; commentators note it thereby inherits AsciiDoc's exact adoption problem. **Lesson: "markdown-shaped" is not "markdown-compatible".**
+
+*Revised 2026-08-09 — decision 20, and this entry now cuts toward us.* The original lesson ended "our byte-for-byte-where-harmless principle is the answer", and that principle is spent: Markleft is not Markdown-compatible either, and adoption here is also a switch rather than a slope. **So the honest form of the lesson is that near-compatibility was never the thing that made adoption incremental** — Quarkdown's problem is that it is a *typesetting language*, and switching to one means rewriting how a document is produced, not how it is spelled. Markleft is a language of the same size and shape, with a mechanical translation and two file extensions, so a switch costs a migrator run and a day of finger retraining. **Whether that difference is large enough is the open bet of this project**, and it should be watched rather than assumed: if Markleft stalls the way Quarkdown and AsciiDoc did, this entry is where the warning was written down.
 
 ## Strategy 3 — Extend Markdown upward for scientific/structured publishing
 
