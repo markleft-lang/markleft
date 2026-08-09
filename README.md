@@ -8,12 +8,13 @@ A formally specified, ambiguity-free successor to Markdown: the same size and th
 
 ## One rule for every inline construct
 
-**A sigil means nothing unless the very next character is `{`.**
+**A sigil means nothing unless the very next character is `{` — or `[`, when the construct carries its own text.**
 
 ```
 *{emphasis}      **{strong}      ***{both}
 ^{superscript}   _{subscript}    #{anchor}
-@{link}          @[text]{link}   ![alt]{image}
+@{link}          @[text]{link}
+!{image}         ![alt]{image}
 \{escaped}       `verbatim`{label}
 ```
 

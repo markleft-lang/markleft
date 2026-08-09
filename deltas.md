@@ -22,7 +22,7 @@ The shortest useful summary of the whole table: **Markleft keeps Markdown's bloc
 | table | `\| a \| b \|` | `\| a \| b \|` |
 | verbatim span | `` `code` `` | `` `code` `` |
 
-Those are tightened rather than reshaped — decisions 4, 5, 6, and 8 remove second spellings and close ambiguities, and rows 5 to 24 below are that work. Everything from row 25 on is the inline layer, and that is where the break is.
+Those are tightened rather than reshaped — decisions 4, 5, 6, and 8 remove second spellings and close ambiguities, and rows 3 to 19 below are that work; rows 1 and 2 are the dollar verdict, and rows 20 to 24 carry the remaining block-side decisions. Everything from row 25 on is the inline layer, and that is where the break is.
 
 ## The block layer
 
