@@ -336,6 +336,8 @@ The required space is doing almost all the work here, and it is the cleanest exa
 - **Reserves:** nothing. **Severity 0.**
 - **Escape:** not applicable.
 
+*Note — decision 24.* One source line per paragraph is recommended, never required. The line-start column is the most reserved position in the language, and a hard wrap rolls a die at every wrap point — a continuation line opening `- `, `> `, or `1984. ` fires a marker mid-paragraph. A soft-wrapped source exposes only true block openings to that column; the canonical formatter writes it, and wrapped sources stay well-formed.
+
 ### R31 — Task item
 
 - **Form:** inside a bullet item (R8), content beginning with a **state box** — `[`, then one space or one `x`, then `]`, then one space. `[ ]` is unchecked; `[x]` is checked.
@@ -590,7 +592,7 @@ If adopted, a line inside an open paragraph is text no matter what it looks like
 
 The cost is a real surprise in the other direction: a list written immediately under a line of prose, with no blank line between, stops being a list.
 
-**Worth deciding explicitly, either way**, and it is now the largest remaining item on this list — decision 20 closed the two findings that outranked it.
+**Worth deciding explicitly, either way**, and it is now the largest remaining item on this list — decision 20 closed the two findings that outranked it. *Decision 24 reduces the everyday pressure here — a recommended single-line paragraph has no continuation lines to misfire — but a recommendation is not grammar, and the finding stands.*
 
 ### Finding 2 — CLOSED 2026-08-08 — pipe tables needed one line of lookahead
 
