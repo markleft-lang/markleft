@@ -27,19 +27,21 @@ Each entry cites the rule that claims it (`R11`, `R30`, …); those rules are th
 | `[` `]` | free | link or image text, only immediately after `@` or `!` (R24, R27); state box at the start of a bullet item's content (R31) | 1 |
 | `{` `}` | free | scope, only immediately after a sigil (R30) | 1 |
 | `~` | free | strikethrough, only before `{` (R32) | 1 |
+| `<` | aside marker, then one space, or alone on the line (R33) | free | 1 |
 | `(` `)` | **free** | **free** | **0** |
-| `<` | **free** | **free** | **0** |
 | `+` | **free** | **free** | **0** |
 | `$` | **free** | **free** | **0** |
 | `%` `:` `;` `?` `/` `=` `&` `"` `'` `,` `.` | **free** | **free** | **0** |
 
-**Sixteen** of the thirty-two ASCII punctuation characters have no meaning anywhere in the language: the eleven in the last row, plus `(`, `)`, `<`, `+`, and `$`. That is the concrete form of invariant 1, and it is the number to watch: **any future decision that moves a character out of the free column is spending the language's main asset, and any decision that moves one into it is the language's main dividend.**
+**Fifteen** of the thirty-two ASCII punctuation characters have no meaning anywhere in the language: the eleven in the last row, plus `(`, `)`, `+`, and `$`. That is the concrete form of invariant 1, and it is the number to watch: **any future decision that moves a character out of the free column is spending the language's main asset, and any decision that moves one into it is the language's main dividend.**
 
 Two things are worth reading off the table directly, because neither is stated by any single rule:
 
 **`-` is the only severity-3 character in the language.** Its collision is R8's, it is inherited from Markdown rather than introduced here, and every Markdown writer has already been trained around it.
 
-**The line-start column holds exactly the six block markers** — `` ` ``, `#`, `-`, digits, `>`, `|` — and nothing else. That is Layer 1 stated as a table, and it is what makes a block's type decidable from its own first character.
+**The line-start column holds exactly the seven block markers** — `` ` ``, `#`, `-`, digits, `>`, `<`, `|` — and nothing else. That is Layer 1 stated as a table, and it is what makes a block's type decidable from its own first character. *(Six until decision 23 added the aside; the six-marker form of this sentence is quoted as an asset in decisions 20 through 22, and the growth was spent knowingly.)*
+
+*Changed 2026-08-10 — decision 23.* `<` is spent at the start of a line — the aside marker, the block quote mirrored — and stays free inside one. The free count drops to fifteen, and the line-start column grows to seven for the first time since it was frozen at six. `<` had been freed by decision 20 the day before; the fast respend is recorded rather than smoothed over.
 
 *Changed 2026-08-10 — decision 22.* `~` is spent — strikethrough, one position (immediately before `{`), at severity 1. The first character since `@` to leave the free column outright, and the free count drops to sixteen.
 
@@ -187,9 +189,9 @@ A leading U+FEFF is not document text; elsewhere it is ordinary text. Content is
 
 ## Layer 1 — Blocks
 
-Applied per line, in the order given. Container rules (R7, R8, R9) consume a prefix and then the remaining rules are applied to what is left of the line.
+Applied per line, in the order given. Container rules (R7, R33, R8, R9) consume a prefix and then the remaining rules are applied to what is left of the line.
 
-**Every block-opening rule in this layer is decided by the first character of the line's remaining content**, and the six characters that can be that character are `` ` ``, `#`, `-`, a digit, `>`, and `|`. Nothing else opens a block. The two rules that read no character make no exception to that — a blank line (R6) has no remaining content, and continuation (R10) is measured as indentation before any character is read — and no rule here looks at any line but its own.
+**Every block-opening rule in this layer is decided by the first character of the line's remaining content**, and the seven characters that can be that character are `` ` ``, `#`, `-`, a digit, `>`, `<`, and `|`. Nothing else opens a block. The two rules that read no character make no exception to that — a blank line (R6) has no remaining content, and continuation (R10) is measured as indentation before any character is read — and no rule here looks at any line but its own.
 
 ### R6 — Blank line
 
@@ -319,7 +321,7 @@ The required space is doing almost all the work here, and it is the cleanest exa
 - **Reserves:** a line beginning with `[` when the bracket closes and is followed by `:`.
 - **Collision:** a line of prose opening with a bracketed citation followed by a colon — `[Smith]: the argument runs…`. **Severity 1.**
 
-**What the removal returns.** `[` leaves the line-start column, which is what leaves that column holding exactly the six block markers. The capability is unchanged in substance: a link's target is written where the link is, and a target used repeatedly is a repetition rather than a definition. See R25 for why the shortcut form was the real cost.
+**What the removal returns.** `[` leaves the line-start column, which is what left that column holding exactly the six block markers *(seven since decision 23 added the aside)*. The capability is unchanged in substance: a link's target is written where the link is, and a target used repeatedly is a repetition rather than a definition. See R25 for why the shortcut form was the real cost.
 
 ### R16 — Paragraph
 
@@ -340,7 +342,19 @@ The required space is doing almost all the work here, and it is the cleanest exa
 - **Collision:** an item genuinely beginning with a bracketed box — a quoted checklist, or `- [x] marks the spot`. **Severity 1.**
 - **Escape:** `\{[x]}`, or `\{[}` on the bracket alone.
 
-*Added 2026-08-10 — decision 21.* A refinement of R8 rather than a seventh block marker: the line-start column still holds exactly six characters, and the box sits inside an item the marker already opened. The spelling is Markdown's because the reader's convention governs (decision 18's argument) — `[ ]`/`[x]` is the forty-year plain-text checkbox. `-[x]` and `-{x}` were both set aside: the first for the failure asymmetry (every GFM-trained hand types the space form, so the space form must be the construct), the second because sigil-then-brace is Layer 2's rule and the block layer holds no brace anywhere. GFM's looseness is removed — `[X]` is text, with a validator warning and a formatter fix. Task lists are also the first capability to *fail* §2's routing test, which is why the grammar carries them; the argument is in the decision.
+*Added 2026-08-10 — decision 21.* A refinement of R8 rather than a new block marker: the line-start column gains nothing here, and the box sits inside an item the marker already opened. The spelling is Markdown's because the reader's convention governs (decision 18's argument) — `[ ]`/`[x]` is the forty-year plain-text checkbox. `-[x]` and `-{x}` were both set aside: the first for the failure asymmetry (every GFM-trained hand types the space form, so the space form must be the construct), the second because sigil-then-brace is Layer 2's rule and the block layer holds no brace anywhere. GFM's looseness is removed — `[X]` is text, with a validator warning and a formatter fix. Task lists are also the first capability to *fail* §2's routing test, which is why the grammar carries them; the argument is in the decision.
+
+### R33 — Aside marker
+
+- **Form:** `<` at the start of the line's remaining content, then one space, then content — or `<` alone on the line, the aside's blank line.
+- **Range:** a container, as R7: nests without limit and holds any blocks.
+- **Order:** 2, as a container prefix alongside R7; the two share a shape, and no input satisfies both. *(Numbered past Layer 2 because rule numbers are serial and permanent; it belongs here.)*
+- **Decidable from:** this line.
+- **Reserves:** `<` in first position when followed by one space, or alone on the line.
+- **Collision:** a line of prose opening with a spaced comparison — `< 5 ms is the target`. **Severity 1.** `<div>`, `<!DOCTYPE`, `<T>`, and `<1%` are all text, the required space missing.
+- **Escape:** `\{<} 5 ms`.
+
+*Added 2026-08-10 — decision 23.* **The converse of the block quote, and the mirror is the meaning:** `>` marks content that presses harder than the prose around it, `<` marks content that presses less — an aside, liftable with little impact — and both mark the left of every line they own. Rendering is the renderer's choice: a sidebar, a margin note, smaller type, or a disclosure fold on an interactive target; folding is one rendering of the semantic, never the construct, which is what keeps the rule meaningful in print. **The one deliberate asymmetry with R7 is the required space.** `>` inherits email's optional-space habit under decision 11; `<` has no such tradition to keep, and the requirement is what makes a pasted `<div>` or `<!DOCTYPE` at line start ordinary text by construction rather than by luck. No title line — a folding renderer may use the first line by convention — and no type vocabulary: decision 9 removed classes, and "Note:" is text.
 
 ## Layer 2 — Inlines
 

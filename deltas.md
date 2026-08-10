@@ -22,7 +22,7 @@ The shortest useful summary of the whole table: **Markleft keeps Markdown's bloc
 | table | `\| a \| b \|` | `\| a \| b \|` |
 | verbatim span | `` `code` `` | `` `code` `` |
 
-Those are tightened rather than reshaped — decisions 4, 5, 6, and 8 remove second spellings and close ambiguities, and rows 3 to 19 below are that work; rows 1 and 2 are the dollar verdict, and rows 20 to 25 carry the remaining block-side decisions. Everything from row 26 on is the inline layer, and that is where the break is.
+Those are tightened rather than reshaped — decisions 4, 5, 6, and 8 remove second spellings and close ambiguities, and rows 3 to 19 below are that work; rows 1 and 2 are the dollar verdict, and rows 20 to 26 carry the remaining block-side decisions. Everything from row 27 on is the inline layer, and that is where the break is.
 
 ## The block layer
 
@@ -53,6 +53,7 @@ Those are tightened rather than reshaped — decisions 4, 5, 6, and 8 remove sec
 | 23 | Unicode throughout, UTF-8 encoded; content is never normalized | 14 | None expected; see the open riders in decision 14 |
 | 24 | The thematic break is removed; `---`, `***`, `___` are ordinary text | 19 | Migrator reports each one — a break is a heading that was not written, and only the author knows which |
 | 25 | Task lists are core and strictly formed: the state box is exactly `[ ]` or `[x]`, bullet items only, one space each side | 21 | Migrator rewrites `[X]` to `[x]`; a box on an ordered item is reported |
+| 26 | Asides are core: `<` then a space marks each line of an aside, the block quote mirrored | 23 | New capability; nothing to translate — the natural home for what `<details>` carried |
 
 ## The inline layer
 
@@ -60,22 +61,22 @@ Everything below follows from one rule (decision 20): **a sigil carries meaning 
 
 | # | Delta | Decision | Markdown | Markleft |
 |---|-------|----------|----------|----------|
-| 26 | Emphasis is braced; there is no paired form and no flanking rule | 2, 20 | `*em*` | `*{em}` |
-| 27 | Strong emphasis is braced | 2, 20 | `**strong**` | `**{strong}` |
-| 28 | Emphasis and strong together are one construct | 2, 20 | `***both***` | `***{both}` |
-| 29 | Underscore is not emphasis syntax | 2 | `_em_` | `*{em}` — and `snake_case` becomes safe |
-| 30 | Links are sigil-marked; the target is in braces | 20 | `[text](url)` | `@[text]{url}` |
-| 31 | A link with no text renders its target | 20 | `<https://example.org>` | `@{https://example.org}` |
-| 32 | Images are sigil-marked; the source is in braces | 16, 20 | `![alt](src)` | `![alt]{src}` |
-| 33 | Anchors put the sigil before the brace | 17, 20 | *(no equivalent)* | `#{id}` |
-| 34 | Reference links removed, with their definitions | 20 | `[text][label]` | `@[text]{url}` — written where it is used |
-| 35 | Shortcut reference links removed | 20 | `[label]` | Ordinary text — `[sic]` is safe with no escape |
-| 36 | Autolinks removed | 20 | `<https://x.org>` | `@{https://x.org}` |
-| 37 | Escaping is a range, not a character | 3, 20 | `\|` | `\{\|}` |
-| 38 | A single backslash escapes nothing; `\n` and `C:\Users` survive | 3, 20 | `\n` renders `\n` | `\n` renders `\n` — no longer a delta |
-| 39 | Trailing-space hard breaks removed; `\` before a line ending is the only one | 13 | two trailing spaces | `\` at end of line |
-| 40 | Superscript and subscript, braced always, typographic only | 18 | `<sup>2</sup>` | `x^{2}`, `H_{2}O` |
-| 41 | Strikethrough is core, single-tilde and braced | 22 | `~~struck~~` (GFM) | `~{struck}` |
+| 27 | Emphasis is braced; there is no paired form and no flanking rule | 2, 20 | `*em*` | `*{em}` |
+| 28 | Strong emphasis is braced | 2, 20 | `**strong**` | `**{strong}` |
+| 29 | Emphasis and strong together are one construct | 2, 20 | `***both***` | `***{both}` |
+| 30 | Underscore is not emphasis syntax | 2 | `_em_` | `*{em}` — and `snake_case` becomes safe |
+| 31 | Links are sigil-marked; the target is in braces | 20 | `[text](url)` | `@[text]{url}` |
+| 32 | A link with no text renders its target | 20 | `<https://example.org>` | `@{https://example.org}` |
+| 33 | Images are sigil-marked; the source is in braces | 16, 20 | `![alt](src)` | `![alt]{src}` |
+| 34 | Anchors put the sigil before the brace | 17, 20 | *(no equivalent)* | `#{id}` |
+| 35 | Reference links removed, with their definitions | 20 | `[text][label]` | `@[text]{url}` — written where it is used |
+| 36 | Shortcut reference links removed | 20 | `[label]` | Ordinary text — `[sic]` is safe with no escape |
+| 37 | Autolinks removed | 20 | `<https://x.org>` | `@{https://x.org}` |
+| 38 | Escaping is a range, not a character | 3, 20 | `\|` | `\{\|}` |
+| 39 | A single backslash escapes nothing; `\n` and `C:\Users` survive | 3, 20 | `\n` renders `\n` | `\n` renders `\n` — no longer a delta |
+| 40 | Trailing-space hard breaks removed; `\` before a line ending is the only one | 13 | two trailing spaces | `\` at end of line |
+| 41 | Superscript and subscript, braced always, typographic only | 18 | `<sup>2</sup>` | `x^{2}`, `H_{2}O` |
+| 42 | Strikethrough is core, single-tilde and braced | 22 | `~~struck~~` (GFM) | `~{struck}` |
 
 ## Per-delta detail
 
@@ -91,19 +92,19 @@ Each row above becomes a subsection here, and each subsection needs the same fou
 
 ## Notes for drafting
 
-**Rows 26 to 41 are one story, and the file should say so before it lists them.** A reader who meets fifteen separate inline changes will read them as fifteen arbitrary choices. A reader who meets the rule first — *a sigil means nothing unless a brace follows* — meets one change with fifteen consequences, and can predict all fifteen from the rule. Lead with the rule, then the table.
+**Rows 27 to 42 are one story, and the file should say so before it lists them.** A reader who meets fifteen separate inline changes will read them as fifteen arbitrary choices. A reader who meets the rule first — *a sigil means nothing unless a brace follows* — meets one change with fifteen consequences, and can predict all fifteen from the rule. Lead with the rule, then the table.
 
-**Rows 26 to 28 have their "what breaks" exhibit ready, and it is an editor behaviour rather than exotic input.** Double-clicking a word selects it *plus* the trailing space in many editors — useful for editing, and exactly wrong for wrapping: `**word **` fails CommonMark's flanking rule (a closer preceded by a space is not right-flanking), so the emphasis silently renders as literal asterisks, and it is common in the wild for precisely that reason. The braced form has no whitespace condition anywhere: `*{word }` emphasizes, trailing space and all, and the formatter can trim it. Write the entry around the double-click, because it shows the failure was never author error.
+**Rows 27 to 29 have their "what breaks" exhibit ready, and it is an editor behaviour rather than exotic input.** Double-clicking a word selects it *plus* the trailing space in many editors — useful for editing, and exactly wrong for wrapping: `**word **` fails CommonMark's flanking rule (a closer preceded by a space is not right-flanking), so the emphasis silently renders as literal asterisks, and it is common in the wild for precisely that reason. The braced form has no whitespace condition anywhere: `*{word }` emphasizes, trailing space and all, and the formatter can trim it. Write the entry around the double-click, because it shows the failure was never author error.
 
-**Row 38 is the entry to write with the most care, because it is the only row that runs backwards.** Every other delta asks a reader to change something. This one tells them that a thing which used to break now works: an earlier draft of this language escaped every character after a backslash, so `C:\Users\frederic` rendered as `C:Usersfrederic` and `\d+` lost its `d`. That was worse than CommonMark, which escapes ASCII punctuation only. Decision 20 removed it. The entry exists so that anyone who read the earlier specification learns the rule changed, and so that the failure is on the record rather than quietly absent.
+**Row 39 is the entry to write with the most care, because it is the only row that runs backwards.** Every other delta asks a reader to change something. This one tells them that a thing which used to break now works: an earlier draft of this language escaped every character after a backslash, so `C:\Users\frederic` rendered as `C:Usersfrederic` and `\d+` lost its `d`. That was worse than CommonMark, which escapes ASCII punctuation only. Decision 20 removed it. The entry exists so that anyone who read the earlier specification learns the rule changed, and so that the failure is on the record rather than quietly absent.
 
-**Row 35 is the largest prose-safety gain in the table and it looks like a removal.** Under CommonMark's shortcut form, `[sic]`, `[1]`, `[TODO]`, and `[citation needed]` become links whenever a definition with a matching label exists anywhere in the same document — including one added months later by someone who never saw the paragraph they changed. It was the only construct in either language whose meaning depended on text arbitrarily far away, and it failed silently when it fired. Write the entry around that, not around the syntax.
+**Row 36 is the largest prose-safety gain in the table and it looks like a removal.** Under CommonMark's shortcut form, `[sic]`, `[1]`, `[TODO]`, and `[citation needed]` become links whenever a definition with a matching label exists anywhere in the same document — including one added months later by someone who never saw the paragraph they changed. It was the only construct in either language whose meaning depended on text arbitrarily far away, and it failed silently when it fired. Write the entry around that, not around the syntax.
 
-**Rows 30 and 32 should be written as one pair, because the mnemonic is the point.** `@[…]` links to the target; `![…]` shows it instead. The two differ by exactly one character, where in Markdown they differ by a bracket-and-parenthesis dance. A reader who learns the pair learns both.
+**Rows 31 and 33 should be written as one pair, because the mnemonic is the point.** `@[…]` links to the target; `![…]` shows it instead. The two differ by exactly one character, where in Markdown they differ by a bracket-and-parenthesis dance. A reader who learns the pair learns both.
 
 **Row 24 is the row most likely to be argued with, so it has to lead with the reason rather than the rule.** The reason is not that `---` is ambiguous — it is not — but that it never said anything: a run of hyphens announces a change and never names it, where a heading names it. State the renderer collision second, because it is the one a reader recognizes immediately. And be honest that this is the one delta with no automatic migration: converting one needs a decision only the author can make.
 
-**Row 40 is the only row that makes row 13 easier.** Raw HTML has no automatic migration path in general, and `<sup>` and `<sub>` were the two tags a Markdown author reached for most often with no alternative available — so this pair converts mechanically, and the migrator should say so rather than reporting them alongside the tags it genuinely cannot handle. The entry also has to carry the negative: there is no braceless form, so `x^2` migrated from `x<sup>2</sup>` is wrong and `x^{2}` is right. A braceless form would have to guess where the raised text stops, and guessing after one digit renders `2^32` as 2³2 — wrongly rather than partially.
+**Row 41 leads the rows that make row 13 easier** (rows 26 and 42 are the others). Raw HTML has no automatic migration path in general, and `<sup>` and `<sub>` were the two tags a Markdown author reached for most often with no alternative available — so this pair converts mechanically, and the migrator should say so rather than reporting them alongside the tags it genuinely cannot handle. The entry also has to carry the negative: there is no braceless form, so `x^2` migrated from `x<sup>2</sup>` is wrong and `x^{2}` is right. A braceless form would have to guess where the raised text stops, and guessing after one digit renders `2^32` as 2³2 — wrongly rather than partially.
 
 **Row 8 is the smallest entry in the table and the easiest to under-explain.** It fires only on a closing fence written longer than the fence it closes, which nobody does deliberately. What the entry has to convey is the *reason*, because the reason is the whole counting story — the run length is the only escape available inside verbatim content, and making the match exact gives one counting rule at every size instead of two. Under decision 20 that rule now covers brace groups as well, so this entry is where a reader first meets a sentence that governs three constructs.
 
@@ -115,6 +116,8 @@ Each row above becomes a subsection here, and each subsection needs the same fou
 
 **Row 25 is the friendliest entry in the block table, and the entry should say so.** Nothing existing changes meaning: `- [x]` items as GFM writers already type them parse exactly as intended, and only the loose spellings — `[X]`, a box on an ordered item — need the migrator's touch, the first mechanically and the second with a report. The strictness is the delta, not the construct.
 
-**Row 41 is the inline table's one addition after decision 20, and it converts mechanically.** `~~text~~` becomes `~{text}`, one edit with no judgement call. The entry's job is the run rule: one tilde before a brace is the construct, and a run of two or more is text — which is why the GFM spelling fails loudly, as visible literal tildes, rather than half-working. It also joins row 40 in making row 13 easier: `<del>` and `<s>` now convert mechanically too, and the migrator should say so.
+**Row 42 is the inline table's one addition after decision 20, and it converts mechanically.** `~~text~~` becomes `~{text}`, one edit with no judgement call. The entry's job is the run rule: one tilde before a brace is the construct, and a run of two or more is text — which is why the GFM spelling fails loudly, as visible literal tildes, rather than half-working. It also joins row 41 in making row 13 easier: `<del>` and `<s>` now convert mechanically too, and the migrator should say so.
+
+**Row 26 is the block table's one addition after decision 20, and the entry should lead with the mirror.** `<` is the converse of `>`: a quotation presses harder than the prose around it, an aside presses less, and both mark the left of every line they own. The one asymmetry is the space, required after `<` where `>` inherits email's optional-space habit — that requirement is what keeps a pasted `<div>` or `<!DOCTYPE` at line start ordinary text. Rendering is the renderer's: a sidebar, a margin note, smaller type, or a disclosure fold; folding is one rendering of the semantic, not the construct. It is also the third row easing row 13, since `<details>`/`<summary>` gains a manual but natural target.
 
 **Rows 3, 4, and 5 are the block layer's muscle-memory cluster**, flagged in the decision record as carrying the highest habit risk there. The inline layer now carries more than all of them together, which changes how the whole file should be framed: the question is no longer "which of these will trip a Markdown author" but "how long does it take to learn one rule". Write for the second question.
