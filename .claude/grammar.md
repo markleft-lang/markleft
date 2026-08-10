@@ -24,7 +24,7 @@ Each entry cites the rule that claims it (`R11`, `R30`, …); those rules are th
 | `^` | free | superscript, only before `{` (R29) | 1 |
 | `@` | free | link, only before `{` or `[` (R24) | 1 |
 | `!` | free | image, only before `{` or `[` (R27) | 1 |
-| `[` `]` | free | link or image text, only immediately after `@` or `!` (R24, R27) | 1 |
+| `[` `]` | free | link or image text, only immediately after `@` or `!` (R24, R27); state box at the start of a bullet item's content (R31) | 1 |
 | `{` `}` | free | scope, only immediately after a sigil (R30) | 1 |
 | `(` `)` | **free** | **free** | **0** |
 | `<` | **free** | **free** | **0** |
@@ -40,6 +40,8 @@ Two things are worth reading off the table directly, because neither is stated b
 **`-` is the only severity-3 character in the language.** Its collision is R8's, it is inherited from Markdown rather than introduced here, and every Markdown writer has already been trained around it.
 
 **The line-start column holds exactly the six block markers** — `` ` ``, `#`, `-`, digits, `>`, `|` — and nothing else. That is Layer 1 stated as a table, and it is what makes a block's type decidable from its own first character.
+
+*Changed 2026-08-10 — decision 21.* `[` gains one position: the three-character state box (`[ ]` or `[x]`) at the start of a bullet item's content. Severity unchanged at 1 — a narrow, partial re-spend of the position decision 20 eased from 2 to 1.
 
 *Changed 2026-08-09 — decision 20, the largest single revision this table has had.* One character spent (`@`), nine characters across the six other rows eased or freed outright, and the language's last severity-3 inline meaning removed.
 
@@ -324,6 +326,18 @@ The required space is doing almost all the work here, and it is the cleanest exa
 - **Decidable from:** nothing — the fallback.
 - **Reserves:** nothing. **Severity 0.**
 - **Escape:** not applicable.
+
+### R31 — Task item
+
+- **Form:** inside a bullet item (R8), content beginning with a **state box** — `[`, then one space or one `x`, then `]`, then one space. `[ ]` is unchecked; `[x]` is checked.
+- **Range:** bullet items only; lowercase `x` only; the box is exactly three characters. The item's content column (R10) sits after the box's trailing space. Anything failing the form — `[X]`, `[x ]`, a box on an ordered item — is ordinary item text.
+- **Order:** after R8 consumes its marker, before the item's content is parsed. *(Numbered past Layer 2 because rule numbers are serial and permanent; it belongs here.)*
+- **Decidable from:** the four code points after the marker's space.
+- **Reserves:** `[` at the start of a bullet item's content, in exactly the forms `[ ] ` and `[x] `.
+- **Collision:** an item genuinely beginning with a bracketed box — a quoted checklist, or `- [x] marks the spot`. **Severity 1.**
+- **Escape:** `\{[x]}`, or `\{[}` on the bracket alone.
+
+*Added 2026-08-10 — decision 21.* A refinement of R8 rather than a seventh block marker: the line-start column still holds exactly six characters, and the box sits inside an item the marker already opened. The spelling is Markdown's because the reader's convention governs (decision 18's argument) — `[ ]`/`[x]` is the forty-year plain-text checkbox. `-[x]` and `-{x}` were both set aside: the first for the failure asymmetry (every GFM-trained hand types the space form, so the space form must be the construct), the second because sigil-then-brace is Layer 2's rule and the block layer holds no brace anywhere. GFM's looseness is removed — `[X]` is text, with a validator warning and a formatter fix. Task lists are also the first capability to *fail* §2's routing test, which is why the grammar carries them; the argument is in the decision.
 
 ## Layer 2 — Inlines
 
