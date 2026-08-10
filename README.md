@@ -10,13 +10,21 @@ A formally specified, ambiguity-free successor to Markdown: the same size and th
 
 **A sigil means nothing unless the very next character is `{` — or `[`, when the construct carries its own text.**
 
-```
-*{emphasis}      **{strong}      ***{both}
-^{superscript}   _{subscript}    #{anchor}
-@{link}          @[text]{link}
-!{image}         ![alt]{image}
-\{escaped}       `verbatim`{label}
-```
+| Construct | Mark |
+| --- | --- |
+| Emphasis | `*{…}` |
+| Strong | `**{…}` |
+| Emphasis and strong | `***{…}` |
+| Superscript | `^{…}` |
+| Subscript | `_{…}` |
+| Anchor | `#{…}` |
+| Link | `@{…}` |
+| Link carrying its own text | `@[text]{…}` |
+| Image | `!{…}` |
+| Image carrying alt text | `![alt]{…}` |
+| Escape | `\{…}` |
+| Verbatim | `` `…` `` |
+| Verbatim with a decorator | `` `…`{label} `` |
 
 So the whole language is three sentences. **Blocks** are decided by position in the line — the start opens one, the end breaks one. **Inlines** are decided by a sigil immediately followed by a brace. **Verbatim** is delimited by matching backtick runs, because content that is not interpreted cannot be closed by balancing.
 
