@@ -22,10 +22,10 @@ The corpus matters more than it looks: it is the only thing that produces *evide
 
 The ladder, in order. Nothing gets built ahead of its rung; the definition fixes the language before any parser encodes it.
 
-1. **Grammar and tests** — the formal grammar, plus a suite of worked examples that any implementation is checked against.
+1. **Grammar and tests** — the formal grammar, plus a suite of worked examples that any implementation is checked against. The formalism was surveyed against the 2026 field and confirmed (`notes/grammar-formalism.md`): PEG for the inline layer, a numbered small-step algorithm for the block layer. Two execution rules came out of that survey: the PEG lands as a machine-readable file the reference parser is generated from or tested against in CI, never hand-transcribed, and every numbered block step points at the conformance examples that exercise it.
 2. **Reference parser** — the first realization, in Rust, producing a documented syntax tree.
 3. **The tools that make it worth adopting** — a validator with genuinely good error messages, a canonical formatter, and a migrator from Markdown. This is where most of the value to users lives.
-4. **Ecosystem** — cheat sheet, web playground, conformance badge, and a short language description sized for an AI model's system prompt.
+4. **Ecosystem** — cheat sheet, web playground, conformance badge, editor highlighting (a tree-sitter grammar — a realization tested against the suite, normative over nothing, because its notation tolerates ambiguity), and a short language description sized for an AI model's system prompt, validated by running its output through the suite rather than by proofreading it.
 
 ## Ideas parked
 
@@ -86,6 +86,8 @@ Things the record has *derived* rather than assumed. They explain the shape of s
 
 - **Do not encode a value that a tool will later compute better.** A hand-written number overrides every future improvement to the code that would have derived it, and it goes stale silently besides. This is why there are no column width hints, and it is the general form of the argument against hand-maintained list numerals.
 - **Rarity in ordinary use is what makes a mark safe to give a job — and a rare *pair* is cheaper than a rare character.** The backtick survives as a delimiter because nobody types it in prose, and a colon works as a namespace separator for the same reason. Decision 20 is the general form: no character needs to be rare if the two-character sequence is, which is how `*`, `#`, `!`, and `\` all became safe while staying free on their own — and how `@` could be spent at all, at severity 1, in one position. The dollar sign lost its job for want of this rule fifteen years earlier.
+
+- **Where two artifacts must agree, a machine checks the pair.** The grammar file and the reference parser, a `.markleft` source and its generated `.md` companion, the document and the suite — each pair is kept honest by CI, never by discipline. The general form of the licence-drift lesson: a decision recorded in one place does not propagate by itself, and the copy nobody is editing is the one that goes stale. Newest instance: `notes/grammar-formalism.md`, rule 1.
 
 - **Audit the rules that read best.** Decision 3's "backslash before any character, no exception list" was the cleanest sentence in the record and was silently mangling Windows paths and regular expressions — worse than the CommonMark behaviour it diverged from. It survived two days and a finding that recorded the symptom, because nobody re-read a rule that sounded that good. A rule nobody questions is a rule nobody checks.
 - **The tooling writes into the source, never into the render.** One policy, arrived at separately for tables of contents, file includes, and citations.
