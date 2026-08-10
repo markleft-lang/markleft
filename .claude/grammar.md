@@ -17,7 +17,7 @@ Each entry cites the rule that claims it (`R11`, `R30`, …); those rules are th
 | digits | ordered marker, then `.` and a space (R9) | free | 2 |
 | `\|` | opens a table (R14) | cell separator inside a table only (R14) | 2 |
 | `` ` `` | fence, run of 3+ (R11) | verbatim span, any run (R19); format label before `{` (R20) | 1 |
-| `>` | block quote (R7) | free | 1 |
+| `>` | block quote, then a space (R7) | free | 1 |
 | `\` | free | escape range, only before `{` (R17); hard break at end of line (R18) | 1 |
 | `*` | free | emphasis, only before `{`, runs of 1–3 (R21) | 1 |
 | `_` | free | subscript, only before `{` (R29) | 1 |
@@ -40,6 +40,8 @@ Two things are worth reading off the table directly, because neither is stated b
 **`-` is the only severity-3 character in the language.** Its collision is R8's, it is inherited from Markdown rather than introduced here, and every Markdown writer has already been trained around it.
 
 **The line-start column holds exactly the seven block markers** — `` ` ``, `#`, `-`, digits, `>`, `<`, `|` — and nothing else. That is Layer 1 stated as a table, and it is what makes a block's type decidable from its own first character. *(Six until decision 23 added the aside; the six-marker form of this sentence is quoted as an asset in decisions 20 through 22, and the growth was spent knowingly.)*
+
+*Changed 2026-08-10 — decision 23's same-day amendment.* The `>` row tightens: its space, optional since email, is required — the last optional-space clause in the language. `>=50%`, `>>log`, and `>5ms` at line start become text by construction; severity stays 1, narrower.
 
 *Changed 2026-08-10 — decision 23.* `<` is spent at the start of a line — the aside marker, the block quote mirrored — and stays free inside one. The free count drops to fifteen, and the line-start column grows to seven for the first time since it was frozen at six. `<` had been freed by decision 20 the day before; the fast respend is recorded rather than smoothed over.
 
@@ -205,13 +207,15 @@ Applied per line, in the order given. Container rules (R7, R33, R8, R9) consume 
 
 ### R7 — Block quote marker
 
-- **Form:** `>` at the start of the line's remaining content, optionally followed by one space.
-- **Range:** nests without limit.
+- **Form:** `>` at the start of the line's remaining content, then one space, then content — or `>` alone on the line, the quote's blank line.
+- **Range:** nests without limit; a nested quote is written `> > text`.
 - **Order:** 2, as a container prefix.
 - **Decidable from:** this line.
-- **Reserves:** `>` in first position.
-- **Collision:** a line of prose beginning with a mathematical `>`, or quoted email text that *is* meant as a quote. **Severity 1.**
-- **Escape:** `\{>}`.
+- **Reserves:** `>` in first position when followed by one space, or alone on the line.
+- **Collision:** a line of prose opening with a spaced comparison — `> 5 ms was typical` — or pasted email text that *is* meant as a quote. **Severity 1.** `>=50%`, `>>log`, and `>5ms` are all text, the required space missing.
+- **Escape:** `\{>} 5 ms`.
+
+*Revised 2026-08-10 — decision 23's same-day amendment.* The space was optional, inherited from email via CommonMark, and it was the last optional-space clause in the language — every other marker already required its space. Required now, for the three reasons the others require theirs: one spelling per construct, the `<`/`>` mirror completed, and the line-start comparisons (`>5ms`, `>=`) becoming text by construction exactly as `<5ms` and `<div>` did under R33. The cost is the old email idiom: `>quoted` and `>>nested` fail the form and are text — loudly, not silently — and the migrator rewrites both mechanically (`>text` → `> text`, `>>` → `> > `).
 
 ### R8 — Bullet list item
 
@@ -354,7 +358,7 @@ The required space is doing almost all the work here, and it is the cleanest exa
 - **Collision:** a line of prose opening with a spaced comparison — `< 5 ms is the target`. **Severity 1.** `<div>`, `<!DOCTYPE`, `<T>`, and `<1%` are all text, the required space missing.
 - **Escape:** `\{<} 5 ms`.
 
-*Added 2026-08-10 — decision 23.* **The converse of the block quote, and the mirror is the meaning:** `>` marks content that presses harder than the prose around it, `<` marks content that presses less — an aside, liftable with little impact — and both mark the left of every line they own. Rendering is the renderer's choice: a sidebar, a margin note, smaller type, or a disclosure fold on an interactive target; folding is one rendering of the semantic, never the construct, which is what keeps the rule meaningful in print. **The one deliberate asymmetry with R7 is the required space.** `>` inherits email's optional-space habit under decision 11; `<` has no such tradition to keep, and the requirement is what makes a pasted `<div>` or `<!DOCTYPE` at line start ordinary text by construction rather than by luck. No title line — a folding renderer may use the first line by convention — and no type vocabulary: decision 9 removed classes, and "Note:" is text.
+*Added 2026-08-10 — decision 23.* **The converse of the block quote, and the mirror is the meaning:** `>` marks content that presses harder than the prose around it, `<` marks content that presses less — an aside, liftable with little impact — and both mark the left of every line they own. Rendering is the renderer's choice: a sidebar, a margin note, smaller type, or a disclosure fold on an interactive target; folding is one rendering of the semantic, never the construct, which is what keeps the rule meaningful in print. **The mirror is exact: R7 requires its space too** *(amended the same day — the asymmetry as first recorded lasted hours)*, so the two containers are one rule with two characters. The requirement is what makes a pasted `<div>` or `<!DOCTYPE` at line start ordinary text by construction rather than by luck — and `>5ms` and `>=` likewise, on the other side. No title line — a folding renderer may use the first line by convention — and no type vocabulary: decision 9 removed classes, and "Note:" is text.
 
 ## Layer 2 — Inlines
 
