@@ -6,6 +6,20 @@ A formally specified, ambiguity-free successor to Markdown: the same size and th
 
 **This repository is the standard.** Not a parser that happens to define the language by its behavior — the specification itself. Implementations live elsewhere, and none of them is privileged.
 
+## Six guarantees
+
+- **Prose-safety.** Natural-language prose renders verbatim. Money, snake_case, `5 * 3 = 15`, and shell snippets are safe by construction, never by heuristic — there is no flanking rule and no lookahead anywhere in the language.
+
+- **Verbatim means verbatim.** Content inside a fence or a span is carried through untouched; TeX backslashes survive. Where a delimiter appears in your content, you lengthen the delimiter — one escape mechanism, at every size, with no exception list.
+
+- **Five minutes.** The complete core fits on one reference card. No rule has an "unless" clause.
+
+- **One meaning.** Every input has exactly one parse, and the specification is executable — a grammar and a conformance suite, not interpretable prose.
+
+- **Linear time.** A single pass, prefix-decidable blocks, no backtracking, no pathological inputs.
+
+- **Read it anywhere.** You can always read the entire document in plain text, with no compiler, viewer, or extension. Nothing renders that the source does not already say.
+
 ## One rule for every inline construct
 
 **A sigil means nothing unless the very next character is `{` — or `[`, when the construct carries its own text.**
@@ -24,25 +38,11 @@ A formally specified, ambiguity-free successor to Markdown: the same size and th
 | Image carrying alt text | `![alt]{…}` |
 | Escape | `\{…}` |
 | Verbatim | `` `…` `` |
-| Verbatim with a decorator | `` `…`{label} `` |
+| Verbatim with a decorator | `` `…`{math} `` |
 
 So the whole language is three sentences. **Blocks** are decided by position in the line — the start opens one, the end breaks one. **Inlines** are decided by a sigil immediately followed by a brace. **Verbatim** is delimited by matching backtick runs, because content that is not interpreted cannot be closed by balancing.
 
 Everything else follows, including the part that matters most: `5 * 3 = 15`, `snake_case`, `2^32`, `[sic]`, `C:\Users\name`, `#hashtag`, `@handle`, and `{"key": 1}` are all ordinary text, and none of them needs an escape.
-
-## Six guarantees
-
-- **Prose-safety.** Natural-language prose renders verbatim. Money, snake_case, `5 * 3 = 15`, and shell snippets are safe by construction, never by heuristic — there is no flanking rule and no lookahead anywhere in the language.
-
-- **Verbatim means verbatim.** Content inside a fence or a span is carried through untouched; TeX backslashes survive. Where a delimiter appears in your content, you lengthen the delimiter — one escape mechanism, at every size, with no exception list.
-
-- **Five minutes.** The complete core fits on one reference card. No rule has an "unless" clause.
-
-- **One meaning.** Every input has exactly one parse, and the specification is executable — a grammar and a conformance suite, not interpretable prose.
-
-- **Linear time.** A single pass, prefix-decidable blocks, no backtracking, no pathological inputs.
-
-- **Read it anywhere.** You can always read the entire document in plain text, with no compiler, viewer, or extension. Nothing renders that the source does not already say.
 
 ## What Markleft is not
 
