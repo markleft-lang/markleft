@@ -31,6 +31,7 @@ A formally specified, ambiguity-free successor to Markdown: the same size and th
 | Emphasis and strong | `***{…}` |
 | Superscript | `^{…}` |
 | Subscript | `_{…}` |
+| Strikethrough | `~{…}` |
 | Anchor | `#{…}` |
 | Link | `@{…}` |
 | Link carrying its own text | `@[text]{…}` |

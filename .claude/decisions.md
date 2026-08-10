@@ -217,6 +217,18 @@ It is also the general answer to "but Markleft cannot do X." The answer is not *
 
     **The ledger.** `[` gains one narrow position — the start of a bullet item's content, in exactly the forms `[ ] ` and `[x] ` — a partial re-spend of the position decision 20 eased from 2 to 1. Severity stays 1: the realistic collision is an item quoting a checkbox, or one beginning `[x] marks the spot`, and the escape is `\{[x]}`. The line-start column still holds exactly the six block markers; the box sits inside an item a marker already opened, and opens nothing itself.
 
+22. **Strikethrough is core: `~{…}`.** *(Decided 2026-08-10. Rule: R32.)* A single `~` immediately followed by `{` strikes its content; the content is ordinary inline content, so nesting works by R30 and the group closes as every brace group does. A run of two or more tildes is not a construct — the run and any brace after it are text, the same fallback shape as the four-asterisk ceiling — so GFM's `~~struck~~` is literal text here, visibly, and the migrator rewrites it mechanically.
+
+    **Why one tilde and not two.** The emphasis ladder is the only reason any sigil runs past one: three meanings on one character need three run lengths. Strikethrough has one meaning, so it joins the single-meaning family — `^`, `_`, `#`, `@`, `!`, `\` — which is run-1 throughout. A lone `~~{…}` would make `~` the only sigil whose minimal run is inert, and "one tilde means nothing, two mean strike" is an "unless" clause with no ladder to justify it. The GFM echo would buy nothing besides: `~~text~~` fails to parse under either spelling, the clean break (decision 12) having already spent that muscle memory, and the migrator's rewrite is the same one edit either way. Typing cost: `~{x}` is one character shorter than `~~x~~`; `~~{x}` would be even.
+
+    **What it is.** Struck text — decision 18's boundary reapplied: the construct positions and decorates content and interprets nothing. It is presentation of written content, so decision 15's front half passes, and every renderer visibly distinguishes struck text — print included — so the back half passes too. The gap is genuine: visible supersession is everyday technical writing — the requirement that changed, the price that dropped, the edit that shows its work — it was the one common piece of inline typography the language still lacked, and its absence was Finding 5's accident rather than anyone's ruling.
+
+    **The ledger.** `~` leaves the free column at severity 1, in one position — immediately before `{`. Sixteen of the thirty-two ASCII punctuation characters now mean nothing anywhere. The realistic collision is shell tilde-and-brace expansion quoted in prose outside a fence — `~{alice,bob}/bin` — the same family as `*{` and `#{`, answered the same way: a verbatim span, which is where shell text belongs. The line-start column still holds exactly the six block markers; `~` is spent inline only.
+
+    **Knock-on, recorded honestly: this weakens one support under Appendix D.5.** The as-drafted answer on tilde fences — not inherited — had two: the one-way-to-do-it discipline, and keeping `~` a character with no meaning anywhere. The second is now spent by this decision, so D.5 rests on the discipline argument alone. It is still sufficient — two fence spellings would be exactly the second-spelling class decisions 4, 5, and 6 removed — and this decision leaves `~`'s line-start column untouched.
+
+    **Closes the strikethrough half of Finding 5 and Appendix D.14.** HTML entity references are the remaining half, and the substantive one.
+
 ## 5. Name: Markleft
 
 Cardinal-point extension of markup/markdown. Four readings, all load-bearing:

@@ -75,6 +75,7 @@ Everything below follows from one rule (decision 20): **a sigil carries meaning 
 | 38 | A single backslash escapes nothing; `\n` and `C:\Users` survive | 3, 20 | `\n` renders `\n` | `\n` renders `\n` — no longer a delta |
 | 39 | Trailing-space hard breaks removed; `\` before a line ending is the only one | 13 | two trailing spaces | `\` at end of line |
 | 40 | Superscript and subscript, braced always, typographic only | 18 | `<sup>2</sup>` | `x^{2}`, `H_{2}O` |
+| 41 | Strikethrough is core, single-tilde and braced | 22 | `~~struck~~` (GFM) | `~{struck}` |
 
 ## Per-delta detail
 
@@ -90,7 +91,7 @@ Each row above becomes a subsection here, and each subsection needs the same fou
 
 ## Notes for drafting
 
-**Rows 26 to 40 are one story, and the file should say so before it lists them.** A reader who meets fifteen separate inline changes will read them as fifteen arbitrary choices. A reader who meets the rule first — *a sigil means nothing unless a brace follows* — meets one change with fifteen consequences, and can predict all fifteen from the rule. Lead with the rule, then the table.
+**Rows 26 to 41 are one story, and the file should say so before it lists them.** A reader who meets fifteen separate inline changes will read them as fifteen arbitrary choices. A reader who meets the rule first — *a sigil means nothing unless a brace follows* — meets one change with fifteen consequences, and can predict all fifteen from the rule. Lead with the rule, then the table.
 
 **Row 38 is the entry to write with the most care, because it is the only row that runs backwards.** Every other delta asks a reader to change something. This one tells them that a thing which used to break now works: an earlier draft of this language escaped every character after a backslash, so `C:\Users\frederic` rendered as `C:Usersfrederic` and `\d+` lost its `d`. That was worse than CommonMark, which escapes ASCII punctuation only. Decision 20 removed it. The entry exists so that anyone who read the earlier specification learns the rule changed, and so that the failure is on the record rather than quietly absent.
 
@@ -111,5 +112,7 @@ Each row above becomes a subsection here, and each subsection needs the same fou
 **Row 16 is the one to explain rather than merely state, because the reason is a hazard rather than a preference.** GFM accepts a single hyphen in a rule-row cell, and gets away with it because a delimiter row can only ever be a table's second line. Once a rule row may also come first — row 17 — a headerless table opening `| - | - |` would parse as structure and **those two cells would disappear.** Silently losing content is the one failure this project treats as disqualifying, so the minimum went to three, which is what fences already ask for.
 
 **Row 25 is the friendliest entry in the block table, and the entry should say so.** Nothing existing changes meaning: `- [x]` items as GFM writers already type them parse exactly as intended, and only the loose spellings — `[X]`, a box on an ordered item — need the migrator's touch, the first mechanically and the second with a report. The strictness is the delta, not the construct.
+
+**Row 41 is the inline table's one addition after decision 20, and it converts mechanically.** `~~text~~` becomes `~{text}`, one edit with no judgement call. The entry's job is the run rule: one tilde before a brace is the construct, and a run of two or more is text — which is why the GFM spelling fails loudly, as visible literal tildes, rather than half-working. It also joins row 40 in making row 13 easier: `<del>` and `<s>` now convert mechanically too, and the migrator should say so.
 
 **Rows 3, 4, and 5 are the block layer's muscle-memory cluster**, flagged in the decision record as carrying the highest habit risk there. The inline layer now carries more than all of them together, which changes how the whole file should be framed: the question is no longer "which of these will trip a Markdown author" but "how long does it take to learn one rule". Write for the second question.

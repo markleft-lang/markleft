@@ -26,20 +26,22 @@ Each entry cites the rule that claims it (`R11`, `R30`, …); those rules are th
 | `!` | free | image, only before `{` or `[` (R27) | 1 |
 | `[` `]` | free | link or image text, only immediately after `@` or `!` (R24, R27); state box at the start of a bullet item's content (R31) | 1 |
 | `{` `}` | free | scope, only immediately after a sigil (R30) | 1 |
+| `~` | free | strikethrough, only before `{` (R32) | 1 |
 | `(` `)` | **free** | **free** | **0** |
 | `<` | **free** | **free** | **0** |
 | `+` | **free** | **free** | **0** |
 | `$` | **free** | **free** | **0** |
-| `~` | **free** | **free** | **0** |
 | `%` `:` `;` `?` `/` `=` `&` `"` `'` `,` `.` | **free** | **free** | **0** |
 
-**Seventeen** of the thirty-two ASCII punctuation characters have no meaning anywhere in the language: the eleven in the last row, plus `(`, `)`, `<`, `+`, `$`, and `~`. That is the concrete form of invariant 1, and it is the number to watch: **any future decision that moves a character out of the free column is spending the language's main asset, and any decision that moves one into it is the language's main dividend.**
+**Sixteen** of the thirty-two ASCII punctuation characters have no meaning anywhere in the language: the eleven in the last row, plus `(`, `)`, `<`, `+`, and `$`. That is the concrete form of invariant 1, and it is the number to watch: **any future decision that moves a character out of the free column is spending the language's main asset, and any decision that moves one into it is the language's main dividend.**
 
 Two things are worth reading off the table directly, because neither is stated by any single rule:
 
 **`-` is the only severity-3 character in the language.** Its collision is R8's, it is inherited from Markdown rather than introduced here, and every Markdown writer has already been trained around it.
 
 **The line-start column holds exactly the six block markers** — `` ` ``, `#`, `-`, digits, `>`, `|` — and nothing else. That is Layer 1 stated as a table, and it is what makes a block's type decidable from its own first character.
+
+*Changed 2026-08-10 — decision 22.* `~` is spent — strikethrough, one position (immediately before `{`), at severity 1. The first character since `@` to leave the free column outright, and the free count drops to sixteen.
 
 *Changed 2026-08-10 — decision 21.* `[` gains one position: the three-character state box (`[ ]` or `[x]`) at the start of a bullet item's content. Severity unchanged at 1 — a narrow, partial re-spend of the position decision 20 eased from 2 to 1.
 
@@ -86,6 +88,7 @@ Layer 2 in one table. **A sigil means nothing unless the very next character is 
 | `***{` | both | `***{both}` | inline content | R21 |
 | `^{` | superscript | `10^{23}` | inline content | R29 |
 | `_{` | subscript | `H_{2}O` | inline content | R29 |
+| `~{` | strikethrough | `~{no longer}` | inline content | R32 |
 | `#{` | anchor | `#{tessier-2026}` | literal | R23 |
 | `@{` | link | `@{https://example.org}` | literal target | R24 |
 | `@[` | link with text | `@[Tessier et al.]{#tessier-2026}` | literal target | R24 |
@@ -278,7 +281,7 @@ The required space is doing almost all the work here, and it is the cleanest exa
 
 **This rule is struck, not deleted, and R13 is never reused.** A line of three or more `-`, `_`, or `*` reserves nothing; such a line is ordinary paragraph text under R16, or a bullet item under R8 where it takes that form (`- - -`).
 
-*Struck in words rather than in marks:* the convention elsewhere would be `~~strikethrough~~`, which this language does not have (Finding 5), so a struck rule says so in its heading.
+*Struck in words rather than in marks:* strikethrough was not in the language when this rule was struck — decision 22 added `~{…}` two days later — so a struck rule says so in its heading.
 
 **What it read before removal**, kept so that a note citing R13 still resolves:
 
@@ -343,7 +346,7 @@ The required space is doing almost all the work here, and it is the cleanest exa
 
 Applied within any block that takes inline content. Verbatim content (R11, R19) is never reached by any rule in this layer.
 
-**One rule governs this layer: a sigil means nothing unless the very next character is `{`** — extended by `[` for the link and image forms that carry their own text. R30 states the shared machinery; R17, R20, R21, R23, R24, R27, and R29 are its instances, and they differ only in which sigil opens them and what the brace holds.
+**One rule governs this layer: a sigil means nothing unless the very next character is `{`** — extended by `[` for the link and image forms that carry their own text. R30 states the shared machinery; R17, R20, R21, R23, R24, R27, R29, and R32 are its instances, and they differ only in which sigil opens them and what the brace holds.
 
 **Order barely matters here, and that is the point.** A left-to-right scan reaches a sigil before it reaches anything else, and no two constructs share an opener, so the numbering below records the parser's convenience rather than a precedence contest. Every rule in this layer is decidable from its sigil run and the code point after it — the verbatim span alone also needs the search for its matching run (R19), which is the price of uninterpreted content.
 
@@ -530,20 +533,32 @@ The rule self-sorts as a result. A variable set upright looks wrong to the perso
 ### R30 — The brace group
 
 - **Form:** a sigil, then a run of one or more `{`, then content, then a run of **exactly the opening length** of `}`.
-- **Range:** the shared machinery of R17, R20, R21, R23, R24, R27, and R29 — R20's "sigil" being the closing backtick run it follows. Runs are maximal, as in R11 and R19.
+- **Range:** the shared machinery of R17, R20, R21, R23, R24, R27, R29, and R32 — R20's "sigil" being the closing backtick run it follows. Runs are maximal, as in R11 and R19.
 - **Order:** not applicable — a definition, not a match. Every rule in this layer is an instance of it.
 - **Decidable from:** the sigil and the code point after it.
 - **Reserves:** `{` and `}` only immediately after a sigil. A brace with no sigil before it is text, everywhere, always.
 - **Collision:** none of its own; each instance carries its own. **Severity 0.**
 - **Escape:** lengthen the run.
 
-**Two flavours of content, and this is the only distinction that reaches the parser.** *Inline content* — R21, R29 — is parsed recursively, so a nested construct is consumed whole and its braces never reach the outer close. *Literal content* — R17, R23, R24, R27, R20 — is not parsed, so the close is found by counting brace depth. Both are linear with no backtracking, and both honour the same escape.
+**Two flavours of content, and this is the only distinction that reaches the parser.** *Inline content* — R21, R29, R32 — is parsed recursively, so a nested construct is consumed whole and its braces never reach the outer close. *Literal content* — R17, R23, R24, R27, R20 — is not parsed, so the close is found by counting brace depth. Both are linear with no backtracking, and both honour the same escape.
 
 **Single braces work whenever the content is balanced.** `\{a {b} c}` closes at the final `}` with no lengthening at all. Lengthening is the escape hatch for the case that actually fails: `*{the } character}` breaks, and `*{{the } character}}` does not, because a lone `}` is a run of one and cannot close a run of two.
 
 **This makes the language's escape story one sentence: when a delimiter appears in your content, lengthen the delimiter.** Fences (R11), verbatim spans (R19), and brace groups, identically. There is no second mechanism, and R17's escape range is not one — it is a construct that happens to hold literal text, not a way of escaping a character.
 
 *Phase 1 owes this rule a worked example* of the corner where the two flavours meet: an inline-content group containing a literal-content group whose own content holds an unbalanced brace. The behaviour follows from the two paragraphs above, and it should be written down rather than derived.
+
+### R32 — Strikethrough
+
+- **Form:** `~{`, inline content, `}`.
+- **Range:** a run of exactly one `~` before the brace. A run of two or more is not a construct, so the run and any brace after it are text — the same fallback shape as R21's four-asterisk ceiling, which is what makes GFM's `~~struck~~` literal text here, visibly. Content is ordinary inline content; nesting works by R30.
+- **Order:** 10.
+- **Decidable from:** the maximal `~` run and the code point after it.
+- **Reserves:** `~` only when alone and immediately followed by `{`.
+- **Collision:** shell tilde-and-brace expansion quoted in prose outside a fence — `~{alice,bob}/bin`. **Severity 1.**
+- **Escape:** `\{~}{alice,bob}`, or a verbatim span, which is where a shell snippet belongs.
+
+*Added 2026-08-10 — decision 22.* The single-meaning sigils are run-1 throughout, and strikethrough has no ladder, so one tilde is the construct and `~~{…}` is deliberately nothing — a dead minimal run would be the only one in the language. Typographic strike only, decision 18's boundary reapplied: the construct decorates content and interprets nothing. `~` in prose — `~10`, `~/bin` — never precedes a brace, which is what kept the price at severity 1. Closes the strikethrough half of Finding 5.
 
 ## Findings
 
@@ -575,15 +590,15 @@ Kept because it is the clearest instance of a pattern worth watching for: **a ru
 
 CommonMark admits `~~~` as an alternative fence. The decision record never mentions it, `deltas.md` has no row for it, and every statement of decision 9's decorator grammar is written in terms of backticks.
 
-Removing them is what the one-way-to-do-it discipline argues for, and under decision 20's clean break it is no longer even a delta worth counting. Note the knock-on: `~` is in the free column above, and admitting tilde fences takes it out. *`definition.md` Appendix D.5 now states the as-drafted answer — not inherited — pending confirmation; confirming it closes this finding.*
+Removing them is what the one-way-to-do-it discipline argues for, and under decision 20's clean break it is no longer even a delta worth counting. The knock-on is restated after decision 22 spent `~` on strikethrough: the "keeps `~` meaningless anywhere" support is gone, so the as-drafted answer rests on the discipline argument alone — and admitting tilde fences would still spend `~`'s line-start column, which strikethrough does not touch. *`definition.md` Appendix D.5 now states the as-drafted answer — not inherited — pending confirmation; confirming it closes this finding.*
 
-### Finding 5 — Strikethrough and HTML entity references are absent by accident, not by decision
+### Finding 5 — HALF-CLOSED 2026-08-10 — strikethrough is decision 22; entity references remain absent by accident
 
-- **Strikethrough (`~~text~~`)** is GFM, not CommonMark, so it is absent. "We considered it and declined" reads differently from silence — and under decision 20 the question changes shape, since a braced form would be `~{text}` and would cost `~` its free column.
+- **Strikethrough — CLOSED.** Adopted as `~{…}`, single tilde, R32. The cost this finding predicted — `~` losing its free column — was paid knowingly, at severity 1 and inline only.
 
 - **HTML entity references (`&amp;`, `&#169;`)** should almost certainly go: an entity reference renders a character the source does not contain, which is decision 15's front half through a very small door, and resolving one requires an HTML entity table, a dependency on a serialization the language claims independence from. Under the clean break the compatibility argument for keeping them is gone entirely.
 
-Both need a line in the record. The entity question is the substantive one. *Held as `definition.md` Appendix D.14.*
+The entity half still needs its line in the record, and it is the substantive one. *Held as `definition.md` Appendix D.14, whose strikethrough half decision 22 closed.*
 
 ### Finding 6 — CLOSED 2026-08-09 — shortcut reference links were the only construct with action at a distance
 
