@@ -1118,7 +1118,7 @@ Items 1 to 4 are answered in section 4 for the first time; each closes a rider t
 
 4. **The meaning of "column".** Section 4.1 defines it as a count of code points rather than display width, so that no rule consults a versioned Unicode property. Adopted from the same memo, and the cost — wide characters aligning by count rather than by apparent width — is stated in section 4.1 rather than buried.
 
-5. **Tilde fences.** CommonMark admits `~~~` as an alternative fence. As drafted, this document answers no: section 4.3.3 describes backtick fences only, and section 4.3.7 closes the block-opener list without `~` — which is also what keeps `~` a character with no meaning anywhere. The answer follows the one-way-to-do-it discipline and stays here until it is confirmed; confirming it adds the removal to Appendix A.
+5. **Tilde fences.** CommonMark admits `~~~` as an alternative fence. As drafted, this document answers no: section 4.3.3 describes backtick fences only, and section 4.3.7 closes the block-opener list without `~`. *(This item once added that the answer also keeps `~` a character with no meaning anywhere; that support fell when decision 22 spent `~` on strikethrough, so the one-way-to-do-it discipline carries the answer alone — and tilde fences would still spend `~`'s line-start column, which strikethrough does not touch.)* The answer stays here until it is confirmed; confirming it adds the removal to Appendix A.
 
 6. **The thematic break spelling — CLOSED 2026-08-08 by decision 19.** The item asked whether a run of underscores survived decision 2. The construct is removed entirely, so the question does not arise. The number is retained rather than reused, so that a note citing D.6 still resolves.
 
