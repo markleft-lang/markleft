@@ -18,6 +18,8 @@ Two things stand between us and a stable language. Everything else is downstream
 
 The corpus matters more than it looks: it is the only thing that produces *evidence* rather than reasoning. The block decisions carry real risk of annoying people who already know Markdown — headings, code blocks, lists — and the inline layer now carries more than all of them together.
 
+Alongside the corpus, prototype the parser sketches: enough of the prefix-decidable block algorithm to run decisions 4, 5, and 6 against the corpus, and an inline sketch beside it — R30's brace group is the whole of Layer 2, and the corner worth testing first is an inline-content group containing a literal-content group whose content holds an unbalanced brace.
+
 ## What comes after
 
 The ladder, in order. Nothing gets built ahead of its rung; the definition fixes the language before any parser encodes it.
@@ -51,7 +53,7 @@ None of these are commitments. They are things worth remembering when the releva
 
 ## Errands with outside dependencies
 
-These need someone else — a registry, a registrar, a lawyer. Worth advancing whenever the opportunity appears. The master copy is `.claude/decisions.md` §10, and `CLAUDE.md`'s checklist is the third copy — update all three or they drift.
+These need someone else — a registry, a registrar, a lawyer. Worth advancing whenever the opportunity appears. The master copy is `.claude/decisions.md` §10 and this list is its only mirror — update both or they drift. (`CLAUDE.md` no longer carries a copy.)
 
 - [ ] Claim the `@markleft` package scope on npm
 - [ ] Claim `markleft` (or `markleft-core`) on crates.io

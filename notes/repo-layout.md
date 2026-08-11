@@ -100,7 +100,7 @@ Each repository carries its own `CLAUDE.md`, and Claude Code sessions are launch
 
 The organization folder is not a repository — it is an ordinary directory holding three of them — so a `CLAUDE.md` placed there could never be committed, reviewed, or cloned. It would exist on exactly one machine and vanish when anyone else checked the project out. Claude Code *would* load it, since it walks up from the working directory, which is what makes the trap an easy one to fall into.
 
-The satellite files stay deliberately thin. `tests/CLAUDE.md` and `.github/CLAUDE.md` state only what is needed to work in those repositories and point at the canonical sources — the invariants and decisions in `markleft/CLAUDE.md`, the record in `markleft/.claude/decisions.md`. Restating normative content in three files would give it three chances to drift, which is the same failure this memo exists to prevent elsewhere.
+The satellite files stay deliberately thin. `tests/CLAUDE.md` and `.github/CLAUDE.md` state only what is needed to work in those repositories and point at the canonical sources — the invariants and decisions in `markleft/.claude/decisions.md`, the rule list in `markleft/.claude/grammar.md`. Restating normative content in three files would give it three chances to drift, which is the same failure this memo exists to prevent elsewhere.
 
 ## Deferred repositories and their triggers
 
